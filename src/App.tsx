@@ -237,9 +237,11 @@ export function App() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  overflowY: 'auto',
+                  overflow: 'auto',
                   padding: '20px',
-                  backgroundColor: 'var(--bg-paper)'
+                  backgroundColor: 'var(--bg-paper)',
+                  width: '100%',
+                  height: '100%'
                 }}
               >
                 {renderVisualizer()}

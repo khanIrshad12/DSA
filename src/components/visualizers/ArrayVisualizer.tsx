@@ -11,6 +11,43 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
   const currentData: (number | string)[] = (step.customVisual?.array || (step.matrix && step.matrix[0]) || data);
   const isColorSort = step.customVisual?.isColorSort || false;
 
+  const n = currentData.length;
+  let itemWidth = 64;
+  let itemGap = 12;
+  let fontSize = 30;
+  let indexFontSize = 11;
+  let pointerFontSize = 12;
+  let pointerIconSize = 13;
+  let bracketLabelFontSize = '9.5px';
+
+  if (n > 20) {
+    itemWidth = 32;
+    itemGap = 5;
+    fontSize = 15;
+    indexFontSize = 9;
+    pointerFontSize = 10;
+    pointerIconSize = 10;
+    bracketLabelFontSize = '8.5px';
+  } else if (n > 14) {
+    itemWidth = 38;
+    itemGap = 6;
+    fontSize = 18;
+    indexFontSize = 9.5;
+    pointerFontSize = 10.5;
+    pointerIconSize = 11;
+    bracketLabelFontSize = '9px';
+  } else if (n > 8) {
+    itemWidth = 48;
+    itemGap = 8;
+    fontSize = 22;
+    indexFontSize = 10;
+    pointerFontSize = 11;
+    pointerIconSize = 12;
+    bracketLabelFontSize = '9px';
+  }
+
+  const stepWidth = itemWidth + itemGap;
+
   const getPointerColor = (color?: string) => {
     if (color === 'accent') return 'var(--accent)';
     if (color === 'accent2' || color === 'blue' || color === 'cyan') return '#38bdf8';
@@ -28,8 +65,9 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '24px 10px',
-        width: '100%',
+        padding: '24px 16px',
+        minWidth: 'max-content',
+        margin: 'auto',
         position: 'relative'
       }}
     >
@@ -74,7 +112,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
       )}
 
       {/* Top Pointers or Brackets / Padding Bracket */}
-      <div style={{ display: 'flex', gap: '12px', height: '36px', alignItems: 'flex-end', marginBottom: '6px', position: 'relative' }}>
+      <div style={{ display: 'flex', gap: `${itemGap}px`, height: '36px', alignItems: 'flex-end', marginBottom: '6px', position: 'relative' }}>
         {/* Support multiple brackets (e.g. HIGH BLOCK, LOW BLOCK, SORTED HALF, ROW brackets, DAY brackets) */}
         {step.customVisual?.brackets?.map((b: any, bIdx: number) => {
           let bColor = 'var(--color-amber)';
@@ -90,8 +128,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
               style={{
                 position: 'absolute',
                 top: '2px',
-                left: `${b.start * 76}px`,
-                width: `${(b.end - b.start + 1) * 76 - 12}px`,
+                left: `${b.start * stepWidth}px`,
+                width: `${(b.end - b.start + 1) * stepWidth - itemGap}px`,
                 borderTop: `2px solid ${bColor}`,
                 borderLeft: `2px solid ${bColor}`,
                 borderRight: `2px solid ${bColor}`,
@@ -107,15 +145,17 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                 style={{
                   position: 'absolute',
                   top: '-16px',
-                  fontSize: '9.5px',
+                  fontSize: bracketLabelFontSize,
                   fontWeight: 700,
                   color: bColor,
-                  letterSpacing: '0.08em',
+                  letterSpacing: '0.06em',
                   backgroundColor: 'var(--bg-paper)',
-                  padding: '0 5px',
+                  padding: '0 4px',
                   borderRadius: '2px',
                   border: `1px solid ${bColor}40`,
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
+                  maxWidth: '100%',
+                  overflow: 'visible'
                 }}
               >
                 {b.label}
@@ -130,8 +170,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
             style={{
               position: 'absolute',
               top: '2px',
-              left: `${step.customVisual.padding.start * 76}px`,
-              width: `${(step.customVisual.padding.end - step.customVisual.padding.start + 1) * 76 - 12}px`,
+              left: `${step.customVisual.padding.start * stepWidth}px`,
+              width: `${(step.customVisual.padding.end - step.customVisual.padding.start + 1) * stepWidth - itemGap}px`,
               borderTop: '2px solid var(--text-faint)',
               borderLeft: '2px solid var(--text-faint)',
               borderRight: '2px solid var(--text-faint)',
@@ -146,7 +186,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
               style={{
                 position: 'absolute',
                 top: '-16px',
-                fontSize: '9.5px',
+                fontSize: bracketLabelFontSize,
                 fontWeight: 700,
                 color: 'var(--text-faint)',
                 letterSpacing: '0.08em',
@@ -166,7 +206,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
               key={idx}
               className="pointer-container"
               style={{
-                width: '64px',
+                width: `${itemWidth}px`,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -184,8 +224,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                     color: getPointerColor(p.color)
                   }}
                 >
-                  <span style={{ fontSize: '13px', lineHeight: 1 }}>▼</span>
-                  <span className="font-mono" style={{ fontSize: '13px', fontWeight: 700 }}>
+                  <span style={{ fontSize: `${pointerIconSize}px`, lineHeight: 1 }}>▼</span>
+                  <span className="font-mono" style={{ fontSize: `${pointerFontSize}px`, fontWeight: 700 }}>
                     {p.name}
                   </span>
                 </div>
@@ -196,7 +236,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
       </div>
 
       {/* Array Element Boxes */}
-      <div style={{ display: 'flex', gap: '12px', position: 'relative' }}>
+      <div style={{ display: 'flex', gap: `${itemGap}px`, position: 'relative' }}>
         {/* Sliding window bounding box outline & top label */}
         {step.window && (() => {
           const isInvalid = (step.window.label?.includes('DUPLICATE') || step.window.label?.includes('✕') || step.window.label?.includes('INVALID') || step.window.label?.includes('DISQUALIFIED'));
@@ -212,8 +252,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                 style={{
                   position: 'absolute',
                   top: '-24px',
-                  left: `${step.window.start * 76}px`,
-                  width: `${(step.window.end - step.window.start + 1) * 76 - 12}px`,
+                  left: `${step.window.start * stepWidth}px`,
+                  width: `${(step.window.end - step.window.start + 1) * stepWidth - itemGap}px`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -224,7 +264,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                 <div
                   className="font-mono"
                   style={{
-                    fontSize: '9.5px',
+                    fontSize: bracketLabelFontSize,
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
@@ -247,8 +287,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                   position: 'absolute',
                   top: '-6px',
                   bottom: '-6px',
-                  left: `${step.window.start * 76}px`,
-                  width: `${(step.window.end - step.window.start + 1) * 76 - 12}px`,
+                  left: `${step.window.start * stepWidth}px`,
+                  width: `${(step.window.end - step.window.start + 1) * stepWidth - itemGap}px`,
                   border: `2px dashed ${winColor}`,
                   borderRadius: '10px',
                   backgroundColor: winBg,
@@ -356,7 +396,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                     style={{
                       position: 'absolute',
                       top: '-24px',
-                      left: '70px',
+                      left: `${itemWidth + itemGap / 2}px`,
                       transform: 'translateX(-50%)',
                       backgroundColor: 'var(--accent)',
                       color: '#ffffff',
@@ -386,7 +426,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                       transform: 'translateX(-50%)',
                       backgroundColor: 'var(--color-red)',
                       color: '#ffffff',
-                      fontSize: '9px',
+                      fontSize: n > 14 ? '8px' : '9px',
                       fontWeight: 800,
                       padding: '2px 6px',
                       borderRadius: '6px',
@@ -411,7 +451,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                       transform: 'translateX(-50%)',
                       backgroundColor: 'var(--color-green)',
                       color: '#000000',
-                      fontSize: '9px',
+                      fontSize: n > 14 ? '8px' : '9px',
                       fontWeight: 800,
                       padding: '2px 6px',
                       borderRadius: '6px',
@@ -429,8 +469,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                 <div
                   className={`sketch-border visualizer-cell ${animClass}`}
                   style={{
-                    width: '64px',
-                    height: '64px',
+                    width: `${itemWidth}px`,
+                    height: `${itemWidth}px`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -447,7 +487,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                   <DialValue
                     value={val}
                     className="font-hand"
-                    style={{ fontSize: '32px', fontWeight: 700 }}
+                    style={{ fontSize: `${fontSize}px`, fontWeight: 700 }}
                   />
                 </div>
               </div>
@@ -457,15 +497,15 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
       </div>
 
       {/* Indices Row */}
-      <div style={{ display: 'flex', gap: '12px', marginTop: '6px' }}>
+      <div style={{ display: 'flex', gap: `${itemGap}px`, marginTop: '6px' }}>
         {currentData.map((_, idx) => (
           <div
             key={idx}
             className="font-mono"
             style={{
-              width: '64px',
+              width: `${itemWidth}px`,
               textAlign: 'center',
-              fontSize: '11px',
+              fontSize: `${indexFontSize}px`,
               color: 'var(--text-mute)'
             }}
           >
@@ -475,7 +515,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
       </div>
 
       {/* Bottom Pointers */}
-      <div style={{ display: 'flex', gap: '12px', height: '42px', marginTop: '4px' }}>
+      <div style={{ display: 'flex', gap: `${itemGap}px`, height: '42px', marginTop: '4px' }}>
         {currentData.map((_, idx) => {
           const bottomPointers = (step.pointers || []).filter(p => p.index === idx && p.position !== 'top');
           return (
@@ -483,7 +523,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
               key={idx}
               className="pointer-container"
               style={{
-                width: '64px',
+                width: `${itemWidth}px`,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -501,8 +541,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                     color: getPointerColor(p.color)
                   }}
                 >
-                  <span style={{ fontSize: '13px', lineHeight: 1 }}>▲</span>
-                  <span className="font-mono" style={{ fontSize: '13px', fontWeight: 700 }}>
+                  <span style={{ fontSize: `${pointerIconSize}px`, lineHeight: 1 }}>▲</span>
+                  <span className="font-mono" style={{ fontSize: `${pointerFontSize}px`, fontWeight: 700 }}>
                     {p.name}
                   </span>
                 </div>
@@ -520,6 +560,12 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
         const secHighlights = Array.isArray(sec) ? (step.secondaryHighlights || []) : (sec.highlights || step.secondaryHighlights || []);
         const secPointers = Array.isArray(sec) ? [] : (sec.pointers || []);
 
+        const secN = secArray.length;
+        const secItemWidth = secN > 20 ? 32 : secN > 14 ? 38 : secN > 8 ? 48 : 64;
+        const secItemGap = secN > 20 ? 5 : secN > 14 ? 6 : secN > 8 ? 8 : 12;
+        const secFontSize = secN > 20 ? 15 : secN > 14 ? 18 : secN > 8 ? 22 : 30;
+        const secIdxSize = secN > 20 ? 9 : secN > 14 ? 9.5 : secN > 8 ? 10 : 10.5;
+
         return (
           <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div
@@ -534,7 +580,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
             >
               {secLabel}
             </div>
-            <div style={{ display: 'flex', gap: '12px', minHeight: '64px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: `${secItemGap}px`, minHeight: '48px', alignItems: 'center' }}>
               {secArray.length === 0 ? (
                 <div
                   style={{
@@ -558,8 +604,8 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                       <div
                         className="sketch-border visualizer-cell"
                         style={{
-                          width: '64px',
-                          height: '64px',
+                          width: `${secItemWidth}px`,
+                          height: `${secItemWidth}px`,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -574,11 +620,11 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
                         <DialValue
                           value={val}
                           className="font-hand"
-                          style={{ fontSize: '30px', fontWeight: 700 }}
+                          style={{ fontSize: `${secFontSize}px`, fontWeight: 700 }}
                         />
                       </div>
 
-                      <div className="font-mono" style={{ fontSize: '10.5px', color: 'var(--text-mute)', marginTop: '4px' }}>
+                      <div className="font-mono" style={{ fontSize: `${secIdxSize}px`, color: 'var(--text-mute)', marginTop: '4px' }}>
                         [{uIdx}]
                       </div>
 
