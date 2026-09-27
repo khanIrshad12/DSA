@@ -1318,122 +1318,479 @@ export const greedyProblems: Problem[] = [
   ]
 },
   {
-    id: 'jump-game',
-    patternId: 'greedy',
-    title: 'Jump Game',
-    subtitle: 'Track the farthest index you can reach',
-    difficulty: 'Medium',
-    leetcodeId: 55,
-    askedAt: ['Amazon', 'Microsoft', 'Google', 'Meta', 'Apple'],
-    kind: 'problem',
-    statement: 'You are given an integer array nums. You are initially positioned at the array\'s first index, and each element in the array represents your maximum jump length at that position. Return true if you can reach the last index, or false otherwise.',
-    visualType: 'array',
-    initialInput: [2, 3, 1, 1, 4],
-    approaches: [
-      {
-        id: 'greedy-farthest-reach',
-        label: 'Greedy Farthest Reach',
-        complexity: {
-          time: 'O(N)',
-          space: 'O(1)'
+  "id": "jump-game",
+  "patternId": "greedy",
+  "title": "Jump Game",
+  "subtitle": "Track the farthest index you can reach",
+  "difficulty": "Medium",
+  "leetcodeId": 55,
+  "askedAt": [
+    "Amazon",
+    "Google",
+    "Microsoft"
+  ],
+  "kind": "problem",
+  "statement": "Given an array where each element is the maximum jump length from that position, determine whether you can reach the last index starting from the first index.",
+  "visualType": "array",
+  "initialInput": [
+    2,
+    3,
+    1,
+    1,
+    4
+  ],
+  "approaches": [
+    {
+      "id": "greedy-farthest-reach-one-pass",
+      "label": "Greedy - farthest reach in one pass",
+      "complexity": {
+        "time": "O(n)",
+        "space": "O(1)"
+      },
+      "pseudocode": [
+        "given nums",
+        "farthest = 0",
+        "for i = 0 to n - 1:",
+        "    if i > farthest: return false",
+        "    farthest = max(farthest, i + nums[i])",
+        "    if farthest >= n - 1: return true",
+        "return true"
+      ],
+      "starterCode": {
+        "javascript": "function canJump(nums) {\n  let farthest = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > farthest) return false;\n    farthest = Math.max(farthest, i + nums[i]);\n    if (farthest >= nums.length - 1) return true;\n  }\n  return true;\n}",
+        "python": "def canJump(nums: list[int]) -> bool:\n    farthest = 0\n    for i in range(len(nums)):\n        if i > farthest:\n            return False\n        farthest = max(farthest, i + nums[i])\n        if farthest >= len(nums) - 1:\n            return True\n    return True"
+      },
+      "solutionCode": {
+        "javascript": "function canJump(nums) {\n  let farthest = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > farthest) return false;\n    farthest = Math.max(farthest, i + nums[i]);\n    if (farthest >= nums.length - 1) return true;\n  }\n  return true;\n}",
+        "python": "def canJump(nums: list[int]) -> bool:\n    farthest = 0\n    for i in range(len(nums)):\n        if i > farthest:\n            return False\n        farthest = max(farthest, i + nums[i])\n        if farthest >= len(nums) - 1:\n            return True\n    return True"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
+              2,
+              3,
+              1,
+              1,
+              4
+            ]
+          ],
+          "expected": true,
+          "description": "Jump 1 step from index 0 to 1, then 3 steps to the last index"
         },
-        pseudocode: [
-          'max_reach = 0',
-          'for i from 0 to n-1:',
-          '    if i > max_reach: return false',
-          '    max_reach = max(max_reach, i + nums[i])',
-          '    if max_reach >= n - 1: return true',
-          'return true'
-        ],
-        starterCode: {
-          javascript: `function canJump(nums) {\n  let maxReach = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > maxReach) return false;\n    maxReach = Math.max(maxReach, i + nums[i]);\n    if (maxReach >= nums.length - 1) return true;\n  }\n  return true;\n}`,
-          python: `def canJump(nums: list[int]) -> bool:\n    max_reach = 0\n    for i, jump in enumerate(nums):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + jump)\n        if max_reach >= len(nums) - 1:\n            return True\n    return True`
-        },
-        solutionCode: {
-          javascript: `function canJump(nums) {\n  let maxReach = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > maxReach) return false;\n    maxReach = Math.max(maxReach, i + nums[i]);\n    if (maxReach >= nums.length - 1) return true;\n  }\n  return true;\n}`,
-          python: `def canJump(nums: list[int]) -> bool:\n    max_reach = 0\n    for i, jump in enumerate(nums):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + jump)\n        if max_reach >= len(nums) - 1:\n            return True\n    return True`
-        },
-        testCases: [
-          {
-            input: [[2, 3, 1, 1, 4]],
-            expected: true,
-            description: "Jump 1 step from 0 to 1, then 3 steps to the last index"
-          },
-          {
-            input: [[3, 2, 1, 0, 4]],
-            expected: false,
-            description: "Stuck at 0 at index 3, cannot reach index 4"
-          }
-        ],
-        steps: [
-          {
-            codeLine: 1,
-            narration: "Start at index 0 with max_reach = 0. We expand the farthest reachable index frontier greedily.",
-            customVisual: { array: [2, 3, 1, 1, 4] },
-            pointers: [{ name: 'curr', index: 0, color: 'accent' }],
-            vars: [
-              ['i', 0],
-              ['max_reach', 0],
-              ['target', 4]
+        {
+          "input": [
+            [
+              3,
+              2,
+              1,
+              0,
+              4
+            ]
+          ],
+          "expected": false,
+          "description": "Stuck at index 3 with 0 jump length"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Jump Game: from index i you may jump up to nums[i] steps forward. Can we reach the last index? The greedy idea is to track ONE number, farthest, the maximum index reachable so far, and never look back.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
             ]
           },
-          {
-            codeLine: 4,
-            narration: "At i = 0 (jump = 2): reach = 0 + 2 = 2. Update max_reach = 2.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 0, end: 2, color: 'blue', label: 'REACHABLE [0..2]' }]
-            },
-            highlights: [0, 1, 2],
-            pointers: [
-              { name: 'curr', index: 0, color: 'accent' },
-              { name: 'reach', index: 2, color: 'accent2' }
+          "highlights": [
+            0
+          ],
+          "vars": [
+            [
+              "n",
+              5
             ],
-            vars: [
-              ['i', 0],
-              ['jump', 2],
-              ['max_reach', 2]
-            ]
-          },
-          {
-            codeLine: 4,
-            narration: "At i = 1 (jump = 3): potential reach = 1 + 3 = 4 >= target (4)! Target index is reached.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 0, end: 4, color: 'green', label: 'TARGET REACHED [0..4]' }]
-            },
-            highlights: [1, 4],
-            pointers: [
-              { name: 'curr', index: 1, color: 'accent' },
-              { name: 'target', index: 4, color: 'green' }
+            [
+              "last",
+              4
             ],
-            best: { label: 'Can Reach Last Index: True' },
-            vars: [
-              ['i', 1],
-              ['jump', 3],
-              ['max_reach', 4],
-              ['target', 4]
+            [
+              "nums",
+              "[2, 3, 1, 1, 4]"
+            ]
+          ]
+        },
+        {
+          "codeLine": 2,
+          "narration": "farthest = 0. Standing at the start we can at least reach index 0. We will sweep left to right and keep stretching this reach.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "amber",
+                "label": "REACHABLE [0..0]"
+              }
             ]
           },
-          {
-            codeLine: 5,
-            narration: "max_reach (4) >= last index (4). Return true immediately in O(N) time.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 0, end: 4, color: 'green', label: 'TARGET REACHED [0..4]' }]
-            },
-            highlights: [0, 1, 4],
-            best: { label: 'Can Reach Last Index: True' },
-            vars: [
-              ['return', true],
-              ['time', 'O(N)'],
-              ['space', 'O(1)']
+          "pointers": [
+            {
+              "name": "far",
+              "index": 0,
+              "color": "blue",
+              "position": "top"
+            }
+          ],
+          "highlights": [
+            0
+          ],
+          "vars": [
+            [
+              "farthest",
+              0
+            ],
+            [
+              "last",
+              4
             ]
-          }
-        ]
-      }
-    ]
-  },
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "i = 0. Check if current index i is within reach: 0 <= 0 (farthest), so we can stand here!",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "amber",
+                "label": "REACHABLE [0..0]"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "far",
+              "index": 0,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 0,
+              "color": "accent",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            0
+          ],
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "farthest",
+              0
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "From i = 0 we can jump nums[0] = 2 steps, reaching index 2. 2 > 0, so farthest = 2. The greedy choice, always keep the FARTHEST reach, is safe because reaching a farther index can never hurt: anything an earlier reach unlocked is still covered.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 2,
+                "color": "amber",
+                "label": "REACHABLE [0..2]"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "far",
+              "index": 2,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 0,
+              "color": "accent",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            0
+          ],
+          "secondaryHighlights": [
+            1,
+            2
+          ],
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "i+nums[i]",
+              2
+            ],
+            [
+              "farthest",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "Move to i = 1. Check if reachable: 1 <= 2 (farthest), valid!",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 2,
+                "color": "amber",
+                "label": "REACHABLE [0..2]"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "far",
+              "index": 2,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 1,
+              "color": "accent",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            1
+          ],
+          "secondaryHighlights": [
+            0,
+            2
+          ],
+          "vars": [
+            [
+              "i",
+              1
+            ],
+            [
+              "farthest",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "From i = 1 we can jump nums[1] = 3 steps, reaching index 4. 4 > 2, so farthest = 4. The greedy choice, always keep the FARTHEST reach, is safe because reaching a farther index can never hurt: anything an earlier reach unlocked is still covered.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 4,
+                "color": "amber",
+                "label": "REACHABLE [0..4]"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "far",
+              "index": 4,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 1,
+              "color": "accent",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            1
+          ],
+          "secondaryHighlights": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "vars": [
+            [
+              "i",
+              1
+            ],
+            [
+              "i+nums[i]",
+              4
+            ],
+            [
+              "farthest",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "farthest (4) >= last index (n - 1 = 4)! We can reach the final index without even needing to scan further.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 4,
+                "color": "green",
+                "label": "LAST INDEX REACHED [0..4]"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "far",
+              "index": 4,
+              "color": "green",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 1,
+              "color": "accent",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            0,
+            1,
+            4
+          ],
+          "best": {
+            "label": "Can Reach Last Index: True"
+          },
+          "vars": [
+            [
+              "farthest",
+              4
+            ],
+            [
+              "last index",
+              4
+            ],
+            [
+              "canReach",
+              "true"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Return true! By tracking the single farthest boundary in one pass, Jump Game runs in O(n) time and O(1) space.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 4,
+                "color": "green",
+                "label": "REACHABLE"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "target",
+              "index": 4,
+              "color": "green",
+              "position": "top"
+            }
+          ],
+          "highlights": [
+            0,
+            1,
+            4
+          ],
+          "best": {
+            "label": "Can Reach Last Index: True"
+          },
+          "vars": [
+            [
+              "return",
+              true
+            ],
+            [
+              "time",
+              "O(n)"
+            ],
+            [
+              "space",
+              "O(1)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     id: 'jump-game-ii',
     patternId: 'greedy',

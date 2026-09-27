@@ -13,7 +13,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
 
   const getPointerColor = (color?: string) => {
     if (color === 'accent') return 'var(--accent)';
-    if (color === 'accent2') return 'var(--accent2)';
+    if (color === 'accent2' || color === 'blue' || color === 'cyan') return '#38bdf8';
     if (color === 'green') return 'var(--color-green)';
     if (color === 'red') return 'var(--color-red)';
     if (color === 'purple') return 'var(--color-purple)';
