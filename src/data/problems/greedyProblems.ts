@@ -1792,155 +1792,641 @@ export const greedyProblems: Problem[] = [
   ]
 },
   {
-    id: 'jump-game-ii',
-    patternId: 'greedy',
-    title: 'Jump Game II',
-    subtitle: 'Minimum jumps, greedy BFS by levels',
-    difficulty: 'Medium',
-    leetcodeId: 45,
-    askedAt: ['Amazon', 'Google', 'Microsoft', 'Apple'],
-    kind: 'problem',
-    statement: 'You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0]. Each element nums[i] represents the maximum length of a forward jump from index i. Return the minimum number of jumps to reach nums[n - 1].',
-    visualType: 'array',
-    initialInput: [2, 3, 1, 1, 4],
-    approaches: [
-      {
-        id: 'greedy-bfs-levels',
-        label: 'Greedy BFS Level Windows',
-        complexity: {
-          time: 'O(N)',
-          space: 'O(1)'
+  "id": "jump-game-ii",
+  "patternId": "greedy",
+  "title": "Jump Game II",
+  "subtitle": "Minimum jumps, greedy BFS by levels",
+  "difficulty": "Medium",
+  "leetcodeId": 45,
+  "askedAt": [
+    "Amazon",
+    "Google",
+    "Meta"
+  ],
+  "kind": "problem",
+  "statement": "Given an array where each element is the maximum jump length from that position, return the minimum number of jumps needed to reach the last index. It is guaranteed the last index is reachable.",
+  "visualType": "array",
+  "initialInput": [
+    2,
+    3,
+    1,
+    1,
+    4
+  ],
+  "approaches": [
+    {
+      "id": "greedy-layer-by-layer-farthest-reach",
+      "label": "Greedy - layer-by-layer farthest reach",
+      "complexity": {
+        "time": "O(n)",
+        "space": "O(1)"
+      },
+      "pseudocode": [
+        "given nums",
+        "jumps = 0; curEnd = 0; farthest = 0",
+        "for i = 0 to n - 2:",
+        "    farthest = max(farthest, i + nums[i])",
+        "    if i == curEnd:",
+        "        jumps++; curEnd = farthest",
+        "        if curEnd >= n - 1: break",
+        "return jumps"
+      ],
+      "starterCode": {
+        "javascript": "function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, curEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === curEnd) {\n      jumps++;\n      curEnd = farthest;\n      if (curEnd >= nums.length - 1) break;\n    }\n  }\n  return jumps;\n}",
+        "python": "def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = cur_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = farthest\n            if cur_end >= len(nums) - 1:\n                break\n    return jumps"
+      },
+      "solutionCode": {
+        "javascript": "function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, curEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === curEnd) {\n      jumps++;\n      curEnd = farthest;\n      if (curEnd >= nums.length - 1) break;\n    }\n  }\n  return jumps;\n}",
+        "python": "def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = cur_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = farthest\n            if cur_end >= len(nums) - 1:\n                break\n    return jumps"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
+              2,
+              3,
+              1,
+              1,
+              4
+            ]
+          ],
+          "expected": 2,
+          "description": "Jump 1 step from index 0 to 1, then 3 steps to index 4 = 2 jumps"
         },
-        pseudocode: [
-          'jumps = 0, cur_end = 0, farthest = 0',
-          'for i from 0 to n-2:',
-          '    farthest = max(farthest, i + nums[i])',
-          '    if i == cur_end:',
-          '        jumps++',
-          '        cur_end = farthest',
-          '        if cur_end >= n-1: break',
-          'return jumps'
-        ],
-        starterCode: {
-          javascript: `function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, curEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === curEnd) {\n      jumps++;\n      curEnd = farthest;\n      if (curEnd >= nums.length - 1) break;\n    }\n  }\n  return jumps;\n}`,
-          python: `def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = cur_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = farthest\n            if cur_end >= len(nums) - 1:\n                break\n    return jumps`
-        },
-        solutionCode: {
-          javascript: `function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, curEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === curEnd) {\n      jumps++;\n      curEnd = farthest;\n      if (curEnd >= nums.length - 1) break;\n    }\n  }\n  return jumps;\n}`,
-          python: `def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = cur_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = farthest\n            if cur_end >= len(nums) - 1:\n                break\n    return jumps`
-        },
-        testCases: [
-          {
-            input: [[2, 3, 1, 1, 4]],
-            expected: 2,
-            description: "Jump 1 step from index 0 to 1, then 3 steps to the last index = 2 jumps"
-          },
-          {
-            input: [[2, 3, 0, 1, 4]],
-            expected: 2,
-            description: "2 jumps to end"
-          }
-        ],
-        steps: [
-          {
-            codeLine: 1,
-            narration: "Treat jumps as BFS distance levels: Level 0 = index 0. Level 1 = all indices reachable in 1 jump. Level 2 = all indices reachable in 2 jumps.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 0, end: 0, color: 'accent', label: 'LEVEL 0 (0 jumps)' }]
-            },
-            pointers: [{ name: 'start', index: 0, color: 'accent' }],
-            vars: [
-              ['jumps', 0],
-              ['cur_end', 0],
-              ['farthest', 0]
+        {
+          "input": [
+            [
+              2,
+              3,
+              0,
+              1,
+              4
+            ]
+          ],
+          "expected": 2,
+          "description": "2 jumps to the end"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Minimum jumps to reach the end. Key insight: this is BFS in disguise. Jump 0 reaches [0..0]. Jump 1 reaches the window of indices reachable from index 0. Jump 2 reaches the window of indices reachable from anywhere in the Jump 1 window. We track the current window boundary (curEnd) and the farthest reach seen so far.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
             ]
           },
-          {
-            codeLine: 3,
-            narration: "At i = 0 (jump = 2): farthest reachable = 0 + 2 = 2. Reached end of Level 0 (i == cur_end = 0).",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 0, end: 2, color: 'blue', label: 'JUMP 1 RANGE [1..2]' }]
-            },
-            highlights: [0],
-            pointers: [
-              { name: 'i', index: 0, color: 'accent' },
-              { name: 'farthest', index: 2, color: 'accent2' }
+          "highlights": [
+            0
+          ],
+          "vars": [
+            [
+              "nums",
+              "[2, 3, 1, 1, 4]"
             ],
-            vars: [
-              ['i', 0],
-              ['farthest', 2],
-              ['cur_end', 0]
+            [
+              "n",
+              5
             ]
-          },
-          {
-            codeLine: 5,
-            narration: "Increment jumps = 1. Level 1 window is now [1..2]. cur_end becomes 2.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 1, end: 2, color: 'blue', label: 'LEVEL 1 WINDOW [1..2]' }]
-            },
-            highlights: [1, 2],
-            pointers: [{ name: 'cur_end', index: 2, color: 'accent2' }],
-            vars: [
-              ['jumps', 1],
-              ['cur_end', 2],
-              ['farthest', 2]
-            ]
-          },
-          {
-            codeLine: 3,
-            narration: "At i = 1 (jump = 3): farthest reachable = 1 + 3 = 4 >= target (4)! Farthest frontier expands to index 4.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 1, end: 4, color: 'green', label: 'JUMP 2 CAN REACH TARGET (4)' }]
-            },
-            highlights: [1, 4],
-            pointers: [
-              { name: 'i', index: 1, color: 'accent' },
-              { name: 'farthest', index: 4, color: 'green' }
+          ]
+        },
+        {
+          "codeLine": 2,
+          "narration": "Initialise: jumps = 0, curEnd = 0 (boundary of current jump level), farthest = 0.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
             ],
-            vars: [
-              ['i', 1],
-              ['farthest', 4],
-              ['cur_end', 2]
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 0 [0..0]"
+              }
             ]
           },
-          {
-            codeLine: 5,
-            narration: "At i = 2 (end of Level 1 window): increment jumps = 2. cur_end expands to farthest = 4 >= last index. Target reached!",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 1, end: 4, color: 'green', label: 'TARGET REACHED IN 2 JUMPS' }]
+          "pointers": [
+            {
+              "name": "curEnd",
+              "index": 0,
+              "color": "blue",
+              "position": "top"
             },
-            highlights: [0, 1, 4],
-            best: { label: 'Min Jumps = 2 (0 -> 1 -> 4)' },
-            vars: [
-              ['jumps', 2],
-              ['cur_end', 4],
-              ['status', 'REACHED']
+            {
+              "name": "far",
+              "index": 0,
+              "color": "accent",
+              "position": "top"
+            }
+          ],
+          "highlights": [
+            0
+          ],
+          "vars": [
+            [
+              "jumps",
+              0
+            ],
+            [
+              "curEnd",
+              0
+            ],
+            [
+              "farthest",
+              0
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "i = 0: nums[0] = 2. Farthest reach from here is 0 + 2 = 2. Update farthest = 2.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 0"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "accent",
+                "label": "JUMP 1 FRONTIER [1..2]"
+              }
             ]
           },
-          {
-            codeLine: 8,
-            narration: "Return min jumps = 2 in O(N) time and O(1) space.",
-            customVisual: {
-              array: [2, 3, 1, 1, 4],
-              brackets: [{ start: 0, end: 4, color: 'green', label: 'MIN JUMPS = 2' }]
+          "pointers": [
+            {
+              "name": "curEnd",
+              "index": 0,
+              "color": "blue",
+              "position": "top"
             },
-            highlights: [0, 1, 4],
-            best: { label: 'Min Jumps = 2' },
-            vars: [
-              ['return', 2],
-              ['time', 'O(N)'],
-              ['space', 'O(1)']
+            {
+              "name": "far",
+              "index": 2,
+              "color": "accent",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 0,
+              "color": "amber",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            0
+          ],
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "farthest",
+              2
+            ],
+            [
+              "curEnd",
+              0
+            ],
+            [
+              "jumps",
+              0
             ]
-          }
-        ]
-      }
-    ]
-  },
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "i == curEnd (0): reached the end of the current jump layer! Increment jumps = 1. The next jump layer covers up to curEnd = farthest = 2.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 1"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "gray",
+                "label": "CURRENT RANGE"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "curEnd",
+              "index": 2,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "far",
+              "index": 2,
+              "color": "accent",
+              "position": "top"
+            }
+          ],
+          "highlights": [
+            0
+          ],
+          "secondaryHighlights": [
+            1,
+            2
+          ],
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "jumps",
+              1
+            ],
+            [
+              "curEnd",
+              2
+            ],
+            [
+              "farthest",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "i = 1: nums[1] = 3. Farthest reach from here is 1 + 3 = 4 (the last index!). Update farthest = 4.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 1"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "gray",
+                "label": "CURRENT RANGE"
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "color": "amber",
+                "label": "JUMP 2 FRONTIER [3..4]"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "curEnd",
+              "index": 2,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "far",
+              "index": 4,
+              "color": "accent",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 1,
+              "color": "amber",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            1
+          ],
+          "secondaryHighlights": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "vars": [
+            [
+              "i",
+              1
+            ],
+            [
+              "farthest",
+              4
+            ],
+            [
+              "curEnd",
+              2
+            ],
+            [
+              "jumps",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "i = 2: nums[2] = 1 reaches index 3 <= farthest = 4. No improvement to our one-more-jump frontier.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 1"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "gray",
+                "label": "CURRENT RANGE"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "curEnd",
+              "index": 2,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "far",
+              "index": 4,
+              "color": "accent",
+              "position": "top"
+            },
+            {
+              "name": "i",
+              "index": 2,
+              "color": "amber",
+              "position": "bottom"
+            }
+          ],
+          "highlights": [
+            2
+          ],
+          "secondaryHighlights": [
+            0,
+            1
+          ],
+          "vars": [
+            [
+              "i",
+              2
+            ],
+            [
+              "jumps",
+              1
+            ],
+            [
+              "curEnd",
+              2
+            ],
+            [
+              "farthest",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "i == curEnd (2): reached the end of the Jump 1 layer! Increment jumps = 2. Update curEnd = farthest = 4.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 1"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "amber",
+                "label": "JUMP 2"
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "color": "gray",
+                "label": "CURRENT RANGE"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "curEnd",
+              "index": 4,
+              "color": "blue",
+              "position": "top"
+            },
+            {
+              "name": "far",
+              "index": 4,
+              "color": "green",
+              "position": "top"
+            }
+          ],
+          "highlights": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "vars": [
+            [
+              "i",
+              2
+            ],
+            [
+              "jumps",
+              2
+            ],
+            [
+              "curEnd",
+              4
+            ],
+            [
+              "farthest",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "curEnd (4) >= n - 1 (4): last index is reached within 2 jumps! Break out of the loop early.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 1"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "amber",
+                "label": "JUMP 2"
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "color": "gray",
+                "label": "CURRENT RANGE"
+              }
+            ]
+          },
+          "pointers": [
+            {
+              "name": "target",
+              "index": 4,
+              "color": "green",
+              "position": "top"
+            }
+          ],
+          "highlights": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "best": {
+            "label": "Min Jumps = 2"
+          },
+          "vars": [
+            [
+              "curEnd",
+              4
+            ],
+            [
+              "last index",
+              4
+            ],
+            [
+              "jumps",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Done. Minimum jumps = 2. One left-to-right pass, O(n) time and O(1) space, no actual BFS queue needed, because each \"layer\" is just a contiguous index range we summarise with two numbers, curEnd and farthest. For [2,3,1,1,4] the path is 2 -> 3 (index 0->1) then 3 -> 4 (index 1->4): two jumps.",
+          "customVisual": {
+            "array": [
+              2,
+              3,
+              1,
+              1,
+              4
+            ],
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "blue",
+                "label": "JUMP 1"
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "color": "amber",
+                "label": "JUMP 2"
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "color": "gray",
+                "label": "CURRENT RANGE"
+              }
+            ]
+          },
+          "highlights": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "best": {
+            "label": "Minimum Jumps: 2"
+          },
+          "vars": [
+            [
+              "time",
+              "O(n)"
+            ],
+            [
+              "space",
+              "O(1)"
+            ],
+            [
+              "jumps",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     id: 'partition-labels',
     patternId: 'greedy',
