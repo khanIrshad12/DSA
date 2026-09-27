@@ -33,6 +33,26 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
         position: 'relative'
       }}
     >
+      {/* Custom Banner if present (e.g. star result summary) */}
+      {step.customVisual?.banner && (
+        <div
+          className="font-mono"
+          style={{
+            marginBottom: '16px',
+            fontSize: '15px',
+            fontWeight: 700,
+            color: '#f59e0b',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            letterSpacing: '0.02em',
+            textShadow: '0 0 12px rgba(245, 158, 11, 0.4)'
+          }}
+        >
+          {step.customVisual.banner}
+        </div>
+      )}
+
       {/* Visual Window bounding box if present */}
       {step.window && (
         <div

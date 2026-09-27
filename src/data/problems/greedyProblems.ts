@@ -2,83 +2,390 @@ import { Problem } from '../../types';
 
 export const greedyProblems: Problem[] = [
   {
-    id: 'intro',
-    patternId: 'greedy',
-    title: 'Overview',
-    subtitle: 'Take the best local choice, never look back',
-    kind: 'intro',
-    statement: 'A Greedy algorithm builds up a solution piece by piece, always choosing the next piece that offers the most immediate, local benefit. Once a choice is made, it is NEVER reconsidered (no backtracking). Greedy works when the problem exhibits the Greedy Choice Property and Optimal Substructure.',
-    visualType: 'array',
-    initialInput: [1, 2, 5, 10, 20, 50, 100],
-    approaches: [
-      {
-        id: 'greedy-concept',
-        label: 'Greedy Choice Property',
-        complexity: {
-          time: 'O(N)',
-          space: 'O(1)'
-        },
-        pseudocode: [
-          'for each decision step:',
-          '    pick the best local option immediately',
-          '    commit to this choice (no backtrack)',
-          '    reduce the remaining subproblem',
-          'return combined choices'
-        ],
-        starterCode: {
-          javascript: `function greedyOverview(choices) {\n  let result = [];\n  for (let c of choices) {\n    if (isBestLocalChoice(c)) result.push(c);\n  }\n  return result;\n}`,
-          python: `def greedyOverview(choices: list[int]) -> list[int]:\n    result = []\n    for c in choices:\n        if is_best_local_choice(c):\n            result.append(c)\n    return result`
-        },
-        solutionCode: {
-          javascript: `function greedyOverview(choices) {\n  let result = [];\n  for (let c of choices) {\n    if (isBestLocalChoice(c)) result.push(c);\n  }\n  return result;\n}`,
-          python: `def greedyOverview(choices: list[int]) -> list[int]:\n    result = []\n    for c in choices:\n        if is_best_local_choice(c):\n            result.append(c)\n    return result`
-        },
-        testCases: [
-          {
-            input: [[1, 2, 5, 10, 20, 50, 100]],
-            expected: [100],
-            description: "Standard denominations"
-          }
-        ],
-        steps: [
-          {
-            codeLine: 1,
-            narration: "Greedy Strategy: Make the locally optimal choice at each stage. Unlike Dynamic Programming which evaluates all subproblems, Greedy commits forward with zero regret.",
-            customVisual: { array: [1, 2, 5, 10, 20, 50, 100] },
-            highlights: [6],
-            pointers: [{ name: 'best', index: 6, color: 'accent' }],
-            vars: [
-              ['strategy', 'locally optimal choice'],
-              ['backtracking', 'none']
+  "id": "intro",
+  "patternId": "greedy",
+  "title": "Overview",
+  "subtitle": "Take the best local choice, never look back",
+  "kind": "concept",
+  "statement": "A Greedy algorithm builds up a solution piece by piece, always choosing the next piece that offers the most immediate, local benefit. Once a choice is made, it is NEVER reconsidered (no backtracking). Greedy works when the problem exhibits the Greedy Choice Property and Optimal Substructure.",
+  "visualType": "array",
+  "initialInput": [
+    1,
+    5,
+    10,
+    25
+  ],
+  "approaches": [
+    {
+      "id": "the-greedy-paradigm",
+      "label": "The greedy paradigm",
+      "complexity": {
+        "time": "O(n)",
+        "space": "O(1)"
+      },
+      "pseudocode": [
+        "greedy(problem):",
+        "    solution = empty",
+        "    while not done:",
+        "        choice = best LOCAL option right now",
+        "        commit to choice    // never reconsidered",
+        "        reduce problem by choice",
+        "    return solution",
+        "// valid only if greedy-choice property + optimal substructure"
+      ],
+      "starterCode": {
+        "javascript": "function greedyParadigm(denominations, amount) {\n  const result = [];\n  // Sort descending to always pick the largest coin that fits\n  denominations.sort((a, b) => b - a);\n  for (let coin of denominations) {\n    while (amount >= coin) {\n      result.push(coin);\n      amount -= coin;\n    }\n  }\n  return result;\n}",
+        "python": "def greedyParadigm(denominations: list[int], amount: int) -> list[int]:\n    result = []\n    for coin in sorted(denominations, reverse=True):\n        while amount >= coin:\n            result.append(coin)\n            amount -= coin\n    return result"
+      },
+      "solutionCode": {
+        "javascript": "function greedyParadigm(denominations, amount) {\n  const result = [];\n  denominations.sort((a, b) => b - a);\n  for (let coin of denominations) {\n    while (amount >= coin) {\n      result.push(coin);\n      amount -= coin;\n    }\n  }\n  return result;\n}",
+        "python": "def greedyParadigm(denominations: list[int], amount: int) -> list[int]:\n    result = []\n    for coin in sorted(denominations, reverse=True):\n        while amount >= coin:\n            result.append(coin)\n            amount -= coin\n    return result"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
+              1,
+              5,
+              10,
+              25
+            ],
+            30
+          ],
+          "expected": [
+            25,
+            5
+          ],
+          "description": "Canonical US coin change for 30"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "The Greedy Paradigm: At each step, take whatever choice looks BEST right now without worrying about the future, and NEVER reconsider or backtrack. Simple, blazing fast, and optimal — IF the problem allows it.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
             ]
           },
-          {
-            codeLine: 2,
-            narration: "Example: Coin Change for canonical currency. To make 143, take the largest possible bill (100) first, reducing the remaining balance immediately to 43.",
-            customVisual: { array: [1, 2, 5, 10, 20, 50, 100] },
-            highlights: [6],
-            best: { label: 'Take $100 -> Remaining: $43' },
-            vars: [
-              ['chosen', 100],
-              ['remaining', 43]
+          "highlights": [
+            3
+          ],
+          "pointers": [
+            {
+              "name": "greedy",
+              "index": 3,
+              "color": "accent"
+            }
+          ],
+          "vars": [
+            [
+              "rule",
+              "pick best local choice"
+            ],
+            [
+              "backtrack",
+              "never"
+            ]
+          ]
+        },
+        {
+          "codeLine": 2,
+          "narration": "Unlike Dynamic Programming which tries all possibilities, Greedy commits to one path forward. It makes one irrevocable decision at each stage.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
             ]
           },
-          {
-            codeLine: 4,
-            narration: "Next step: From 43, pick 20, then 20, then 2, then 1 -> 5 coins total. Optimal in O(N) time without searching all combinations.",
-            customVisual: { array: [1, 2, 5, 10, 20, 50, 100] },
-            highlights: [4, 1, 0],
-            best: { label: 'Optimal: 100 + 20 + 20 + 2 + 1 = 143' },
-            vars: [
-              ['coins', '100, 20, 20, 2, 1'],
-              ['total count', 5],
-              ['time', 'O(N)']
+          "highlights": [
+            3
+          ],
+          "vars": [
+            [
+              "approach",
+              "forward-only"
+            ],
+            [
+              "space",
+              "O(1)"
             ]
-          }
-        ]
-      }
-    ]
-  },
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Two golden rules are required for Greedy to be correct: (1) Greedy-Choice Property — locally optimal choices lead to a global optimum. (2) Optimal Substructure — an optimal solution contains optimal solutions to subproblems.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
+            ]
+          },
+          "highlights": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "vars": [
+            [
+              "property 1",
+              "greedy-choice"
+            ],
+            [
+              "property 2",
+              "optimal substructure"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Worked example: coin change with the canonical set [1, 5, 10, 25]. Goal: make 30 with the FEWEST coins. The greedy rule: always grab the LARGEST coin that still fits. With these denominations that rule is provably optimal.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
+            ]
+          },
+          "highlights": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "vars": [
+            [
+              "amount",
+              30
+            ],
+            [
+              "picked",
+              "[]"
+            ],
+            [
+              "count",
+              0
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "amount = 30. Largest coin that fits is 25 (the next one, 25, fits; nothing bigger exists). Take it. This is the greedy choice: 25 leaves the SMALLEST possible remainder, so it can never hurt us. amount -> 5.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
+            ]
+          },
+          "highlights": [
+            3
+          ],
+          "pointers": [
+            {
+              "name": "pick",
+              "index": 3,
+              "color": "accent"
+            }
+          ],
+          "vars": [
+            [
+              "amount",
+              5
+            ],
+            [
+              "took",
+              25
+            ],
+            [
+              "picked",
+              "[25]"
+            ],
+            [
+              "count",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "amount = 5. Largest coin that fits is 5. Take it -> amount becomes 0.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
+            ]
+          },
+          "highlights": [
+            1
+          ],
+          "pointers": [
+            {
+              "name": "pick",
+              "index": 1,
+              "color": "accent"
+            }
+          ],
+          "vars": [
+            [
+              "amount",
+              0
+            ],
+            [
+              "took",
+              5
+            ],
+            [
+              "picked",
+              "[25, 5]"
+            ],
+            [
+              "count",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "amount = 0 -> done. We made 30 with [25, 5] = just 2 coins, and that is provably optimal. Greedy WORKED because the canonical coin system has the greedy-choice property.",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
+            ],
+            "banner": "★ 25 + 5 = 30 · 2 coins"
+          },
+          "highlights": [
+            1,
+            3
+          ],
+          "best": {
+            "label": "25 + 5 = 30 (2 coins)"
+          },
+          "vars": [
+            [
+              "amount",
+              0
+            ],
+            [
+              "picked",
+              "[25, 5]"
+            ],
+            [
+              "count",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "When does Greedy FAIL? Suppose coin denominations are [1, 3, 4] and we want to make 6. Watch what happens when we blindly pick the biggest coin.",
+          "customVisual": {
+            "array": [
+              1,
+              3,
+              4
+            ]
+          },
+          "highlights": [
+            0,
+            1,
+            2
+          ],
+          "vars": [
+            [
+              "amount",
+              6
+            ],
+            [
+              "coins",
+              "[1, 3, 4]"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Greedy takes 4 -> amount = 2, then can only use 1 + 1. Total: 4 + 1 + 1 = THREE coins. But the OPTIMAL answer is 3 + 3 = two coins. The locally best move (the big 4) painted us into a corner.",
+          "customVisual": {
+            "array": [
+              1,
+              3,
+              4
+            ],
+            "banner": "★ optimal: 3 + 3 = 2 coins"
+          },
+          "highlights": [
+            1,
+            2
+          ],
+          "best": {
+            "label": "Optimal = 2 coins (3 + 3)"
+          },
+          "vars": [
+            [
+              "greedy",
+              "4+1+1 = 3 coins"
+            ],
+            [
+              "optimal",
+              "3+3 = 2 coins"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Rule of thumb: Greedy is the first idea to try because it is O(N). But you must prove the greedy-choice property. If a counter-example exists, switch to Dynamic Programming!",
+          "customVisual": {
+            "array": [
+              1,
+              5,
+              10,
+              25
+            ],
+            "banner": "★ Greedy vs DP Tradeoff"
+          },
+          "highlights": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "best": {
+            "label": "Check Greedy-Choice Property First"
+          },
+          "vars": [
+            [
+              "rule",
+              "prove greedy choice"
+            ],
+            [
+              "fallback",
+              "Dynamic Programming"
+            ],
+            [
+              "time",
+              "O(N) vs O(N · W)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     id: 'best-time-to-buy-and-sell-stock',
     patternId: 'greedy',
