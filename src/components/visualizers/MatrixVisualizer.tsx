@@ -63,11 +63,18 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               let borderColor = 'rgba(255, 255, 255, 0.35)';
               let bgColor = 'var(--bg-surface)';
               let textColor = 'var(--text-ink)';
+              let isSpecialFocus = false;
 
-              if (isActive || isTarget) {
+              if (gridH?.status === 'visited-target') {
+                borderColor = 'var(--color-green)';
+                bgColor = 'rgba(16, 185, 129, 0.3)';
+                textColor = '#ffffff';
+                isSpecialFocus = true;
+              } else if (isActive || isTarget) {
                 borderColor = 'var(--accent)';
-                bgColor = 'rgba(255, 120, 40, 0.15)';
+                bgColor = 'rgba(255, 120, 40, 0.18)';
                 textColor = 'var(--accent)';
+                isSpecialFocus = true;
               } else if (isVisited) {
                 borderColor = 'var(--color-green)';
                 bgColor = 'rgba(16, 185, 129, 0.12)';
@@ -94,8 +101,8 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     backgroundColor: bgColor,
                     color: textColor,
                     opacity: isFlatDimmed ? 0.35 : 1,
-                    boxShadow: isActive ? '0 0 16px var(--accent-glow)' : 'none',
-                    transform: isActive || isTarget ? 'scale(1.05)' : 'none',
+                    boxShadow: isSpecialFocus ? (gridH?.status === 'visited-target' ? '0 0 14px rgba(46, 213, 115, 0.45)' : '0 0 16px var(--accent-glow)') : 'none',
+                    transform: isSpecialFocus ? 'scale(1.05)' : 'none',
                     transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     position: 'relative'
                   }}

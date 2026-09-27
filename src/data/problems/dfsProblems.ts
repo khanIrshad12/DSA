@@ -41228,7 +41228,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (0, 1) look down -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look down -> (1, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -41269,7 +41269,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             }
           ],
           "vars": [
@@ -41279,11 +41279,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 1) = 'f'"
+              "(1, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -41613,7 +41613,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 0) look up -> (0, 0) = 'a'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (0, 0). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -41648,7 +41648,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 0,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 0,
@@ -41674,11 +41674,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(0, 0) = 'a'"
+              "(0, 0)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -41828,7 +41828,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 0) look up -> (1, 0) = 'e'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (1, 0). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -41873,7 +41873,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 0,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -41894,11 +41894,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 0) = 'e'"
+              "(1, 0)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -42058,7 +42058,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 0) look up -> (2, 0) = 'i'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (2, 0). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -42113,7 +42113,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 0,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -42129,11 +42129,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 0) = 'i'"
+              "(2, 0)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -42639,7 +42639,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 1) look up -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (1, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -42689,7 +42689,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -42720,17 +42720,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 1) = 'f'"
+              "(1, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 1) look down -> (3, 1) = 'n'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look down -> (3, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -42801,7 +42801,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             }
           ],
           "vars": [
@@ -42811,17 +42811,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(3, 1) = 'n'"
+              "(3, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 1) look left -> (2, 0) = 'i'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (2, 0). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -42876,7 +42876,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 0,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -42902,11 +42902,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 0) = 'i'"
+              "(2, 0)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -43600,7 +43600,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (0, 2) look down -> (1, 2) = 'g'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look down -> (1, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -43661,7 +43661,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -43696,17 +43696,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 2) = 'g'"
+              "(1, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (0, 2) look left -> (0, 1) = 'b'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (0, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -43746,7 +43746,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 0,
@@ -43802,11 +43802,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(0, 1) = 'b'"
+              "(0, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -44361,7 +44361,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 3) look up -> (0, 3) = 'd'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (0, 3). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -44411,7 +44411,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 3,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -44467,11 +44467,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(0, 3) = 'd'"
+              "(0, 3)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -44711,7 +44711,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 3) look up -> (1, 3) = 'h'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (1, 3). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -44781,7 +44781,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 3,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -44822,11 +44822,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 3) = 'h'"
+              "(1, 3)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -45076,7 +45076,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 3) look up -> (2, 3) = 'l'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (2, 3). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -45166,7 +45166,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 3,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -45192,11 +45192,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 3) = 'l'"
+              "(2, 3)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -45582,7 +45582,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 2) look up -> (2, 2) = 'k'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look up -> (2, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -45667,7 +45667,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -45703,11 +45703,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 2) = 'k'"
+              "(2, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -45844,7 +45844,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 2) look left -> (3, 1) = 'n'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (3, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -45944,7 +45944,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -45965,17 +45965,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(3, 1) = 'n'"
+              "(3, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 2) look right -> (3, 3) = 'p'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (3, 3). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -46086,7 +46086,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 3,
-              "status": "visited"
+              "status": "visited-target"
             }
           ],
           "vars": [
@@ -46096,11 +46096,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(3, 3) = 'p'"
+              "(3, 3)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -46491,7 +46491,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 3) look left -> (2, 2) = 'k'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (2, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -46576,7 +46576,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -46612,11 +46612,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 2) = 'k'"
+              "(2, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -46880,7 +46880,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 3) look left -> (1, 2) = 'g'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (1, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -46945,7 +46945,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -47001,11 +47001,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 2) = 'g'"
+              "(1, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -47269,7 +47269,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (0, 3) look left -> (0, 2) = 'c'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (0, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -47314,7 +47314,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 0,
@@ -47390,11 +47390,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(0, 2) = 'c'"
+              "(0, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -47785,7 +47785,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 2) look down -> (2, 2) = 'k'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look down -> (2, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -47871,7 +47871,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -47906,17 +47906,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 2) = 'k'"
+              "(2, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 2) look left -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (1, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -47976,7 +47976,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -48037,17 +48037,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 1) = 'f'"
+              "(1, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 2) look right -> (1, 3) = 'h'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (1, 3). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -48118,7 +48118,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 3,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -48168,11 +48168,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 3) = 'h'"
+              "(1, 3)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -48305,7 +48305,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 2) look down -> (3, 2) = 'o'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look down -> (3, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -48411,7 +48411,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -48426,17 +48426,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(3, 2) = 'o'"
+              "(3, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 2) look left -> (2, 1) = 'j'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (2, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -48516,7 +48516,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -48557,17 +48557,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 1) = 'j'"
+              "(2, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 2) look right -> (2, 3) = 'l'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (2, 3). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -48658,7 +48658,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 3,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -48688,11 +48688,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 3) = 'l'"
+              "(2, 3)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -49083,7 +49083,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 1) look left -> (3, 0) = 'm'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (3, 0). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -49178,7 +49178,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 0,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -49204,17 +49204,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(3, 0) = 'm'"
+              "(3, 0)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (3, 1) look right -> (3, 2) = 'o'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (3, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -49320,7 +49320,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 3,
@@ -49335,11 +49335,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(3, 2) = 'o'"
+              "(3, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -49730,7 +49730,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (2, 0) look right -> (2, 1) = 'j'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (2, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -49811,7 +49811,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -49851,11 +49851,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 1) = 'j'"
+              "(2, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -50119,7 +50119,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 0) look right -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (1, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -50180,7 +50180,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -50240,11 +50240,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 1) = 'f'"
+              "(1, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -50508,7 +50508,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (0, 0) look right -> (0, 1) = 'b'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (0, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -50549,7 +50549,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 0,
@@ -50629,11 +50629,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(0, 1) = 'b'"
+              "(0, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -50766,7 +50766,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (0, 1) look right -> (0, 2) = 'c'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (0, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -50812,7 +50812,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 0,
@@ -50887,11 +50887,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(0, 2) = 'c'"
+              "(0, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
@@ -51024,7 +51024,7 @@ export const dfsProblems: Problem[] = [
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 1) look down -> (2, 1) = 'j'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look down -> (2, 1). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -51105,7 +51105,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 2,
               "c": 1,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 2,
@@ -51145,17 +51145,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(2, 1) = 'j'"
+              "(2, 1)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 1) look left -> (1, 0) = 'e'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look left -> (1, 0). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -51210,7 +51210,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 0,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -51276,17 +51276,17 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 0) = 'e'"
+              "(1, 0)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },
         {
           "codeLine": 6,
-          "narration": "From (1, 1) look right -> (1, 2) = 'g'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "narration": "Look right -> (1, 2). It is already green (visited). Skip it, revisiting is what causes infinite loops on a grid.",
           "matrix": [
             [
               "a",
@@ -51352,7 +51352,7 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 2,
-              "status": "visited"
+              "status": "visited-target"
             },
             {
               "r": 1,
@@ -51407,11 +51407,11 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "target",
-              "(1, 2) = 'g'"
+              "(1, 2)"
             ],
             [
               "result",
-              "already visited (skip)"
+              "already visited"
             ]
           ]
         },

@@ -20,7 +20,7 @@ export interface Step {
   queue?: (string | number | any)[];
   heap?: (number | string)[];
   matrix?: (number | string)[][];
-  gridHighlights?: Array<{ r: number; c: number; status?: 'active' | 'visited' | 'target' | 'blocked'; badge?: string }>;
+  gridHighlights?: Array<{ r: number; c: number; status?: 'active' | 'visited' | 'visited-target' | 'target' | 'blocked'; badge?: string }>;
   tree?: {
     activeNode?: string | number;
     visitedNodes?: (string | number)[];
