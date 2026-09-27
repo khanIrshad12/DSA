@@ -302,6 +302,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
         })()}
 
         {(() => {
+          const narrationLower = (step.narration || '').toLowerCase();
           const isSwapStep = narrationLower.includes('swap') || narrationLower.includes('trade') || narrationLower.includes('exchange');
           const isPopStep = (step.customVisual?.remove !== undefined) || (step.highlights?.length === 1 && (narrationLower.startsWith('remove') || narrationLower.includes('pop ') || narrationLower.includes('delete ')));
           const isPushStep = (step.customVisual?.insert !== undefined) || (step.highlights?.length === 1 && (narrationLower.startsWith('insert') || narrationLower.includes('push ') || narrationLower.includes('append ')));
