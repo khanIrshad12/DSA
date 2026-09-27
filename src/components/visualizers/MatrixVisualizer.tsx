@@ -70,6 +70,9 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               const isFlatDimmed = step.dimmed?.includes(flatIdx);
               const isVisited = gridH?.status === 'visited' || gridH?.status === 'safe';
               const isCaptured = gridH?.status === 'captured';
+              const isPacific = gridH?.status === 'pacific';
+              const isAtlantic = gridH?.status === 'atlantic';
+              const isBoth = gridH?.status === 'both';
               const isBorderHighlight = gridH?.status === 'border-highlight';
               const isActive = gridH?.status === 'active' || isFlatActive;
 
@@ -97,12 +100,26 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                 textColor = '#ef4444';
                 isSpecialFocus = true;
                 focusShadow = '0 0 16px rgba(239, 68, 68, 0.45)';
+              } else if (isBoth) {
+                borderColor = 'var(--color-green)';
+                bgColor = 'rgba(16, 185, 129, 0.24)';
+                textColor = 'var(--color-green)';
+                isSpecialFocus = true;
+                focusShadow = '0 0 16px rgba(46, 213, 115, 0.5)';
               } else if (isActive || isTarget) {
                 borderColor = 'var(--accent)';
                 bgColor = 'rgba(255, 120, 40, 0.18)';
                 textColor = 'var(--accent)';
                 isSpecialFocus = true;
                 focusShadow = '0 0 16px var(--accent-glow)';
+              } else if (isPacific) {
+                borderColor = '#0284c7';
+                bgColor = 'rgba(14, 165, 233, 0.16)';
+                textColor = '#38bdf8';
+              } else if (isAtlantic) {
+                borderColor = '#a855f7';
+                bgColor = 'rgba(168, 85, 247, 0.16)';
+                textColor = '#c084fc';
               } else if (isVisited) {
                 borderColor = 'var(--color-green)';
                 bgColor = 'rgba(16, 185, 129, 0.14)';
@@ -120,9 +137,15 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               // Distinct badge styles
               let badgeColor = 'var(--accent)';
               let badgeBg = 'rgba(255, 120, 40, 0.18)';
-              if (badgeText === 'safe') {
+              if (badgeText === 'safe' || badgeText === 'both') {
                 badgeColor = 'var(--color-green)';
                 badgeBg = 'rgba(16, 185, 129, 0.22)';
+              } else if (badgeText === 'pac') {
+                badgeColor = '#38bdf8';
+                badgeBg = 'rgba(14, 165, 233, 0.2)';
+              } else if (badgeText === 'atl') {
+                badgeColor = '#c084fc';
+                badgeBg = 'rgba(168, 85, 247, 0.2)';
               } else if (badgeText === 'flip' || badgeText === 'captured') {
                 badgeColor = '#ef4444';
                 badgeBg = 'rgba(239, 68, 68, 0.22)';

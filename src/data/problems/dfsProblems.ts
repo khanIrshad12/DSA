@@ -56347,136 +56347,87 @@ export const dfsProblems: Problem[] = [
   ]
 },
   {
-    "id": "pacific-atlantic-water-flow",
-    "patternId": "dfs",
-    "title": "Pacific Atlantic Water Flow",
-    "subtitle": "Flood inward from both oceans, intersect",
-    "kind": "problem",
-    "leetcode": {
-      "id": 417,
-      "slug": "pacific-atlantic-water-flow",
-      "difficulty": "Medium"
-    },
-    "companies": [
-      "Google",
-      "Amazon",
-      "Facebook"
+  "id": "pacific-atlantic-water-flow",
+  "patternId": "dfs",
+  "title": "Pacific Atlantic Water Flow",
+  "subtitle": "Flood inward from both oceans, intersect",
+  "difficulty": "medium",
+  "leetcodeId": 417,
+  "askedAt": [
+    "Amazon",
+    "Google"
+  ],
+  "kind": "problem",
+  "statement": "Given a grid of cell heights where the Pacific Ocean borders the top and left edges and the Atlantic borders the bottom and right edges, return all cells from which water can flow to both oceans, moving only to equal-or-lower neighboring cells.",
+  "visualType": "matrix",
+  "initialInput": [
+    [
+      1,
+      2,
+      2,
+      3,
+      5
     ],
-    "statement": "Given an m x n matrix of heights, water flows to adjacent cells with equal or lower height. The Pacific touches the top and left edges, and the Atlantic touches bottom and right. Return all coordinates that can reach both oceans by reverse-flooding inward from ocean borders.",
-    "visualType": "matrix",
-    "initialInput": [
-      [
-        1,
-        2,
-        2,
-        3,
-        5
-      ],
-      [
-        3,
-        2,
-        3,
-        4,
-        4
-      ],
-      [
-        2,
-        4,
-        5,
-        3,
-        1
-      ],
-      [
-        6,
-        7,
-        1,
-        4,
-        5
-      ],
-      [
-        5,
-        1,
-        1,
-        2,
-        4
-      ]
+    [
+      3,
+      2,
+      3,
+      4,
+      4
     ],
-    "approaches": [
-      {
-        "id": "reverse-flood-dfs",
-        "label": "Reverse DFS from Ocean Borders",
-        "complexity": {
-          "time": "O(M · N)",
-          "space": "O(M · N)"
-        },
-        "pseudocode": [
-          "1. Run DFS from Pacific edges (top/left) going uphill (height >= prev)",
-          "2. Run DFS from Atlantic edges (bottom/right) going uphill",
-          "3. Result = Intersection of PacificReachable and AtlanticReachable"
-        ],
-        "starterCode": {
-          "javascript": "function pacificAtlantic(heights) {\n  const m = heights.length, n = heights[0].length;\n  const pac = Array.from({ length: m }, () => Array(n).fill(false));\n  const atl = Array.from({ length: m }, () => Array(n).fill(false));\n  function dfs(r, c, reachable) {\n    reachable[r][c] = true;\n    for (let [dr, dc] of [[-1,0],[1,0],[0,-1],[0,1]]) {\n      const nr = r + dr, nc = c + dc;\n      if (nr >= 0 && nr < m && nc >= 0 && nc < n && !reachable[nr][nc] && heights[nr][nc] >= heights[r][c]) {\n        dfs(nr, nc, reachable);\n      }\n    }\n  }\n  for (let r = 0; r < m; r++) { dfs(r, 0, pac); dfs(r, n - 1, atl); }\n  for (let c = 0; c < n; c++) { dfs(0, c, pac); dfs(m - 1, c, atl); }\n  const res = [];\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) if (pac[r][c] && atl[r][c]) res.push([r, c]);\n  }\n  return res;\n}",
-          "python": "def pacificAtlantic(heights):\n    m, n = len(heights), len(heights[0])\n    pac = [[False]*n for _ in range(m)]\n    atl = [[False]*n for _ in range(m)]\n    def dfs(r, c, reach):\n        reach[r][c] = True\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < m and 0 <= nc < n and not reach[nr][nc] and heights[nr][nc] >= heights[r][c]:\n                dfs(nr, nc, reach)\n    for r in range(m): dfs(r, 0, pac); dfs(r, n - 1, atl)\n    for c in range(n): dfs(0, c, pac); dfs(m - 1, c, atl)\n    return [[r, c] for r in range(m) for c in range(n) if pac[r][c] and atl[r][c]]"
-        },
-        "solutionCode": {
-          "javascript": "function pacificAtlantic(heights) {\n  const m = heights.length, n = heights[0].length;\n  const pac = Array.from({ length: m }, () => Array(n).fill(false));\n  const atl = Array.from({ length: m }, () => Array(n).fill(false));\n  function dfs(r, c, reachable) {\n    reachable[r][c] = true;\n    for (let [dr, dc] of [[-1,0],[1,0],[0,-1],[0,1]]) {\n      const nr = r + dr, nc = c + dc;\n      if (nr >= 0 && nr < m && nc >= 0 && nc < n && !reachable[nr][nc] && heights[nr][nc] >= heights[r][c]) {\n        dfs(nr, nc, reachable);\n      }\n    }\n  }\n  for (let r = 0; r < m; r++) { dfs(r, 0, pac); dfs(r, n - 1, atl); }\n  for (let c = 0; c < n; c++) { dfs(0, c, pac); dfs(m - 1, c, atl); }\n  const res = [];\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) if (pac[r][c] && atl[r][c]) res.push([r, c]);\n  }\n  return res;\n}",
-          "python": "def pacificAtlantic(heights):\n    m, n = len(heights), len(heights[0])\n    pac = [[False]*n for _ in range(m)]\n    atl = [[False]*n for _ in range(m)]\n    def dfs(r, c, reach):\n        reach[r][c] = True\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < m and 0 <= nc < n and not reach[nr][nc] and heights[nr][nc] >= heights[r][c]:\n                dfs(nr, nc, reach)\n    for r in range(m): dfs(r, 0, pac); dfs(r, n - 1, atl)\n    for c in range(n): dfs(0, c, pac); dfs(m - 1, c, atl)\n    return [[r, c] for r in range(m) for c in range(n) if pac[r][c] and atl[r][c]]"
-        },
-        "testCases": [
-          {
-            "input": [
-              [
-                [
-                  1,
-                  2,
-                  2
-                ],
-                [
-                  3,
-                  2,
-                  3
-                ],
-                [
-                  2,
-                  4,
-                  5
-                ]
-              ]
-            ],
-            "expected": [
-              [
-                0,
-                2
-              ],
-              [
-                1,
-                0
-              ],
-              [
-                1,
-                2
-              ],
-              [
-                2,
-                0
-              ],
-              [
-                2,
-                1
-              ],
-              [
-                2,
-                2
-              ]
-            ],
-            "description": "Cells reaching both oceans"
-          }
-        ],
-        "steps": [
-          {
-            "codeLine": 1,
-            "narration": "Flood uphill from Pacific ocean borders (top & left).",
-            "matrix": [
+    [
+      2,
+      4,
+      5,
+      3,
+      1
+    ],
+    [
+      6,
+      7,
+      1,
+      4,
+      5
+    ],
+    [
+      5,
+      1,
+      1,
+      2,
+      4
+    ]
+  ],
+  "approaches": [
+    {
+      "id": "reverse-dfs-from-both-oceans",
+      "label": "Reverse DFS from both oceans",
+      "complexity": {
+        "time": "O(R · C)",
+        "space": "O(R · C)"
+      },
+      "pseudocode": [
+        "flood(r, c, reach):",
+        "    reach[r][c] = true",
+        "    for each neighbour with height >= heights[r][c]:",
+        "        if not reach[nr][nc]: flood(nr, nc, reach)",
+        "seed Pacific from top row + left col",
+        "seed Atlantic from bottom row + right col",
+        "// intersect",
+        "answer = cells where pacific && atlantic",
+        "return answer"
+      ],
+      "starterCode": {
+        "javascript": "function pacificAtlantic(heights) {\n  if (!heights.length) return [];\n  const R = heights.length, C = heights[0].length;\n  const pacific = Array.from({ length: R }, () => Array(C).fill(false));\n  const atlantic = Array.from({ length: R }, () => Array(C).fill(false));\n  const dirs = [[-1,0], [1,0], [0,-1], [0,1]];\n  function dfs(r, c, reach) {\n    reach[r][c] = true;\n    for (let [dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr < 0 || nr >= R || nc < 0 || nc >= C || reach[nr][nc]) continue;\n      if (heights[nr][nc] >= heights[r][c]) dfs(nr, nc, reach);\n    }\n  }\n  for (let c = 0; c < C; c++) { dfs(0, c, pacific); dfs(R - 1, c, atlantic); }\n  for (let r = 0; r < R; r++) { dfs(r, 0, pacific); dfs(r, C - 1, atlantic); }\n  const result = [];\n  for (let r = 0; r < R; r++) {\n    for (let c = 0; c < C; c++) {\n      if (pacific[r][c] && atlantic[r][c]) result.push([r, c]);\n    }\n  }\n  return result;\n}",
+        "python": "def pacificAtlantic(heights: list[list[int]]) -> list[list[int]]:\n    if not heights: return []\n    R, C = len(heights), len(heights[0])\n    pacific = [[False]*C for _ in range(R)]\n    atlantic = [[False]*C for _ in range(R)]\n    dirs = [(-1,0), (1,0), (0,-1), (0,1)]\n    def dfs(r, c, reach):\n        reach[r][c] = True\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < R and 0 <= nc < C and not reach[nr][nc]:\n                if heights[nr][nc] >= heights[r][c]:\n                    dfs(nr, nc, reach)\n    for c in range(C):\n        dfs(0, c, pacific)\n        dfs(R - 1, c, atlantic)\n    for r in range(R):\n        dfs(r, 0, pacific)\n        dfs(r, C - 1, atlantic)\n    return [[r, c] for r in range(R) for c in range(C) if pacific[r][c] and atlantic[r][c]]"
+      },
+      "solutionCode": {
+        "javascript": "function pacificAtlantic(heights) {\n  if (!heights.length) return [];\n  const R = heights.length, C = heights[0].length;\n  const pacific = Array.from({ length: R }, () => Array(C).fill(false));\n  const atlantic = Array.from({ length: R }, () => Array(C).fill(false));\n  const dirs = [[-1,0], [1,0], [0,-1], [0,1]];\n  function dfs(r, c, reach) {\n    reach[r][c] = true;\n    for (let [dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr < 0 || nr >= R || nc < 0 || nc >= C || reach[nr][nc]) continue;\n      if (heights[nr][nc] >= heights[r][c]) dfs(nr, nc, reach);\n    }\n  }\n  for (let c = 0; c < C; c++) { dfs(0, c, pacific); dfs(R - 1, c, atlantic); }\n  for (let r = 0; r < R; r++) { dfs(r, 0, pacific); dfs(r, C - 1, atlantic); }\n  const result = [];\n  for (let r = 0; r < R; r++) {\n    for (let c = 0; c < C; c++) {\n      if (pacific[r][c] && atlantic[r][c]) result.push([r, c]);\n    }\n  }\n  return result;\n}",
+        "python": "def pacificAtlantic(heights: list[list[int]]) -> list[list[int]]:\n    if not heights: return []\n    R, C = len(heights), len(heights[0])\n    pacific = [[False]*C for _ in range(R)]\n    atlantic = [[False]*C for _ in range(R)]\n    dirs = [(-1,0), (1,0), (0,-1), (0,1)]\n    def dfs(r, c, reach):\n        reach[r][c] = True\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < R and 0 <= nc < C and not reach[nr][nc]:\n                if heights[nr][nc] >= heights[r][c]:\n                    dfs(nr, nc, reach)\n    for c in range(C):\n        dfs(0, c, pacific)\n        dfs(R - 1, c, atlantic)\n    for r in range(R):\n        dfs(r, 0, pacific)\n        dfs(r, C - 1, atlantic)\n    return [[r, c] for r in range(R) for c in range(C) if pacific[r][c] and atlantic[r][c]]"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
               [
                 1,
                 2,
@@ -56512,88 +56463,5391 @@ export const dfsProblems: Problem[] = [
                 2,
                 4
               ]
-            ],
-            "highlights": [
+            ]
+          ],
+          "expected": [
+            [
               0,
+              4
+            ],
+            [
               1,
+              3
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          "description": "5x5 continental divide watershed map"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Water on each cell flows to neighbours of EQUAL-or-LOWER height. We want every cell whose water can reach BOTH the Pacific (top & left edges) and the Atlantic (bottom & right edges). Testing each cell forward is expensive, so we REVERSE the flow: start at an ocean border and climb INWARD to cells that are >= the current height (water could have flowed down to us from them).",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
               2,
               3,
               4,
-              5,
-              10,
-              15,
-              20
+              4
             ],
-            "vars": [
-              [
-                "pacific_flooded",
-                true
-              ]
-            ]
-          },
-          {
-            "codeLine": 2,
-            "narration": "Flood uphill from Atlantic ocean borders (bottom & right). Intersect reachable sets.",
-            "matrix": [
-              [
-                1,
-                2,
-                2,
-                3,
-                5
-              ],
-              [
-                3,
-                2,
-                3,
-                4,
-                4
-              ],
-              [
-                2,
-                4,
-                5,
-                3,
-                1
-              ],
-              [
-                6,
-                7,
-                1,
-                4,
-                5
-              ],
-              [
-                5,
-                1,
-                1,
-                2,
-                4
-              ]
-            ],
-            "highlights": [
+            [
+              2,
               4,
-              9,
-              11,
-              12,
-              15,
-              16,
-              19,
-              20,
-              24
+              5,
+              3,
+              1
             ],
-            "best": {
-              "label": "Intersection: Coordinates Reaching Both Oceans"
-            },
-            "vars": [
-              [
-                "result_cells",
-                "[[0,4], [1,3], [1,4], [2,2], [3,0], [3,1], [4,0]]"
-              ]
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
             ]
-          }
-        ]
-      }
-    ]
-  }
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [],
+          "vars": [
+            [
+              "rule",
+              "flow to <= neighbour"
+            ],
+            [
+              "trick",
+              "reverse from oceans"
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "PHASE 1: Pacific. Seed the reverse-flood from the entire TOP row and LEFT column (the Pacific shoreline). Climbing only to >= cells, mark everything blue that can drain to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "border-highlight"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "border-highlight"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "seed",
+              "top row + left col"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (0, 0) [height 1] as reachable. From here we climb to any neighbour whose height is >= 1, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(0, 0)"
+            ],
+            [
+              "height",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (1, 0) [height 3] as reachable. From here we climb to any neighbour whose height is >= 3, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(1, 0)"
+            ],
+            [
+              "height",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (0, 1) [height 2] as reachable. From here we climb to any neighbour whose height is >= 2, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(0, 1)"
+            ],
+            [
+              "height",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (1, 1) [height 2] as reachable. From here we climb to any neighbour whose height is >= 2, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(1, 1)"
+            ],
+            [
+              "height",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (2, 1) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(2, 1)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (3, 1) [height 7] as reachable. From here we climb to any neighbour whose height is >= 7, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(3, 1)"
+            ],
+            [
+              "height",
+              7
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (2, 2) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(2, 2)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (1, 2) [height 3] as reachable. From here we climb to any neighbour whose height is >= 3, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(1, 2)"
+            ],
+            [
+              "height",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (1, 3) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(1, 3)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (1, 4) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(1, 4)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (0, 4) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(0, 4)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (0, 2) [height 2] as reachable. From here we climb to any neighbour whose height is >= 2, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(0, 2)"
+            ],
+            [
+              "height",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (0, 3) [height 3] as reachable. From here we climb to any neighbour whose height is >= 3, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(0, 3)"
+            ],
+            [
+              "height",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (2, 0) [height 2] as reachable. From here we climb to any neighbour whose height is >= 2, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(2, 0)"
+            ],
+            [
+              "height",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (3, 0) [height 6] as reachable. From here we climb to any neighbour whose height is >= 6, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(3, 0)"
+            ],
+            [
+              "height",
+              6
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Pacific reverse-flood marks (4, 0) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5, because real water could flow DOWN from that higher neighbour to this cell, and onward to the Pacific.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "active",
+              "badge": "pac"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Pacific"
+            ],
+            [
+              "at",
+              "(4, 0)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "Pacific flood complete! 15 cells (blue) can drain to the Pacific Ocean. Now start reverse flooding from the Atlantic shoreline.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "pacific"
+            }
+          ],
+          "vars": [
+            [
+              "Pacific reachable",
+              15
+            ],
+            [
+              "phase",
+              "Pacific finished"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "PHASE 2: Atlantic. Seed the reverse-flood from the entire BOTTOM row and RIGHT column (the Atlantic shoreline). Climbing only to >= cells, mark everything purple that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "border-highlight"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "border-highlight"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "border-highlight"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "border-highlight"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "border-highlight"
+            },
+            {
+              "r": 2,
+              "c": 4,
+              "status": "border-highlight"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "border-highlight"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "seed",
+              "bottom row + right col"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (4, 0) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(4, 0)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (3, 0) [height 6] as reachable. From here we climb to any neighbour whose height is >= 6 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(3, 0)"
+            ],
+            [
+              "height",
+              6
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (3, 1) [height 7] as reachable. From here we climb to any neighbour whose height is >= 7 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(3, 1)"
+            ],
+            [
+              "height",
+              7
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (4, 1) [height 1] as reachable. From here we climb to any neighbour whose height is >= 1 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(4, 1)"
+            ],
+            [
+              "height",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (4, 2) [height 1] as reachable. From here we climb to any neighbour whose height is >= 1 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(4, 2)"
+            ],
+            [
+              "height",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (3, 2) [height 1] as reachable. From here we climb to any neighbour whose height is >= 1 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(3, 2)"
+            ],
+            [
+              "height",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (2, 2) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(2, 2)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (3, 3) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(3, 3)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (3, 4) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(3, 4)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (4, 3) [height 2] as reachable. From here we climb to any neighbour whose height is >= 2 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(4, 3)"
+            ],
+            [
+              "height",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (4, 4) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(4, 4)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (0, 4) [height 5] as reachable. From here we climb to any neighbour whose height is >= 5 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(0, 4)"
+            ],
+            [
+              "height",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (1, 4) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(1, 4)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (1, 3) [height 4] as reachable. From here we climb to any neighbour whose height is >= 4 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(1, 3)"
+            ],
+            [
+              "height",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (2, 4) [height 1] as reachable. From here we climb to any neighbour whose height is >= 1 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 4,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(2, 4)"
+            ],
+            [
+              "height",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Atlantic reverse-flood marks (2, 3) [height 3] as reachable. From here we climb to any neighbour whose height is >= 3 that can drain to the Atlantic.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "active",
+              "badge": "atl"
+            }
+          ],
+          "vars": [
+            [
+              "ocean",
+              "Atlantic"
+            ],
+            [
+              "at",
+              "(2, 3)"
+            ],
+            [
+              "height",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "PHASE 3: Intersect both oceans! Scan all 25 cells on the map. Any cell reached by BOTH Pacific (blue) and Atlantic (purple) is an optimal watershed peak that can drain water to both oceans.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            }
+          ],
+          "vars": [
+            [
+              "phase",
+              "intersect"
+            ],
+            [
+              "rule",
+              "pacific && atlantic"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Found 7 watershed coordinates: [0,4], [1,3], [1,4], [2,2], [3,0], [3,1], [4,0]. Highlighted in radiant emerald green with 'both' badges.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            }
+          ],
+          "best": {
+            "label": "7 Cells Flow to Both Oceans"
+          },
+          "vars": [
+            [
+              "both count",
+              7
+            ],
+            [
+              "peaks",
+              "[0,4], [1,3], [1,4], [2,2], [3,0], [3,1], [4,0]"
+            ]
+          ]
+        },
+        {
+          "codeLine": 9,
+          "narration": "Return answer = [[0,4], [1,3], [1,4], [2,2], [3,0], [3,1], [4,0]]. Dual reverse-DFS finds all ocean intersection peaks in O(R · C) time and O(R · C) space.",
+          "matrix": [
+            [
+              1,
+              2,
+              2,
+              3,
+              5
+            ],
+            [
+              3,
+              2,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              4,
+              5,
+              3,
+              1
+            ],
+            [
+              6,
+              7,
+              1,
+              4,
+              5
+            ],
+            [
+              5,
+              1,
+              1,
+              2,
+              4
+            ]
+          ],
+          "customVisual": {
+            "label": "5 × 5 HEIGHTS · FLOW TO ≤ NEIGHBOUR",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "pacific"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "pacific"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "pacific"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 2,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 0,
+              "status": "both",
+              "badge": "both"
+            },
+            {
+              "r": 4,
+              "c": 1,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 3,
+              "status": "atlantic"
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "status": "atlantic"
+            }
+          ],
+          "best": {
+            "label": "7 Cells Flow to Both Oceans"
+          },
+          "vars": [
+            [
+              "status",
+              "COMPLETE"
+            ],
+            [
+              "result count",
+              7
+            ],
+            [
+              "time",
+              "O(R · C)"
+            ],
+            [
+              "space",
+              "O(R · C)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
 ];
