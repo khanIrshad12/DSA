@@ -39161,568 +39161,1652 @@ export const dfsProblems: Problem[] = [
   ]
 },
   {
-    "id": "graph-valid-tree",
-    "patternId": "dfs",
-    "title": "Graph Valid Tree",
-    "subtitle": "Connected + exactly n−1 edges + no cycle",
-    "kind": "problem",
-    "leetcode": {
-      "id": 261,
-      "slug": "graph-valid-tree",
-      "difficulty": "Medium"
-    },
-    "companies": [
-      "Google",
-      "Facebook",
-      "Amazon"
-    ],
-    "statement": "Given n nodes labeled from 0 to n-1 and a list of undirected edges, determine if these edges form a valid tree (must have exactly n-1 edges, contain no cycles, and be fully connected).",
-    "visualType": "graph",
-    "initialInput": [
-      5,
+  "id": "graph-valid-tree",
+  "patternId": "dfs",
+  "title": "Graph Valid Tree",
+  "subtitle": "Connected + exactly n−1 edges + no cycle",
+  "kind": "problem",
+  "leetcode": {
+    "id": 261,
+    "slug": "graph-valid-tree",
+    "difficulty": "Medium"
+  },
+  "companies": [
+    "Amazon",
+    "Google",
+    "Meta"
+  ],
+  "statement": "Given n nodes and a list of undirected edges, determine whether the edges form a valid tree, meaning the graph is fully connected and contains no cycles.",
+  "visualType": "graph",
+  "initialInput": [
+    5,
+    [
       [
-        [
-          0,
-          1
-        ],
-        [
-          0,
-          2
-        ],
-        [
-          0,
-          3
-        ],
-        [
-          1,
-          4
-        ]
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        4
       ]
-    ],
-    "approaches": [
-      {
-        "id": "dfs-cycle-check",
-        "label": "DFS Cycle Detection & Connectivity",
-        "complexity": {
-          "time": "O(V + E)",
-          "space": "O(V)"
-        },
-        "pseudocode": [
-          "if edges.length != n - 1: return false",
-          "hasCycle(node, parent, visited):",
-          "    visited.add(node)",
-          "    for neighbor in adj[node]:",
-          "        if neighbor == parent: continue",
-          "        if neighbor in visited or hasCycle(neighbor, node, visited): return true",
-          "    return false",
-          "return !hasCycle(0, -1, visited) and visited.size == n"
-        ],
-        "starterCode": {
-          "javascript": "function validTree(n, edges) {\n  if (edges.length !== n - 1) return false;\n  const adj = Array.from({ length: n }, () => []);\n  for (let [u, v] of edges) { adj[u].push(v); adj[v].push(u); }\n  const visited = new Set();\n  function hasCycle(u, p) {\n    visited.add(u);\n    for (let v of adj[u]) {\n      if (v === p) continue;\n      if (visited.has(v) || hasCycle(v, u)) return true;\n    }\n    return false;\n  }\n  if (hasCycle(0, -1)) return false;\n  return visited.size === n;\n}",
-          "python": "def validTree(n, edges):\n    if len(edges) != n - 1: return False\n    adj = [[] for _ in range(n)]\n    for u, v in edges:\n        adj[u].append(v); adj[v].append(u)\n    visited = set()\n    def has_cycle(u, p):\n        visited.add(u)\n        for v in adj[u]:\n            if v == p: continue\n            if v in visited or has_cycle(v, u): return True\n        return False\n    if has_cycle(0, -1): return False\n    return len(visited) == n"
-        },
-        "solutionCode": {
-          "javascript": "function validTree(n, edges) {\n  if (edges.length !== n - 1) return false;\n  const adj = Array.from({ length: n }, () => []);\n  for (let [u, v] of edges) { adj[u].push(v); adj[v].push(u); }\n  const visited = new Set();\n  function hasCycle(u, p) {\n    visited.add(u);\n    for (let v of adj[u]) {\n      if (v === p) continue;\n      if (visited.has(v) || hasCycle(v, u)) return true;\n    }\n    return false;\n  }\n  if (hasCycle(0, -1)) return false;\n  return visited.size === n;\n}",
-          "python": "def validTree(n, edges):\n    if len(edges) != n - 1: return False\n    adj = [[] for _ in range(n)]\n    for u, v in edges:\n        adj[u].append(v); adj[v].append(u)\n    visited = set()\n    def has_cycle(u, p):\n        visited.add(u)\n        for v in adj[u]:\n            if v == p: continue\n            if v in visited or has_cycle(v, u): return True\n        return False\n    if has_cycle(0, -1): return False\n    return len(visited) == n"
-        },
-        "testCases": [
-          {
-            "input": [
-              5,
+    ]
+  ],
+  "approaches": [
+    {
+      "id": "dfs-cycle-check",
+      "label": "Edge-count gate + DFS cycle/connectivity check",
+      "complexity": {
+        "time": "O(V + E)",
+        "space": "O(V)"
+      },
+      "pseudocode": [
+        "if edges.length != n - 1: return false   // too few/many",
+        "visited = {}",
+        "dfs(u, parent):",
+        "    mark u visited",
+        "    for v in adj[u]:",
+        "        if v == parent: continue         // skip back",
+        "        if v in visited: return false    // cycle!",
+        "        if not dfs(v, u): return false",
+        "    return true",
+        "return dfs(0, None) and visited.size == n // connected"
+      ],
+      "starterCode": {
+        "javascript": "function validTree(n, edges) {\n  if (edges.length !== n - 1) return false;\n  const adj = Array.from({ length: n }, () => []);\n  for (let [u, v] of edges) { adj[u].push(v); adj[v].push(u); }\n  const visited = new Set();\n  function dfs(u, parent) {\n    visited.add(u);\n    for (let v of adj[u]) {\n      if (v === parent) continue;\n      if (visited.has(v) || !dfs(v, u)) return false;\n    }\n    return true;\n  }\n  return dfs(0, -1) && visited.size === n;\n}",
+        "python": "def validTree(n, edges):\n    if len(edges) != n - 1: return False\n    adj = [[] for _ in range(n)]\n    for u, v in edges:\n        adj[u].append(v); adj[v].append(u)\n    visited = set()\n    def dfs(u, parent):\n        visited.add(u)\n        for v in adj[u]:\n            if v == parent: continue\n            if v in visited or not dfs(v, u): return False\n        return True\n    return dfs(0, -1) and len(visited) == n"
+      },
+      "solutionCode": {
+        "javascript": "function validTree(n, edges) {\n  if (edges.length !== n - 1) return false;\n  const adj = Array.from({ length: n }, () => []);\n  for (let [u, v] of edges) { adj[u].push(v); adj[v].push(u); }\n  const visited = new Set();\n  function dfs(u, parent) {\n    visited.add(u);\n    for (let v of adj[u]) {\n      if (v === parent) continue;\n      if (visited.has(v) || !dfs(v, u)) return false;\n    }\n    return true;\n  }\n  return dfs(0, -1) && visited.size === n;\n}",
+        "python": "def validTree(n, edges):\n    if len(edges) != n - 1: return False\n    adj = [[] for _ in range(n)]\n    for u, v in edges:\n        adj[u].append(v); adj[v].append(u)\n    visited = set()\n    def dfs(u, parent):\n        visited.add(u)\n        for v in adj[u]:\n            if v == parent: continue\n            if v in visited or not dfs(v, u): return False\n        return True\n    return dfs(0, -1) and len(visited) == n"
+      },
+      "testCases": [
+        {
+          "input": [
+            5,
+            [
               [
-                [
-                  0,
-                  1
-                ],
-                [
-                  0,
-                  2
-                ],
-                [
-                  0,
-                  3
-                ],
-                [
-                  1,
-                  4
-                ]
-              ]
-            ],
-            "expected": true,
-            "description": "Valid tree with 5 nodes, 4 edges"
-          }
-        ],
-        "steps": [
-          {
-            "codeLine": 1,
-            "narration": "Edge count = 4 == n - 1 (5 - 1 = 4) ✓.",
-            "graph": {
-              "activeNode": 0,
-              "visited": [
-                0
-              ]
-            },
-            "vars": [
-              [
-                "edges_count",
-                4
+                0,
+                1
               ],
               [
-                "n",
-                5
-              ]
-            ]
-          },
-          {
-            "codeLine": 7,
-            "narration": "DFS from 0 visits all 5 nodes with 0 cycles. Graph is a valid tree!",
-            "graph": {
-              "activeNode": 0,
-              "visited": [
                 0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
                 1,
-                2,
-                3,
                 4
               ]
-            },
-            "best": {
-              "label": "Valid Tree: Connected with 0 Cycles"
-            },
-            "vars": [
-              [
-                "validTree",
-                true
-              ]
             ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "matrices",
-    "patternId": "dfs",
-    "title": "Matrices",
-    "subtitle": "A grid is a graph · DFS the 4 neighbours",
-    "kind": "concept",
-    "statement": "A 2D matrix can be treated as an implicit graph where each cell (r, c) connects to its 4 orthogonal neighbors: (r-1, c), (r+1, c), (r, c-1), (r, c+1) with bounds check 0 <= r < m and 0 <= c < n.",
-    "visualType": "matrix",
-    "initialInput": [
-      [
-        1,
-        1,
-        0
+          ],
+          "expected": true,
+          "description": "5-node valid tree"
+        }
       ],
-      [
-        1,
-        0,
-        0
-      ],
-      [
-        0,
-        0,
-        1
-      ]
-    ],
-    "approaches": [
-      {
-        "id": "grid-dfs-template",
-        "label": "4-Directional DFS Template",
-        "complexity": {
-          "time": "O(M · N)",
-          "space": "O(M · N)"
-        },
-        "pseudocode": [
-          "dfs(r, c):",
-          "    if r < 0 or r >= m or c < 0 or c >= n: return  // Out of bounds",
-          "    if grid[r][c] == 0: return                     // Water or visited",
-          "    grid[r][c] = 0                                 // Mark visited",
-          "    dfs(r - 1, c); dfs(r + 1, c); dfs(r, c - 1); dfs(r, c + 1)"
-        ],
-        "starterCode": {
-          "javascript": "function gridDfs(grid, r, c) {\n  if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] === 0) return;\n  grid[r][c] = 0;\n  gridDfs(grid, r - 1, c);\n  gridDfs(grid, r + 1, c);\n  gridDfs(grid, r, c - 1);\n  gridDfs(grid, r, c + 1);\n}",
-          "python": "def gridDfs(grid, r, c):\n    if r < 0 or r >= len(grid) or c < 0 or c >= len(grid[0]) or grid[r][c] == 0: return\n    grid[r][c] = 0\n    for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n        gridDfs(grid, r + dr, c + dc)"
-        },
-        "solutionCode": {
-          "javascript": "function gridDfs(grid, r, c) {\n  if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] === 0) return;\n  grid[r][c] = 0;\n  gridDfs(grid, r - 1, c);\n  gridDfs(grid, r + 1, c);\n  gridDfs(grid, r, c - 1);\n  gridDfs(grid, r, c + 1);\n}",
-          "python": "def gridDfs(grid, r, c):\n    if r < 0 or r >= len(grid) or c < 0 or c >= len(grid[0]) or grid[r][c] == 0: return\n    grid[r][c] = 0\n    for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n        gridDfs(grid, r + dr, c + dc)"
-        },
-        "testCases": [
-          {
-            "input": [
-              [
-                [
-                  1,
-                  1
-                ],
-                [
-                  0,
-                  1
-                ]
-              ],
-              0,
-              0
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Graph Valid Tree (LeetCode 261): given n nodes and a list of undirected edges, is the graph a valid tree? A tree is exactly: fully CONNECTED and ACYCLIC. Two equivalent quick conditions, (1) edge count == n - 1, and (2) one DFS reaches all n nodes with no cycle. We check both.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeEdges": [],
+            "callStack": [],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
             ],
-            "expected": 3,
-            "description": "Traverse 3 land cells"
-          }
-        ],
-        "steps": [
-          {
-            "codeLine": 1,
-            "narration": "Start at cell (0, 0). Check 4 orthogonal neighbors (up, down, left, right).",
-            "matrix": [
-              [
-                1,
-                1,
-                0
-              ],
-              [
-                1,
-                0,
-                0
-              ],
-              [
-                0,
-                0,
-                1
-              ]
-            ],
-            "highlights": [
-              0
-            ],
-            "vars": [
-              [
-                "r",
-                0
-              ],
-              [
-                "c",
-                0
-              ],
-              [
-                "val",
-                1
-              ]
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
             ]
           },
-          {
-            "codeLine": 4,
-            "narration": "Visit (0, 1) and (1, 0). All connected 1s traversed.",
-            "matrix": [
+          "vars": [
+            [
+              "n",
+              5
+            ],
+            [
+              "edges",
+              4
+            ],
+            [
+              "need",
+              "connected + acyclic"
+            ]
+          ]
+        },
+        {
+          "codeLine": 1,
+          "narration": "Edge-count check: 4 edges == 5 - 1 = 4. Passes edge count gate! Now we run DFS from node 0 to verify connectivity and absence of cycles.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeEdges": [],
+            "callStack": [],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "edges == n - 1",
+              "4 == 4 (PASS)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 10,
+          "narration": "Call dfs(0, None) to start traversal from root vertex 0.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 0,
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "call",
+              "dfs(0, None)"
+            ],
+            [
+              "stack",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Mark node 0 as visited. visited = {0}.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "visited",
+              "{0}"
+            ],
+            [
+              "u",
+              0
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "Node 0 neighbours are [1, 2, 3]. First explore neighbour 1.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0
+            ],
+            "activeEdges": [
               [
-                1,
-                1,
-                0
-              ],
-              [
-                1,
-                0,
-                0
-              ],
-              [
-                0,
                 0,
                 1
               ]
             ],
-            "highlights": [
-              0,
-              1,
-              3
+            "callStack": [
+              "dfs(0)"
             ],
-            "best": {
-              "label": "Connected Region Explored"
-            },
-            "vars": [
-              [
-                "visited_cells",
-                "[(0,0), (0,1), (1,0)]"
-              ]
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
             ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "flood-fill",
-    "patternId": "dfs",
-    "title": "Flood Fill",
-    "subtitle": "Recolour a connected region",
-    "kind": "problem",
-    "leetcode": {
-      "id": 733,
-      "slug": "flood-fill",
-      "difficulty": "Easy"
-    },
-    "companies": [
-      "Amazon",
-      "Microsoft",
-      "Google"
-    ],
-    "statement": "An image is represented by an m x n integer grid. Perform a flood fill starting from pixel (sr, sc) by recoloring all 4-directionally connected pixels with the starting original color to a new color.",
-    "visualType": "matrix",
-    "initialInput": [
-      [
-        1,
-        1,
-        1
-      ],
-      [
-        1,
-        1,
-        0
-      ],
-      [
-        1,
-        0,
-        1
-      ]
-    ],
-    "approaches": [
-      {
-        "id": "dfs-flood-fill",
-        "label": "DFS Flood Fill",
-        "complexity": {
-          "time": "O(M · N)",
-          "space": "O(M · N)"
+          },
+          "vars": [
+            [
+              "u",
+              0
+            ],
+            [
+              "v",
+              1
+            ],
+            [
+              "parent",
+              "None"
+            ]
+          ]
         },
-        "pseudocode": [
-          "floodFill(image, sr, sc, newColor):",
-          "    origColor = image[sr][sc]",
-          "    if origColor == newColor: return image",
-          "    dfs(r, c):",
-          "        if r < 0 or r >= m or c < 0 or c >= n or image[r][c] != origColor: return",
-          "        image[r][c] = newColor",
-          "        dfs(r-1, c); dfs(r+1, c); dfs(r, c-1); dfs(r, c+1)"
-        ],
-        "starterCode": {
-          "javascript": "function floodFill(image, sr, sc, color) {\n  const orig = image[sr][sc];\n  if (orig === color) return image;\n  function dfs(r, c) {\n    if (r < 0 || r >= image.length || c < 0 || c >= image[0].length || image[r][c] !== orig) return;\n    image[r][c] = color;\n    dfs(r - 1, c); dfs(r + 1, c); dfs(r, c - 1); dfs(r, c + 1);\n  }\n  dfs(sr, sc);\n  return image;\n}",
-          "python": "def floodFill(image, sr, sc, color):\n    orig = image[sr][sc]\n    if orig == color: return image\n    def dfs(r, c):\n        if r < 0 or r >= len(image) or c < 0 or c >= len(image[0]) or image[r][c] != orig: return\n        image[r][c] = color\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            dfs(r + dr, c + dc)\n    dfs(sr, sc)\n    return image"
-        },
-        "solutionCode": {
-          "javascript": "function floodFill(image, sr, sc, color) {\n  const orig = image[sr][sc];\n  if (orig === color) return image;\n  function dfs(r, c) {\n    if (r < 0 || r >= image.length || c < 0 || c >= image[0].length || image[r][c] !== orig) return;\n    image[r][c] = color;\n    dfs(r - 1, c); dfs(r + 1, c); dfs(r, c - 1); dfs(r, c + 1);\n  }\n  dfs(sr, sc);\n  return image;\n}",
-          "python": "def floodFill(image, sr, sc, color):\n    orig = image[sr][sc]\n    if orig == color: return image\n    def dfs(r, c):\n        if r < 0 or r >= len(image) or c < 0 or c >= len(image[0]) or image[r][c] != orig: return\n        image[r][c] = color\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            dfs(r + dr, c + dc)\n    dfs(sr, sc)\n    return image"
-        },
-        "testCases": [
-          {
-            "input": [
+        {
+          "codeLine": 8,
+          "narration": "Neighbour 1 is unvisited. Call dfs(1, 0). Push dfs(1) onto call stack.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 1,
+            "visitedNodes": [
+              0
+            ],
+            "activeEdges": [
               [
-                [
-                  1,
-                  1,
-                  1
-                ],
-                [
-                  1,
-                  1,
-                  0
-                ],
-                [
-                  1,
-                  0,
-                  1
-                ]
-              ],
-              1,
-              1,
+                0,
+                1
+              ]
+            ],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "call",
+              "dfs(1, 0)"
+            ],
+            [
+              "stack",
               2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Mark node 1 as visited. visited = {0, 1}.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1
             ],
-            "expected": [
-              [
-                2,
-                2,
-                2
-              ],
-              [
-                2,
-                2,
-                0
-              ],
-              [
-                2,
-                0,
-                1
-              ]
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)"
             ],
-            "description": "Recolor connected 1s to 2"
-          }
-        ],
-        "steps": [
-          {
-            "codeLine": 1,
-            "narration": "Starting flood fill at pixel (sr=1, sc=1) with original color 1, newColor = 2.",
-            "matrix": {
-              "grid": [
-                [
-                  1,
-                  1,
-                  1
-                ],
-                [
-                  1,
-                  1,
-                  0
-                ],
-                [
-                  1,
-                  0,
-                  1
-                ]
-              ],
-              "activeCell": [
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "visited",
+              "{0, 1}"
+            ],
+            [
+              "u",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Node 1 neighbours: [0, 4]. For neighbour 0: 0 == parent, so skip back-edge to caller.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "u",
+              1
+            ],
+            [
+              "v",
+              0
+            ],
+            [
+              "parent",
+              0
+            ],
+            [
+              "action",
+              "skip parent"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "For neighbour 4: unvisited. Call dfs(4, 1). Push dfs(4) onto call stack.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 4,
+            "visitedNodes": [
+              0,
+              1
+            ],
+            "activeEdges": [
+              [
                 1,
+                4
+              ]
+            ],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)",
+              "dfs(4)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "call",
+              "dfs(4, 1)"
+            ],
+            [
+              "stack",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Mark node 4 visited. visited = {0, 1, 4}. Neighbour 1 is parent (skipped). Node 4 has no other neighbours. Return true.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)",
+              "dfs(4)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "visited",
+              "{0, 1, 4}"
+            ],
+            [
+              "returns",
+              "true"
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "Back in dfs(1): subtree under 4 is clean. Continue with 1's other neighbours.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 1,
+            "visitedNodes": [
+              0,
+              4
+            ],
+            "activeEdges": [
+              [
+                0,
                 1
               ]
-            },
-            "vars": [
+            ],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "resume",
+              "dfs(1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 9,
+          "narration": "Node 1 has finished checking all neighbours. Subtree under 1 is acyclic. Return true to dfs(0).",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)",
+              "dfs(1)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "u",
+              1
+            ],
+            [
+              "returns",
+              "true"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "Back in dfs(0). Continue loop: next neighbour of 0 is 2.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 0,
+            "visitedNodes": [
+              0,
+              1,
+              4
+            ],
+            "activeEdges": [
               [
-                "origColor",
-                1
-              ],
-              [
-                "newColor",
+                0,
                 2
               ]
+            ],
+            "callStack": [
+              "dfs(0)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
             ]
           },
-          {
-            "codeLine": 6,
-            "narration": "Color pixel (1, 1) -> 2. Recurse UP into (0, 1).",
-            "matrix": {
-              "grid": [
-                [
-                  1,
-                  1,
-                  1
-                ],
-                [
-                  1,
-                  2,
-                  0
-                ],
-                [
-                  1,
-                  0,
-                  1
-                ]
-              ],
-              "activeCell": [
+          "vars": [
+            [
+              "u",
+              0
+            ],
+            [
+              "v",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Neighbour 2 is unvisited. Call dfs(2, 0). Push dfs(2) onto call stack.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 2,
+            "visitedNodes": [
+              0,
+              1,
+              4
+            ],
+            "activeEdges": [
+              [
                 0,
-                1
+                2
               ]
-            },
-            "vars": [
-              [
-                "active",
-                "(0, 1)"
-              ]
+            ],
+            "callStack": [
+              "dfs(0)",
+              "dfs(2)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
             ]
           },
-          {
-            "codeLine": 6,
-            "narration": "Color pixel (0, 1) -> 2. Recurse LEFT into (0, 0) and RIGHT into (0, 2).",
-            "matrix": {
-              "grid": [
-                [
-                  2,
-                  2,
-                  2
-                ],
-                [
-                  1,
-                  2,
-                  0
-                ],
-                [
-                  1,
-                  0,
-                  1
-                ]
-              ],
-              "activeCell": [
+          "vars": [
+            [
+              "call",
+              "dfs(2, 0)"
+            ],
+            [
+              "stack",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Mark node 2 visited. visited = {0, 1, 4, 2}. Node 2 has neighbour 0 (parent skipped). Return true.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)",
+              "dfs(2)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "visited",
+              "{0, 1, 2, 4}"
+            ],
+            [
+              "returns",
+              "true"
+            ]
+          ]
+        },
+        {
+          "codeLine": 9,
+          "narration": "dfs(2) finishes. Return true to dfs(0). Pop dfs(2) from call stack.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "returns",
+              "true"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "Back in dfs(0). Next neighbour of 0 is 3.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 0,
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              4
+            ],
+            "activeEdges": [
+              [
                 0,
-                0
+                3
               ]
-            },
-            "vars": [
-              [
-                "active",
-                "(0, 0) -> (0, 2)"
-              ]
+            ],
+            "callStack": [
+              "dfs(0)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
             ]
           },
-          {
-            "codeLine": 6,
-            "narration": "Recurse into (1, 0) -> color 2. Pixel (2, 0) -> color 2. Pixel (1, 2) is water '0' (stop).",
-            "matrix": {
-              "grid": [
-                [
-                  2,
-                  2,
-                  2
-                ],
-                [
-                  2,
-                  2,
-                  0
-                ],
-                [
-                  2,
-                  0,
-                  1
-                ]
-              ],
-              "activeCell": [
-                2,
-                0
-              ]
-            },
-            "vars": [
+          "vars": [
+            [
+              "u",
+              0
+            ],
+            [
+              "v",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Neighbour 3 is unvisited. Call dfs(3, 0). Push dfs(3) onto call stack.",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "activeNode": 3,
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              4
+            ],
+            "activeEdges": [
               [
-                "active",
-                "(2, 0)"
+                0,
+                3
               ]
+            ],
+            "callStack": [
+              "dfs(0)",
+              "dfs(3)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
             ]
           },
-          {
-            "codeLine": 7,
-            "narration": "Flood fill complete! Pixel (2, 2) is isolated by 0s and remains color 1.",
-            "matrix": {
-              "grid": [
-                [
-                  2,
-                  2,
-                  2
-                ],
-                [
-                  2,
-                  2,
-                  0
-                ],
-                [
-                  2,
-                  0,
-                  1
-                ]
-              ]
-            },
-            "best": {
-              "label": "Flood Fill Applied"
-            },
-            "vars": [
-              [
-                "status",
-                "COMPLETE"
-              ]
+          "vars": [
+            [
+              "call",
+              "dfs(3, 0)"
+            ],
+            [
+              "stack",
+              2
             ]
-          }
-        ]
-      }
-    ]
-  },
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Mark node 3 visited. visited = {0, 1, 2, 3, 4}. All 5 nodes have now been visited without cycle!",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [
+              "dfs(0)",
+              "dfs(3)"
+            ],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "visited",
+              "{0, 1, 2, 3, 4}"
+            ],
+            [
+              "returns",
+              "true"
+            ]
+          ]
+        },
+        {
+          "codeLine": 10,
+          "narration": "All DFS branches returned true (no cycles) and visited.size == 5 == n (fully connected).",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "vars": [
+            [
+              "acyclic",
+              true
+            ],
+            [
+              "visited.size",
+              5
+            ],
+            [
+              "n",
+              5
+            ],
+            [
+              "connected",
+              true
+            ]
+          ]
+        },
+        {
+          "codeLine": 10,
+          "narration": "Conclusion: The graph has no cycles and connects all n nodes with n - 1 edges. It is a Valid Tree!",
+          "tree": {
+            "title": "CANDIDATE GRAPH",
+            "visitedNodes": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "activeEdges": [],
+            "callStack": [],
+            "nodes": [
+              {
+                "id": 0,
+                "x": 170,
+                "y": 50
+              },
+              {
+                "id": 1,
+                "x": 70,
+                "y": 140
+              },
+              {
+                "id": 2,
+                "x": 170,
+                "y": 140
+              },
+              {
+                "id": 3,
+                "x": 270,
+                "y": 140
+              },
+              {
+                "id": 4,
+                "x": 70,
+                "y": 230
+              }
+            ],
+            "edges": [
+              {
+                "from": 0,
+                "to": 1
+              },
+              {
+                "from": 0,
+                "to": 2
+              },
+              {
+                "from": 0,
+                "to": 3
+              },
+              {
+                "from": 1,
+                "to": 4
+              }
+            ]
+          },
+          "best": {
+            "label": "Valid Tree (True)"
+          },
+          "vars": [
+            [
+              "result",
+              "true (Valid Tree)"
+            ],
+            [
+              "time",
+              "O(V + E)"
+            ],
+            [
+              "space",
+              "O(V)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     "id": "number-of-islands",
     "patternId": "dfs",
