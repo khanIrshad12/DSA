@@ -2429,33 +2429,31 @@ export const greedyProblems: Problem[] = [
 },
   {
     id: 'partition-labels',
-    patternId: 'greedy',
     title: 'Partition Labels',
-    subtitle: "Extend the part to each letter's last occurrence",
+    category: 'Greedy Algorithms',
     difficulty: 'Medium',
     leetcodeId: 763,
-    askedAt: ['Amazon', 'Google', 'Facebook'],
-    kind: 'problem',
-    statement: 'You are given a string s. We want to partition the string into as many parts as possible so that each letter appears in at most one part. Return a list of integers representing the size of these parts.',
+    description: "Given a string, partition it into as many contiguous parts as possible so that each letter appears in at most one part, and return the list of part sizes in order.",
+    askedAt: ['Amazon', 'Google'],
     visualType: 'array',
     initialInput: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
     approaches: [
       {
         id: 'greedy-last-occurrence',
-        label: 'Greedy Last Occurrence Window',
+        label: "Greedy · cut at each letter's last occurrence",
         complexity: {
-          time: 'O(N)',
-          space: 'O(1) · at most 26 letters'
+          time: 'O(n)',
+          space: 'O(1)'
         },
         pseudocode: [
-          'last = map of each char to its last index in s',
-          'start = 0, end = 0, result = []',
-          'for i from 0 to n-1:',
+          'given s',
+          'for i = 0 to n - 1: last[s[i]] = i',
+          'start = 0; end = 0; sizes = []',
+          'for i = 0 to n - 1:',
           '    end = max(end, last[s[i]])',
           '    if i == end:',
-          '        result.append(end - start + 1)',
-          '        start = i + 1',
-          'return result'
+          '        sizes.push(end - start + 1); start = i + 1',
+          'return sizes'
         ],
         starterCode: {
           javascript: `function partitionLabels(s) {\n  const last = {};\n  for (let i = 0; i < s.length; i++) last[s[i]] = i;\n  const res = [];\n  let start = 0, end = 0;\n  for (let i = 0; i < s.length; i++) {\n    end = Math.max(end, last[s[i]]);\n    if (i === end) {\n      res.push(end - start + 1);\n      start = i + 1;\n    }\n  }\n  return res;\n}`,
@@ -2474,141 +2472,2906 @@ export const greedyProblems: Problem[] = [
         ],
         steps: [
           {
-            codeLine: 1,
-            narration: "Precompute last occurrence of each char: last['a']=8, last['b']=5, last['c']=7, last['d']=14, last['e']=15, last['f']=11, last['g']=13, last['h']=19, last['i']=22, last['j']=23, last['k']=20, last['l']=21.",
-            customVisual: { array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'] },
-            vars: [
-              ['last a', 8],
-              ['last b', 5],
-              ['last c', 7]
-            ]
+                    "codeLine": 1,
+                    "narration": "Given string s = \"ababcbacadefegdehijhklij\" (length 24). Goal: partition s into as many parts as possible such that each letter appears in at most one part.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ]
+                    },
+                    "vars": [
+                              [
+                                        "s",
+                                        "\"ababcbacadefegdehijhklij\""
+                              ],
+                              [
+                                        "n",
+                                        24
+                              ]
+                    ]
           },
           {
-            codeLine: 4,
-            narration: "Scan from index 0 ('a'): last['a'] = 8 -> extend end boundary to 8. Every letter in this part must be contained within at least [0..8].",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [{ start: 0, end: 8, color: 'accent', label: 'PART 1 BOUNDARY [0..8]' }]
-            },
-            highlights: [0, 8],
-            pointers: [
-              { name: 'start', index: 0, color: 'accent' },
-              { name: 'end', index: 8, color: 'accent2' }
-            ],
-            vars: [
-              ['start', 0],
-              ['end', 8]
-            ]
+                    "codeLine": 2,
+                    "narration": "First pass: record the LAST index of each letter. last = {a:8, b:5, c:7, d:14, e:15, f:11, g:13, h:19, i:22, j:23, k:20, l:21}. For example 'a' last appears at index 8, 'b' at 5. These caps are what every partition must respect.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ]
+                    },
+                    "highlights": [
+                              8,
+                              5,
+                              7,
+                              14,
+                              15,
+                              11,
+                              13,
+                              19,
+                              22,
+                              23,
+                              20,
+                              21
+                    ],
+                    "vars": [
+                              [
+                                        "last",
+                                        "{a:8, b:5, c:7, d:14, e:15, f:11, g:13, h:19, i:22, j:23, k:20, l:21}"
+                              ]
+                    ]
           },
           {
-            codeLine: 6,
-            narration: "Sweep through indices 1..8: all chars ('b' last=5, 'c' last=7) have last index <= 8. At i = 8, i == end! Cut Partition 1: length = 8 - 0 + 1 = 9 ('ababcbaca').",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [{ start: 0, end: 8, color: 'green', label: 'PARTITION 1: LENGTH 9' }]
-            },
-            highlights: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            best: { label: 'Partition 1 = 9' },
-            vars: [
-              ['part 1 length', 9],
-              ['collected', '[9]']
-            ]
+                    "codeLine": 3,
+                    "narration": "Initialize start = 0, end = 0, and an empty list sizes = []. We will scan left-to-right, stretching 'end' to include the last occurrence of every letter seen so far.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ]
+                    },
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 0,
+                                        "color": "accent",
+                                        "position": "top"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        0
+                              ],
+                              [
+                                        "sizes",
+                                        "[]"
+                              ]
+                    ]
           },
           {
-            codeLine: 4,
-            narration: "Start Partition 2 at index 9 ('d'): last['d'] = 14. At index 10 ('e'): last['e'] = 15 -> expand end boundary to 15.",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [
-                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
-                { start: 9, end: 15, color: 'accent', label: 'PART 2 BOUNDARY [9..15]' }
-              ]
-            },
-            highlights: [9, 15],
-            pointers: [
-              { name: 'start', index: 9, color: 'accent' },
-              { name: 'end', index: 15, color: 'accent2' }
-            ],
-            vars: [
-              ['start', 9],
-              ['end', 15]
-            ]
+                    "codeLine": 4,
+                    "narration": "i = 0: letter 'a' last appears at index 8, which is past the current end 0. The partition is FORCED to stretch: end <- 8. Greedy choice: extend only as far as the contained letters demand, never more.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              0,
+                              8
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 0,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        0
+                              ],
+                              [
+                                        "s[i]",
+                                        "a"
+                              ],
+                              [
+                                        "last['a']",
+                                        8
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
           },
           {
-            codeLine: 6,
-            narration: "Sweep through indices 11..15 ('f' last=11, 'g' last=13): all fit in <= 15. At i = 15, i == end! Cut Partition 2: length = 15 - 9 + 1 = 7 ('defegde').",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [
-                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
-                { start: 9, end: 15, color: 'green', label: 'PARTITION 2: LENGTH 7' }
-              ]
-            },
-            highlights: [9, 10, 11, 12, 13, 14, 15],
-            best: { label: 'Partitions: [9, 7]' },
-            vars: [
-              ['part 2 length', 7],
-              ['collected', '[9, 7]']
-            ]
+                    "codeLine": 4,
+                    "narration": "i = 1: letter 'b' last appears at index 5 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              1,
+                              5
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 1,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        1
+                              ],
+                              [
+                                        "s[i]",
+                                        "b"
+                              ],
+                              [
+                                        "last['b']",
+                                        5
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
           },
           {
-            codeLine: 4,
-            narration: "Start Partition 3 at index 16 ('h'): last['h']=19, last['i']=22, last['j']=23 -> expand end boundary to 23 (end of string).",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [
-                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
-                { start: 9, end: 15, color: 'green', label: 'PART 2 (7)' },
-                { start: 16, end: 23, color: 'accent', label: 'PART 3 BOUNDARY [16..23]' }
-              ]
-            },
-            highlights: [16, 23],
-            pointers: [
-              { name: 'start', index: 16, color: 'accent' },
-              { name: 'end', index: 23, color: 'accent2' }
-            ],
-            vars: [
-              ['start', 16],
-              ['end', 23]
-            ]
+                    "codeLine": 4,
+                    "narration": "i = 2: letter 'a' last appears at index 8 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              2,
+                              8
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 2,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        2
+                              ],
+                              [
+                                        "s[i]",
+                                        "a"
+                              ],
+                              [
+                                        "last['a']",
+                                        8
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
           },
           {
-            codeLine: 6,
-            narration: "At i = 23 (end of string): i == end! Cut Partition 3: length = 23 - 16 + 1 = 8 ('hijhklij').",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [
-                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
-                { start: 9, end: 15, color: 'green', label: 'PART 2 (7)' },
-                { start: 16, end: 23, color: 'green', label: 'PART 3 (8)' }
-              ]
-            },
-            highlights: [16, 17, 18, 19, 20, 21, 22, 23],
-            best: { label: 'All Partitions: [9, 7, 8]' },
-            vars: [
-              ['part 3 length', 8],
-              ['result', '[9, 7, 8]']
-            ]
+                    "codeLine": 4,
+                    "narration": "i = 3: letter 'b' last appears at index 5 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              3,
+                              5
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 3,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        3
+                              ],
+                              [
+                                        "s[i]",
+                                        "b"
+                              ],
+                              [
+                                        "last['b']",
+                                        5
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
           },
           {
-            codeLine: 8,
-            narration: "Return result = [9, 7, 8]. Max partitions created such that no letter appears in more than one part. O(N) time and O(1) space.",
-            customVisual: {
-              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
-              brackets: [
-                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
-                { start: 9, end: 15, color: 'green', label: 'PART 2 (7)' },
-                { start: 16, end: 23, color: 'green', label: 'PART 3 (8)' }
-              ]
-            },
-            best: { label: 'Result: [9, 7, 8]' },
-            vars: [
-              ['return', '[9, 7, 8]'],
-              ['time', 'O(N)'],
-              ['space', 'O(1)']
-            ]
+                    "codeLine": 4,
+                    "narration": "i = 4: letter 'c' last appears at index 7 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              4,
+                              7
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 4,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        4
+                              ],
+                              [
+                                        "s[i]",
+                                        "c"
+                              ],
+                              [
+                                        "last['c']",
+                                        7
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 5: letter 'b' last appears at index 5 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              5
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 5,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        5
+                              ],
+                              [
+                                        "s[i]",
+                                        "b"
+                              ],
+                              [
+                                        "last['b']",
+                                        5
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 6: letter 'a' last appears at index 8 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              6,
+                              8
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 6,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        6
+                              ],
+                              [
+                                        "s[i]",
+                                        "a"
+                              ],
+                              [
+                                        "last['a']",
+                                        8
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 7: letter 'c' last appears at index 7 <= end = 8. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              7
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 7,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        7
+                              ],
+                              [
+                                        "s[i]",
+                                        "c"
+                              ],
+                              [
+                                        "last['c']",
+                                        7
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 6,
+                    "narration": "i = 8: letter 'a' (last=8). We reached i == end (8 == 8)! All characters in [0..8] have their last occurrences within [0..8]. Safe to close partition 1.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [0..8]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              0,
+                              1,
+                              2,
+                              3,
+                              4,
+                              5,
+                              6,
+                              7,
+                              8
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 0,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 8,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        8
+                              ],
+                              [
+                                        "s[i]",
+                                        "a"
+                              ],
+                              [
+                                        "start",
+                                        0
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ],
+                              [
+                                        "i == end",
+                                        "true"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 7,
+                    "narration": "Cut Partition 1: size = 8 - 0 + 1 = 9 (\"ababcbaca\"). Record sizes.push(9) -> sizes = [9]. Advance start = i + 1 = 9.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              0,
+                              1,
+                              2,
+                              3,
+                              4,
+                              5,
+                              6,
+                              7,
+                              8
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 8,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 8,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "best": {
+                              "label": "Partition 1 = 9 (\"ababcbaca\")"
+                    },
+                    "vars": [
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        8
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 9: letter 'd' last appears at index 14. Expand partition boundary: end <- max(8, 14) = 14.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 14,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..14]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              9,
+                              14
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 14,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 9,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        9
+                              ],
+                              [
+                                        "s[i]",
+                                        "d"
+                              ],
+                              [
+                                        "last['d']",
+                                        14
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        14
+                              ],
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 10: letter 'e' last appears at index 15 > end = 14. Expand partition boundary: end <- 15.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..15]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              10,
+                              15
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 10,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        10
+                              ],
+                              [
+                                        "s[i]",
+                                        "e"
+                              ],
+                              [
+                                        "last['e']",
+                                        15
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ],
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 11: letter 'f' last appears at index 11 <= end = 15. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..15]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              11
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 11,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        11
+                              ],
+                              [
+                                        "s[i]",
+                                        "f"
+                              ],
+                              [
+                                        "last['f']",
+                                        11
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ],
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 12: letter 'e' last appears at index 15 <= end = 15. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..15]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              12,
+                              15
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 12,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        12
+                              ],
+                              [
+                                        "s[i]",
+                                        "e"
+                              ],
+                              [
+                                        "last['e']",
+                                        15
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ],
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 13: letter 'g' last appears at index 13 <= end = 15. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..15]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              13
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 13,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        13
+                              ],
+                              [
+                                        "s[i]",
+                                        "g"
+                              ],
+                              [
+                                        "last['g']",
+                                        13
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ],
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 14: letter 'd' last appears at index 14 <= end = 15. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..15]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              14
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 14,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        14
+                              ],
+                              [
+                                        "s[i]",
+                                        "d"
+                              ],
+                              [
+                                        "last['d']",
+                                        14
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ],
+                              [
+                                        "sizes",
+                                        "[9]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 6,
+                    "narration": "i = 15: letter 'e' (last=15). We reached i == end (15 == 15)! All characters in [9..15] have their last occurrences within [9..15]. Safe to close partition 2.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [9..15]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              9,
+                              10,
+                              11,
+                              12,
+                              13,
+                              14,
+                              15
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 9,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 15,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        15
+                              ],
+                              [
+                                        "s[i]",
+                                        "e"
+                              ],
+                              [
+                                        "start",
+                                        9
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ],
+                              [
+                                        "i == end",
+                                        "true"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 7,
+                    "narration": "Cut Partition 2: size = 15 - 9 + 1 = 7 (\"defegde\"). Record sizes.push(7) -> sizes = [9, 7]. Advance start = i + 1 = 16.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              9,
+                              10,
+                              11,
+                              12,
+                              13,
+                              14,
+                              15
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 15,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 15,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "best": {
+                              "label": "Partition 2 = 7 (\"defegde\")"
+                    },
+                    "vars": [
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        15
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 16: letter 'h' last appears at index 19. Expand partition boundary: end <- max(15, 19) = 19.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 19,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..19]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              16,
+                              19
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 19,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 16,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        16
+                              ],
+                              [
+                                        "s[i]",
+                                        "h"
+                              ],
+                              [
+                                        "last['h']",
+                                        19
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        19
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 17: letter 'i' last appears at index 22 > end = 19. Expand partition boundary: end <- 22.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 22,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..22]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              17,
+                              22
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 22,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 17,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        17
+                              ],
+                              [
+                                        "s[i]",
+                                        "i"
+                              ],
+                              [
+                                        "last['i']",
+                                        22
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        22
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 18: letter 'j' last appears at index 23 > end = 22. Expand partition boundary to string end: end <- 23.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..23]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              18,
+                              23
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 18,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        18
+                              ],
+                              [
+                                        "s[i]",
+                                        "j"
+                              ],
+                              [
+                                        "last['j']",
+                                        23
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 19: letter 'h' last appears at index 19 <= end = 23. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..23]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              19
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 19,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        19
+                              ],
+                              [
+                                        "s[i]",
+                                        "h"
+                              ],
+                              [
+                                        "last['h']",
+                                        19
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 20: letter 'k' last appears at index 20 <= end = 23. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..23]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              20
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 20,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        20
+                              ],
+                              [
+                                        "s[i]",
+                                        "k"
+                              ],
+                              [
+                                        "last['k']",
+                                        20
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 21: letter 'l' last appears at index 21 <= end = 23. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..23]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              21
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 21,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        21
+                              ],
+                              [
+                                        "s[i]",
+                                        "l"
+                              ],
+                              [
+                                        "last['l']",
+                                        21
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "i = 22: letter 'i' last appears at index 22 <= end = 23. Already inside the part, end is unchanged.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..23]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              22
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 22,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        22
+                              ],
+                              [
+                                        "s[i]",
+                                        "i"
+                              ],
+                              [
+                                        "last['i']",
+                                        22
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ],
+                              [
+                                        "sizes",
+                                        "[9, 7]"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 6,
+                    "narration": "i = 23: letter 'j' (last=23). We reached i == end (23 == 23)! All characters in [16..23] have their last occurrences within [16..23]. Safe to close partition 3.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "amber",
+                                                  "label": "OPEN PART [16..23]"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              16,
+                              17,
+                              18,
+                              19,
+                              20,
+                              21,
+                              22,
+                              23
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 16,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 23,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "vars": [
+                              [
+                                        "i",
+                                        23
+                              ],
+                              [
+                                        "s[i]",
+                                        "j"
+                              ],
+                              [
+                                        "start",
+                                        16
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ],
+                              [
+                                        "i == end",
+                                        "true"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 7,
+                    "narration": "Cut Partition 3: size = 23 - 16 + 1 = 8 (\"hijhklij\"). Record sizes.push(8) -> sizes = [9, 7, 8]. Advance start = i + 1 = 24.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "green",
+                                                  "label": "PART 3: 8"
+                                        }
+                              ]
+                    },
+                    "highlights": [
+                              16,
+                              17,
+                              18,
+                              19,
+                              20,
+                              21,
+                              22,
+                              23
+                    ],
+                    "pointers": [
+                              {
+                                        "name": "start",
+                                        "index": 23,
+                                        "color": "blue",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "end",
+                                        "index": 23,
+                                        "color": "accent",
+                                        "position": "top"
+                              },
+                              {
+                                        "name": "i",
+                                        "index": 23,
+                                        "color": "amber",
+                                        "position": "bottom"
+                              }
+                    ],
+                    "best": {
+                              "label": "Partition 3 = 8 (\"hijhklij\")"
+                    },
+                    "vars": [
+                              [
+                                        "sizes",
+                                        "[9, 7, 8]"
+                              ],
+                              [
+                                        "start",
+                                        24
+                              ],
+                              [
+                                        "end",
+                                        23
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 4,
+                    "narration": "Loop finishes: reached end of string (i = 24 >= n). All 24 characters have been cleanly partitioned.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "green",
+                                                  "label": "PART 3: 8"
+                                        }
+                              ]
+                    },
+                    "vars": [
+                              [
+                                        "sizes",
+                                        "[9, 7, 8]"
+                              ],
+                              [
+                                        "partitions",
+                                        3
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 8,
+                    "narration": "return sizes = [9, 7, 8]. Each character in s appears in at most one partition, and the number of partitions is maximized.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1: 9"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2: 7"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "green",
+                                                  "label": "PART 3: 8"
+                                        }
+                              ]
+                    },
+                    "best": {
+                              "label": "Result: [9, 7, 8]"
+                    },
+                    "vars": [
+                              [
+                                        "return",
+                                        "[9, 7, 8]"
+                              ],
+                              [
+                                        "time",
+                                        "O(n)"
+                              ],
+                              [
+                                        "space",
+                                        "O(1)"
+                              ]
+                    ]
+          },
+          {
+                    "codeLine": 8,
+                    "narration": "Done. Result = [9, 7, 8]. Partitions: \"ababcbaca\" (9), \"defegde\" (7), \"hijhklij\" (8). Two linear passes with O(n) time and O(1) space.",
+                    "customVisual": {
+                              "array": [
+                                        "a",
+                                        "b",
+                                        "a",
+                                        "b",
+                                        "c",
+                                        "b",
+                                        "a",
+                                        "c",
+                                        "a",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "e",
+                                        "g",
+                                        "d",
+                                        "e",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "h",
+                                        "k",
+                                        "l",
+                                        "i",
+                                        "j"
+                              ],
+                              "brackets": [
+                                        {
+                                                  "start": 0,
+                                                  "end": 8,
+                                                  "color": "green",
+                                                  "label": "PART 1 (9)"
+                                        },
+                                        {
+                                                  "start": 9,
+                                                  "end": 15,
+                                                  "color": "green",
+                                                  "label": "PART 2 (7)"
+                                        },
+                                        {
+                                                  "start": 16,
+                                                  "end": 23,
+                                                  "color": "green",
+                                                  "label": "PART 3 (8)"
+                                        }
+                              ]
+                    },
+                    "best": {
+                              "label": "Final Output = [9, 7, 8]"
+                    },
+                    "vars": [
+                              [
+                                        "result",
+                                        "[9, 7, 8]"
+                              ],
+                              [
+                                        "parts",
+                                        3
+                              ],
+                              [
+                                        "time",
+                                        "O(n)"
+                              ],
+                              [
+                                        "space",
+                                        "O(1)"
+                              ]
+                    ]
           }
-        ]
+]
       }
     ]
   }
