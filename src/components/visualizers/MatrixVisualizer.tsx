@@ -8,13 +8,29 @@ interface MatrixVisualizerProps {
 }
 
 export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }) => {
-  const matrix = (step.matrix || data || [
-    [1, 3, 5, 7],
-    [10, 11, 16, 20],
-    [23, 30, 34, 60]
-  ]) as number[][];
-  
-  const gridHighlights = step.gridHighlights || [];
+  const rawMatrix = (step.matrix && Array.isArray((step.matrix as any).grid))
+    ? (step.matrix as any).grid
+    : (Array.isArray(step.matrix)
+        ? step.matrix
+        : (data && Array.isArray((data as any).grid)
+            ? (data as any).grid
+            : (Array.isArray(data) ? data : [
+                [1, 3, 5, 7],
+                [10, 11, 16, 20],
+                [23, 30, 34, 60]
+              ])));
+
+  const matrix = (Array.isArray(rawMatrix) ? rawMatrix : []) as (number | string)[][];
+  const gridHighlights = [...(step.gridHighlights || [])];
+
+  const activeCell = (step.matrix as any)?.activeCell;
+  if (Array.isArray(activeCell) && activeCell.length === 2) {
+    const [ar, ac] = activeCell;
+    if (!gridHighlights.some(h => h.r === ar && h.c === ac)) {
+      gridHighlights.push({ r: ar, c: ac, status: 'active' });
+    }
+  }
+
   const numCols = matrix[0]?.length || 1;
 
   return (
