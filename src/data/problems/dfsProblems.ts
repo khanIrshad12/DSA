@@ -55641,217 +55641,711 @@ export const dfsProblems: Problem[] = [
   ]
 },
   {
-    "id": "surrounded-regions",
-    "patternId": "dfs",
-    "title": "Surrounded Regions",
-    "subtitle": "Border-connected O's are safe",
-    "kind": "problem",
-    "leetcode": {
-      "id": 130,
-      "slug": "surrounded-regions",
-      "difficulty": "Medium"
-    },
-    "companies": [
-      "Amazon",
-      "Google",
-      "Facebook"
+  "id": "surrounded-regions",
+  "patternId": "dfs",
+  "title": "Surrounded Regions",
+  "subtitle": "Border-connected O's are safe",
+  "difficulty": "medium",
+  "leetcodeId": 130,
+  "askedAt": [
+    "Amazon",
+    "Google"
+  ],
+  "kind": "problem",
+  "statement": "Given a grid of X and O cells, flip to X every region of O cells that is fully surrounded, that is, any region not connected 4-directionally to an O on the grid border.",
+  "visualType": "matrix",
+  "initialInput": [
+    [
+      "X",
+      "X",
+      "X",
+      "X"
     ],
-    "statement": "Given an m x n matrix board containing \"X\" and \"O\", capture all regions that are 4-directionally surrounded by \"X\". Start DFS from all border \"O\"s and mark them safe (\"S\"). Then flip remaining \"O\"s to \"X\" and restore \"S\" back to \"O\".",
-    "visualType": "matrix",
-    "initialInput": [
-      [
-        "X",
-        "X",
-        "X",
-        "X"
-      ],
-      [
-        "X",
-        "O",
-        "O",
-        "X"
-      ],
-      [
-        "X",
-        "X",
-        "O",
-        "X"
-      ],
-      [
-        "X",
-        "O",
-        "X",
-        "X"
-      ]
+    [
+      "X",
+      "O",
+      "O",
+      "X"
     ],
-    "approaches": [
-      {
-        "id": "boundary-dfs",
-        "label": "Boundary DFS Marking",
-        "complexity": {
-          "time": "O(M · N)",
-          "space": "O(M · N)"
-        },
-        "pseudocode": [
-          "1. Run DFS from all \"O\" cells on grid boundaries, mark as \"S\" (Safe)",
-          "2. Iterate whole board: flip inner \"O\" -> \"X\" (captured)",
-          "3. Restore \"S\" -> \"O\" (safe border-connected)"
-        ],
-        "starterCode": {
-          "javascript": "function solve(board) {\n  const m = board.length, n = board[0].length;\n  function mark(r, c) {\n    if (r < 0 || r >= m || c < 0 || c >= n || board[r][c] !== 'O') return;\n    board[r][c] = 'S';\n    mark(r - 1, c); mark(r + 1, c); mark(r, c - 1); mark(r, c + 1);\n  }\n  for (let r = 0; r < m; r++) { mark(r, 0); mark(r, n - 1); }\n  for (let c = 0; c < n; c++) { mark(0, c); mark(m - 1, c); }\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) {\n      if (board[r][c] === 'O') board[r][c] = 'X';\n      else if (board[r][c] === 'S') board[r][c] = 'O';\n    }\n  }\n}",
-          "python": "def solve(board):\n    m, n = len(board), len(board[0])\n    def mark(r, c):\n        if r < 0 or r >= m or c < 0 or c >= n or board[r][c] != 'O': return\n        board[r][c] = 'S'\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            mark(r + dr, c + dc)\n    for r in range(m): mark(r, 0); mark(r, n - 1)\n    for c in range(n): mark(0, c); mark(m - 1, c)\n    for r in range(m):\n        for c in range(n):\n            if board[r][c] == 'O': board[r][c] = 'X'\n            elif board[r][c] == 'S': board[r][c] = 'O'"
-        },
-        "solutionCode": {
-          "javascript": "function solve(board) {\n  const m = board.length, n = board[0].length;\n  function mark(r, c) {\n    if (r < 0 || r >= m || c < 0 || c >= n || board[r][c] !== 'O') return;\n    board[r][c] = 'S';\n    mark(r - 1, c); mark(r + 1, c); mark(r, c - 1); mark(r, c + 1);\n  }\n  for (let r = 0; r < m; r++) { mark(r, 0); mark(r, n - 1); }\n  for (let c = 0; c < n; c++) { mark(0, c); mark(m - 1, c); }\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) {\n      if (board[r][c] === 'O') board[r][c] = 'X';\n      else if (board[r][c] === 'S') board[r][c] = 'O';\n    }\n  }\n}",
-          "python": "def solve(board):\n    m, n = len(board), len(board[0])\n    def mark(r, c):\n        if r < 0 or r >= m or c < 0 or c >= n or board[r][c] != 'O': return\n        board[r][c] = 'S'\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            mark(r + dr, c + dc)\n    for r in range(m): mark(r, 0); mark(r, n - 1)\n    for c in range(n): mark(0, c); mark(m - 1, c)\n    for r in range(m):\n        for c in range(n):\n            if board[r][c] == 'O': board[r][c] = 'X'\n            elif board[r][c] == 'S': board[r][c] = 'O'"
-        },
-        "testCases": [
-          {
-            "input": [
-              [
-                [
-                  "X",
-                  "X",
-                  "X",
-                  "X"
-                ],
-                [
-                  "X",
-                  "O",
-                  "O",
-                  "X"
-                ],
-                [
-                  "X",
-                  "X",
-                  "O",
-                  "X"
-                ],
-                [
-                  "X",
-                  "O",
-                  "X",
-                  "X"
-                ]
-              ]
-            ],
-            "expected": [
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "O",
-                "X",
-                "X"
-              ]
-            ],
-            "description": "Capture inner O cells"
-          }
-        ],
-        "steps": [
-          {
-            "codeLine": 1,
-            "narration": "Mark border \"O\" at (3, 1) as Safe \"S\".",
-            "matrix": [
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "O",
-                "O",
-                "X"
-              ],
-              [
-                "X",
-                "X",
-                "O",
-                "X"
-              ],
-              [
-                "X",
-                "S",
-                "X",
-                "X"
-              ]
-            ],
-            "highlights": [
-              13
-            ],
-            "vars": [
-              [
-                "borderSafe",
-                "(3, 1)"
-              ]
-            ]
-          },
-          {
-            "codeLine": 2,
-            "narration": "Flip all surrounded interior \"O\"s to \"X\". Safe \"S\" restored to \"O\".",
-            "matrix": [
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "X",
-                "X",
-                "X"
-              ],
-              [
-                "X",
-                "O",
-                "X",
-                "X"
-              ]
-            ],
-            "highlights": [
-              5,
-              6,
-              10
-            ],
-            "best": {
-              "label": "Surrounded Regions Captured"
-            },
-            "vars": [
-              [
-                "captured",
-                "3 cells"
-              ]
-            ]
-          }
-        ]
-      }
+    [
+      "X",
+      "X",
+      "O",
+      "X"
+    ],
+    [
+      "X",
+      "O",
+      "X",
+      "X"
     ]
-  },
+  ],
+  "approaches": [
+    {
+      "id": "border-flood-capture-sweep",
+      "label": "Border flood + capture sweep",
+      "complexity": {
+        "time": "O(R · C)",
+        "space": "O(R · C)"
+      },
+      "pseudocode": [
+        "markSafe(r, c):",
+        "    safe[r][c] = true",
+        "    for each O-neighbour not safe: markSafe",
+        "for each border cell that is 'O':",
+        "    markSafe(r, c)",
+        "// capture sweep",
+        "for each cell (r, c):",
+        "    if grid[r][c]=='O' and not safe: grid[r][c]='X'",
+        "return grid"
+      ],
+      "starterCode": {
+        "javascript": "function solve(board) {\n  const R = board.length, C = board[0].length;\n  function markSafe(r, c) {\n    if (r < 0 || r >= R || c < 0 || c >= C || board[r][c] !== 'O') return;\n    board[r][c] = 'S';\n    markSafe(r - 1, c); markSafe(r + 1, c); markSafe(r, c - 1); markSafe(r, c + 1);\n  }\n  for (let r = 0; r < R; r++) {\n    markSafe(r, 0); markSafe(r, C - 1);\n  }\n  for (let c = 0; c < C; c++) {\n    markSafe(0, c); markSafe(R - 1, c);\n  }\n  for (let r = 0; r < R; r++) {\n    for (let c = 0; c < C; c++) {\n      if (board[r][c] === 'O') board[r][c] = 'X';\n      else if (board[r][c] === 'S') board[r][c] = 'O';\n    }\n  }\n  return board;\n}",
+        "python": "def solve(board: list[list[str]]) -> None:\n    R, C = len(board), len(board[0])\n    def markSafe(r, c):\n        if r < 0 or r >= R or c < 0 or c >= C or board[r][c] != 'O':\n            return\n        board[r][c] = 'S'\n        markSafe(r - 1, c)\n        markSafe(r + 1, c)\n        markSafe(r, c - 1)\n        markSafe(r, c + 1)\n    for r in range(R):\n        markSafe(r, 0); markSafe(r, C - 1)\n    for c in range(C):\n        markSafe(0, c); markSafe(R - 1, c)\n    for r in range(R):\n        for c in range(C):\n            if board[r][c] == 'O':\n                board[r][c] = 'X'\n            elif board[r][c] == 'S':\n                board[r][c] = 'O'"
+      },
+      "solutionCode": {
+        "javascript": "function solve(board) {\n  const R = board.length, C = board[0].length;\n  function markSafe(r, c) {\n    if (r < 0 || r >= R || c < 0 || c >= C || board[r][c] !== 'O') return;\n    board[r][c] = 'S';\n    markSafe(r - 1, c); markSafe(r + 1, c); markSafe(r, c - 1); markSafe(r, c + 1);\n  }\n  for (let r = 0; r < R; r++) {\n    markSafe(r, 0); markSafe(r, C - 1);\n  }\n  for (let c = 0; c < C; c++) {\n    markSafe(0, c); markSafe(R - 1, c);\n  }\n  for (let r = 0; r < R; r++) {\n    for (let c = 0; c < C; c++) {\n      if (board[r][c] === 'O') board[r][c] = 'X';\n      else if (board[r][c] === 'S') board[r][c] = 'O';\n    }\n  }\n  return board;\n}",
+        "python": "def solve(board: list[list[str]]) -> None:\n    R, C = len(board), len(board[0])\n    def markSafe(r, c):\n        if r < 0 or r >= R or c < 0 or c >= C or board[r][c] != 'O':\n            return\n        board[r][c] = 'S'\n        markSafe(r - 1, c)\n        markSafe(r + 1, c)\n        markSafe(r, c - 1)\n        markSafe(r, c + 1)\n    for r in range(R):\n        markSafe(r, 0); markSafe(r, C - 1)\n    for c in range(C):\n        markSafe(0, c); markSafe(R - 1, c)\n    for r in range(R):\n        for c in range(C):\n            if board[r][c] == 'O':\n                board[r][c] = 'X'\n            elif board[r][c] == 'S':\n                board[r][c] = 'O'"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
+              [
+                "X",
+                "X",
+                "X",
+                "X"
+              ],
+              [
+                "X",
+                "O",
+                "O",
+                "X"
+              ],
+              [
+                "X",
+                "X",
+                "O",
+                "X"
+              ],
+              [
+                "X",
+                "O",
+                "X",
+                "X"
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "description": "4x4 board with 1 border-connected O and 3 surrounded O's"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Capture surrounded regions. An 'O' survives only if it can reach the BORDER through other O's; any O-region sealed inside the board gets flipped to 'X'. The slick trick: instead of testing each region for surroundedness, we flood from the border inward to mark the SAFE O's first, then everything still O afterwards must be captured.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [],
+          "vars": [
+            [
+              "rule",
+              "border-connected O => safe"
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "PHASE 1, walk the four borders. Every border cell that is an O starts a DFS that paints its whole region safe. Border X cells and already-safe O cells are skipped.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "border-highlight"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "border-highlight"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "border-highlight"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "border-highlight"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "border-highlight"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "border-highlight"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "border-highlight"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "border-highlight"
+            }
+          ],
+          "vars": [
+            [
+              "phase",
+              "flood border O's"
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "Border cell (3, 1) is an 'O' that isn't safe yet -> launch a DFS from here to rescue its region.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "border"
+            }
+          ],
+          "vars": [
+            [
+              "border O",
+              "(3, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Border-flood reaches (3, 1): an 'O' connected to the edge. Mark it SAFE (green), it can drain to the border, so it survives. Spread to its O-neighbours: they are safe by the same path.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "safe"
+            }
+          ],
+          "vars": [
+            [
+              "safe",
+              "(3, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "From (3, 1), check orthogonal neighbours: (2, 1) is 'X', (3, 0) is 'X', (3, 2) is 'X'. No further connected 'O' cells reachable from this border node. DFS backtrack.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 3,
+              "c": 1,
+              "status": "safe"
+            }
+          ],
+          "vars": [
+            [
+              "safe O cells",
+              1
+            ],
+            [
+              "phase",
+              "border flood finished"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "PHASE 2, capture sweep. Walk every cell on the 4 × 4 board. Any 'O' cell NOT marked safe must be fully surrounded by 'X' walls with no escape to the border. Flip it to 'X'.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 3,
+              "c": 1,
+              "status": "safe"
+            }
+          ],
+          "vars": [
+            [
+              "phase",
+              "capture sweep"
+            ],
+            [
+              "safe cells",
+              "(3, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "At (1, 1): this 'O' was never reached by border flooding. It is completely surrounded! Flip (1, 1) to 'X'.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "O",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 1,
+              "status": "captured",
+              "badge": "flip"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "safe"
+            }
+          ],
+          "vars": [
+            [
+              "captured",
+              "(1, 1)"
+            ],
+            [
+              "action",
+              "flip O -> X"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "At (1, 2) and (2, 2): these 'O' cells are trapped together with no border outlet. Flip both to 'X'.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 2,
+              "status": "captured",
+              "badge": "flip"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "captured",
+              "badge": "flip"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "safe"
+            }
+          ],
+          "vars": [
+            [
+              "captured",
+              "(1, 2), (2, 2)"
+            ],
+            [
+              "action",
+              "flip O -> X"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "At (3, 1): this 'O' is safe (marked green). Keep it as 'O'!",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "safe"
+            }
+          ],
+          "vars": [
+            [
+              "cell",
+              "(3, 1)"
+            ],
+            [
+              "status",
+              "SAFE (retained)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 9,
+          "narration": "Capture sweep complete! Surrounded regions of 'O' were captured and converted to 'X' in O(R · C) time and O(R · C) space.",
+          "matrix": [
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "X",
+              "X",
+              "X"
+            ],
+            [
+              "X",
+              "O",
+              "X",
+              "X"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 BOARD",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 3,
+              "c": 1,
+              "status": "safe"
+            }
+          ],
+          "best": {
+            "label": "Surrounded Regions Captured"
+          },
+          "vars": [
+            [
+              "status",
+              "COMPLETE"
+            ],
+            [
+              "captured cells",
+              3
+            ],
+            [
+              "time",
+              "O(R · C)"
+            ],
+            [
+              "space",
+              "O(R · C)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     "id": "pacific-atlantic-water-flow",
     "patternId": "dfs",

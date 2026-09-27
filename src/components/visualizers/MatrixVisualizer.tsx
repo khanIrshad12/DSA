@@ -68,7 +68,9 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               const gridH = gridHighlights.find(h => h.r === r && h.c === c);
               const isFlatActive = step.highlights?.includes(flatIdx);
               const isFlatDimmed = step.dimmed?.includes(flatIdx);
-              const isVisited = gridH?.status === 'visited';
+              const isVisited = gridH?.status === 'visited' || gridH?.status === 'safe';
+              const isCaptured = gridH?.status === 'captured';
+              const isBorderHighlight = gridH?.status === 'border-highlight';
               const isActive = gridH?.status === 'active' || isFlatActive;
 
               const isStringVal = typeof val === 'string';
@@ -81,25 +83,49 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               let bgColor = 'var(--bg-surface)';
               let textColor = 'var(--text-ink)';
               let isSpecialFocus = false;
+              let focusShadow = 'none';
 
               if (gridH?.status === 'visited-target') {
                 borderColor = 'var(--color-green)';
                 bgColor = 'rgba(16, 185, 129, 0.3)';
                 textColor = '#ffffff';
                 isSpecialFocus = true;
+                focusShadow = '0 0 14px rgba(46, 213, 115, 0.45)';
+              } else if (isCaptured) {
+                borderColor = '#ef4444';
+                bgColor = 'rgba(239, 68, 68, 0.2)';
+                textColor = '#ef4444';
+                isSpecialFocus = true;
+                focusShadow = '0 0 16px rgba(239, 68, 68, 0.45)';
               } else if (isActive || isTarget) {
                 borderColor = 'var(--accent)';
                 bgColor = 'rgba(255, 120, 40, 0.18)';
                 textColor = 'var(--accent)';
                 isSpecialFocus = true;
+                focusShadow = '0 0 16px var(--accent-glow)';
               } else if (isVisited) {
                 borderColor = 'var(--color-green)';
-                bgColor = 'rgba(16, 185, 129, 0.12)';
+                bgColor = 'rgba(16, 185, 129, 0.14)';
                 textColor = 'var(--color-green)';
+              } else if (isBorderHighlight) {
+                borderColor = 'var(--accent)';
+                bgColor = 'rgba(255, 120, 40, 0.08)';
+                textColor = 'var(--accent)';
               } else if (isFlatDimmed) {
                 borderColor = 'var(--border-ink-soft)';
                 bgColor = 'var(--bg-paper)';
                 textColor = 'var(--text-faint)';
+              }
+
+              // Distinct badge styles
+              let badgeColor = 'var(--accent)';
+              let badgeBg = 'rgba(255, 120, 40, 0.18)';
+              if (badgeText === 'safe') {
+                badgeColor = 'var(--color-green)';
+                badgeBg = 'rgba(16, 185, 129, 0.22)';
+              } else if (badgeText === 'flip' || badgeText === 'captured') {
+                badgeColor = '#ef4444';
+                badgeBg = 'rgba(239, 68, 68, 0.22)';
               }
 
               return (
@@ -118,9 +144,9 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     backgroundColor: bgColor,
                     color: textColor,
                     opacity: isFlatDimmed ? 0.35 : 1,
-                    boxShadow: isSpecialFocus ? (gridH?.status === 'visited-target' ? '0 0 14px rgba(46, 213, 115, 0.45)' : '0 0 16px var(--accent-glow)') : 'none',
-                    transform: isSpecialFocus ? 'scale(1.05)' : 'none',
-                    transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    boxShadow: isSpecialFocus ? focusShadow : 'none',
+                    transform: isSpecialFocus ? 'scale(1.06)' : 'scale(1)',
+                    transition: 'all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     position: 'relative'
                   }}
                 >
@@ -128,14 +154,14 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     <div
                       className="font-mono"
                       style={{
-                        fontSize: '13px',
+                        fontSize: '12px',
                         fontWeight: 800,
-                        color: 'var(--accent)',
+                        color: badgeColor,
                         letterSpacing: '0.02em',
-                        border: '1.5px solid var(--accent)',
-                        padding: '2px 6px',
+                        border: `1.5px solid ${badgeColor}`,
+                        padding: '2px 5px',
                         borderRadius: '4px',
-                        backgroundColor: 'rgba(255, 120, 40, 0.15)',
+                        backgroundColor: badgeBg,
                         lineHeight: 1.2
                       }}
                     >
