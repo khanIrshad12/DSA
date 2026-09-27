@@ -53725,501 +53725,1921 @@ export const dfsProblems: Problem[] = [
   ]
 },
   {
-    "id": "number-of-islands",
-    "patternId": "dfs",
-    "title": "Number of Islands",
-    "subtitle": "Count components, sink each island",
-    "kind": "problem",
-    "leetcode": {
-      "id": 200,
-      "slug": "number-of-islands",
-      "difficulty": "Medium"
-    },
-    "companies": [
-      "Amazon",
-      "Google",
-      "Microsoft",
-      "Bloomberg"
+  "id": "number-of-islands",
+  "patternId": "dfs",
+  "title": "Number of Islands",
+  "subtitle": "Count components, sink each island",
+  "difficulty": "medium",
+  "leetcodeId": 200,
+  "askedAt": [
+    "Amazon",
+    "Google",
+    "Meta",
+    "Microsoft"
+  ],
+  "kind": "problem",
+  "statement": "Given a grid of land and water cells, count the number of islands, where an island is a group of land cells connected 4-directionally and surrounded by water.",
+  "visualType": "matrix",
+  "initialInput": [
+    [
+      1,
+      1,
+      0,
+      0,
+      1
     ],
-    "statement": "Given an m x n 2D binary grid which represents a map of \"1\"s (land) and \"0\"s (water), return the number of islands. Sink each visited island by turning connected \"1\"s to \"0\"s.",
-    "visualType": "matrix",
-    "initialInput": [
-      [
-        1,
-        1,
-        0,
-        0,
-        0
-      ],
-      [
-        1,
-        1,
-        0,
-        0,
-        0
-      ],
-      [
-        0,
-        0,
-        1,
-        0,
-        0
-      ],
-      [
-        0,
-        0,
-        0,
-        1,
-        1
-      ]
+    [
+      1,
+      0,
+      0,
+      1,
+      1
     ],
-    "approaches": [
-      {
-        "id": "dfs-sink-islands",
-        "label": "Sink Connected Islands via DFS",
-        "complexity": {
-          "time": "O(M · N)",
-          "space": "O(M · N)"
-        },
-        "pseudocode": [
-          "numIslands(grid):",
-          "    count = 0",
-          "    for r from 0 to m-1:",
-          "        for c from 0 to n-1:",
-          "            if grid[r][c] == 1:",
-          "                count += 1",
-          "                sink(r, c)   // DFS to turn all connected 1s to 0",
-          "    return count"
-        ],
-        "starterCode": {
-          "javascript": "function numIslands(grid) {\n  let count = 0;\n  function sink(r, c) {\n    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] !== 1) return;\n    grid[r][c] = 0;\n    sink(r - 1, c); sink(r + 1, c); sink(r, c - 1); sink(r, c + 1);\n  }\n  for (let r = 0; r < grid.length; r++) {\n    for (let c = 0; c < grid[0].length; c++) {\n      if (grid[r][c] === 1) { count++; sink(r, c); }\n    }\n  }\n  return count;\n}",
-          "python": "def numIslands(grid):\n    count = 0\n    def sink(r, c):\n        if r < 0 or r >= len(grid) or c < 0 or c >= len(grid[0]) or grid[r][c] != 1: return\n        grid[r][c] = 0\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            sink(r + dr, c + dc)\n    for r in range(len(grid)):\n        for c in range(len(grid[0])):\n            if grid[r][c] == 1:\n                count += 1\n                sink(r, c)\n    return count"
-        },
-        "solutionCode": {
-          "javascript": "function numIslands(grid) {\n  let count = 0;\n  function sink(r, c) {\n    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] !== 1) return;\n    grid[r][c] = 0;\n    sink(r - 1, c); sink(r + 1, c); sink(r, c - 1); sink(r, c + 1);\n  }\n  for (let r = 0; r < grid.length; r++) {\n    for (let c = 0; c < grid[0].length; c++) {\n      if (grid[r][c] === 1) { count++; sink(r, c); }\n    }\n  }\n  return count;\n}",
-          "python": "def numIslands(grid):\n    count = 0\n    def sink(r, c):\n        if r < 0 or r >= len(grid) or c < 0 or c >= len(grid[0]) or grid[r][c] != 1: return\n        grid[r][c] = 0\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            sink(r + dr, c + dc)\n    for r in range(len(grid)):\n        for c in range(len(grid[0])):\n            if grid[r][c] == 1:\n                count += 1\n                sink(r, c)\n    return count"
-        },
-        "testCases": [
-          {
-            "input": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      0,
+      0
+    ]
+  ],
+  "approaches": [
+    {
+      "id": "scan-dfs-sink",
+      "label": "Scan + DFS sink",
+      "complexity": {
+        "time": "O(R · C)",
+        "space": "O(R · C)"
+      },
+      "pseudocode": [
+        "count = 0",
+        "for each cell (r, c):",
+        "    if already water/sunk: continue",
+        "    if grid[r][c] == 1:",
+        "        count++",
+        "        sink(r, c):",
+        "            grid[r][c] = 0",
+        "            for each land neighbour: sink it",
+        "return count"
+      ],
+      "starterCode": {
+        "javascript": "function numIslands(grid) {\n  let count = 0;\n  const R = grid.length, C = grid[0].length;\n  function sink(r, c) {\n    if (r < 0 || r >= R || c < 0 || c >= C || grid[r][c] !== 1) return;\n    grid[r][c] = 0;\n    sink(r - 1, c); sink(r + 1, c); sink(r, c - 1); sink(r, c + 1);\n  }\n  for (let r = 0; r < R; r++) {\n    for (let c = 0; c < C; c++) {\n      if (grid[r][c] === 1) {\n        count++;\n        sink(r, c);\n      }\n    }\n  }\n  return count;\n}",
+        "python": "def numIslands(grid: list[list[int]]) -> int:\n    count = 0\n    R, C = len(grid), len(grid[0])\n    def sink(r, c):\n        if r < 0 or r >= R or c < 0 or c >= C or grid[r][c] != 1:\n            return\n        grid[r][c] = 0\n        sink(r - 1, c)\n        sink(r + 1, c)\n        sink(r, c - 1)\n        sink(r, c + 1)\n    for r in range(R):\n        for c in range(C):\n            if grid[r][c] == 1:\n                count += 1\n                sink(r, c)\n    return count"
+      },
+      "solutionCode": {
+        "javascript": "function numIslands(grid) {\n  let count = 0;\n  const R = grid.length, C = grid[0].length;\n  function sink(r, c) {\n    if (r < 0 || r >= R || c < 0 || c >= C || grid[r][c] !== 1) return;\n    grid[r][c] = 0;\n    sink(r - 1, c); sink(r + 1, c); sink(r, c - 1); sink(r, c + 1);\n  }\n  for (let r = 0; r < R; r++) {\n    for (let c = 0; c < C; c++) {\n      if (grid[r][c] === 1) {\n        count++;\n        sink(r, c);\n      }\n    }\n  }\n  return count;\n}",
+        "python": "def numIslands(grid: list[list[int]]) -> int:\n    count = 0\n    R, C = len(grid), len(grid[0])\n    def sink(r, c):\n        if r < 0 or r >= R or c < 0 or c >= C or grid[r][c] != 1:\n            return\n        grid[r][c] = 0\n        sink(r - 1, c)\n        sink(r + 1, c)\n        sink(r, c - 1)\n        sink(r, c + 1)\n    for r in range(R):\n        for c in range(C):\n            if grid[r][c] == 1:\n                count += 1\n                sink(r, c)\n    return count"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
               [
-                [
-                  1,
-                  1,
-                  0
-                ],
-                [
-                  1,
-                  1,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  1
-                ]
-              ]
-            ],
-            "expected": 2,
-            "description": "2 distinct islands"
-          }
-        ],
-        "steps": [
-          {
-            "codeLine": 1,
-            "narration": "Scan 4x5 grid top-to-bottom, left-to-right. When we encounter land '1', increment island count and sink connected land via DFS.",
-            "matrix": {
-              "grid": [
-                [
-                  1,
-                  1,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  1,
-                  1,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              ],
-              "activeCell": [
+                1,
+                1,
                 0,
-                0
-              ]
-            },
-            "vars": [
-              [
-                "islands",
-                0
-              ],
-              [
-                "r",
-                0
-              ],
-              [
-                "c",
-                0
-              ]
-            ]
-          },
-          {
-            "codeLine": 6,
-            "narration": "Found land at (0, 0)! islandCount becomes 1. Start sink DFS from (0, 0).",
-            "matrix": {
-              "grid": [
-                [
-                  1,
-                  1,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  1,
-                  1,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              ],
-              "activeCell": [
                 0,
-                0
-              ]
-            },
-            "vars": [
-              [
-                "islands",
                 1
               ],
               [
-                "action",
-                "sink island 1"
-              ]
-            ]
-          },
-          {
-            "codeLine": 7,
-            "narration": "Sink (0, 0) -> '0'. Recurse to neighbors (0, 1) and (1, 0).",
-            "matrix": {
-              "grid": [
-                [
-                  0,
-                  1,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  1,
-                  1,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              ],
-              "activeCell": [
+                1,
                 0,
-                1
-              ]
-            },
-            "vars": [
-              [
-                "sinking",
-                "(0, 1)"
-              ]
-            ]
-          },
-          {
-            "codeLine": 7,
-            "narration": "Sink (0, 1) -> '0' and (1, 1) -> '0' and (1, 0) -> '0'. Island 1 is completely sunken.",
-            "matrix": {
-              "grid": [
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              ],
-              "activeCell": [
+                0,
                 1,
                 1
-              ]
-            },
-            "vars": [
+              ],
               [
-                "island 1",
-                "SUNK"
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                0,
+                0,
+                0
               ]
             ]
+          ],
+          "expected": 3,
+          "description": "4x5 grid with 3 disjoint islands"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Count the islands: maximal blobs of 1 (land) connected up/down/left/right; 0 is water. This is a connected-components count. Scan the grid row by row; the FIRST time we step onto a piece of an undiscovered island, we add one to the counter and then DFS-flood that entire island so we never count it twice.",
+          "matrix": [
+            [
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
           },
-          {
-            "codeLine": 5,
-            "narration": "Continue scanning grid: at (2, 2) find land '1'! islandCount becomes 2.",
-            "matrix": {
-              "grid": [
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              ],
-              "activeCell": [
-                2,
-                2
-              ]
-            },
-            "vars": [
-              [
-                "islands",
-                2
-              ],
-              [
-                "found",
-                "(2, 2)"
-              ]
+          "gridHighlights": [],
+          "vars": [
+            [
+              "size",
+              "4 × 5"
+            ],
+            [
+              "count",
+              0
             ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Scanning reached (0, 0) and it is land that has NOT been sunk yet -> a brand-new island. Increment count to 1. Before moving on, we must erase the whole island so its other cells don't get counted as new ones.",
+          "matrix": [
+            [
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
           },
-          {
-            "codeLine": 7,
-            "narration": "Sink (2, 2) -> '0'. All 4 neighbors are water.",
-            "matrix": {
-              "grid": [
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              ],
-              "activeCell": [
-                2,
-                2
-              ]
-            },
-            "vars": [
-              [
-                "island 2",
-                "SUNK"
-              ]
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "scan"
+            }
+          ],
+          "vars": [
+            [
+              "found land",
+              "(0, 0)"
+            ],
+            [
+              "count",
+              1
             ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (0, 0): flip this land to water (0) and tint it green. Flipping to 0 IS our visited mark, it can never trigger a fresh island count again. Now spread to its four neighbours and sink any land we find.",
+          "matrix": [
+            [
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
           },
-          {
-            "codeLine": 5,
-            "narration": "Continue scan: at (3, 3) find land '1'! islandCount becomes 3. Sink (3, 3) and (3, 4).",
-            "matrix": {
-              "grid": [
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ]
-              ],
-              "activeCell": [
-                3,
-                3
-              ]
-            },
-            "vars": [
-              [
-                "islands",
-                3
-              ],
-              [
-                "island 3",
-                "SUNK"
-              ]
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(0, 0)"
+            ],
+            [
+              "island #",
+              1
+            ],
+            [
+              "sunk so far",
+              1
             ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "From (0, 0) look down -> (1, 0): land (1) found! DFS-recurse down to sink it.",
+          "matrix": [
+            [
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
           },
-          {
-            "codeLine": 8,
-            "narration": "Grid scan complete. Total number of distinct connected islands = 3.",
-            "matrix": {
-              "grid": [
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ]
-              ]
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 0,
+              "status": "target"
             },
-            "best": {
-              "label": "Total Islands: 3"
-            },
-            "vars": [
-              [
-                "count",
-                3
-              ],
-              [
-                "status",
-                "COMPLETE"
-              ]
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "spread into",
+              "(1, 0)"
+            ],
+            [
+              "island #",
+              1
             ]
-          }
-        ]
-      }
-    ]
-  },
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (1, 0): flip this land to water (0) and tint it green. Flipping to 0 IS our visited mark, it can never trigger a fresh island count again. Now spread to its four neighbours and sink any land we find.",
+          "matrix": [
+            [
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(1, 0)"
+            ],
+            [
+              "island #",
+              1
+            ],
+            [
+              "sunk so far",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "From (0, 0) look right -> (0, 1): land (1) found! DFS-recurse right to sink it.",
+          "matrix": [
+            [
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "target"
+            },
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "spread into",
+              "(0, 1)"
+            ],
+            [
+              "island #",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (0, 1): flip this land to water (0) and tint it green. All neighbours of this first island are now sunk/water. Island 1 is completely erased.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(0, 1)"
+            ],
+            [
+              "island #",
+              1
+            ],
+            [
+              "sunk so far",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "Resume linear scan through Row 0. Cells (0, 2) and (0, 3) are already water (0) -> skip both.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "scan",
+              "(0, 2) .. (0, 3)"
+            ],
+            [
+              "status",
+              "water (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Scanning reached (0, 4) and it is land (1) that was not part of island 1! This is island #2. Increment count to 2.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "active",
+              "badge": "scan"
+            }
+          ],
+          "vars": [
+            [
+              "found land",
+              "(0, 4)"
+            ],
+            [
+              "count",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (0, 4): flip land to 0 and mark green. DFS spread to its 4 neighbours to sink all connected land of island #2.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(0, 4)"
+            ],
+            [
+              "island #",
+              2
+            ],
+            [
+              "sunk so far",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "From (0, 4) look down -> (1, 4): land (1) found! DFS-recurse down to sink it.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "target"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "spread into",
+              "(1, 4)"
+            ],
+            [
+              "island #",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (1, 4): flip land to 0 and mark green. Now look left to neighbour (1, 3).",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(1, 4)"
+            ],
+            [
+              "island #",
+              2
+            ],
+            [
+              "sunk so far",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "From (1, 4) look left -> (1, 3): land (1) found! DFS-recurse left to sink it.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "spread into",
+              "(1, 3)"
+            ],
+            [
+              "island #",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (1, 3): flip land to 0 and mark green. All 3 cells of island #2 are now completely sunk.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(1, 3)"
+            ],
+            [
+              "island #",
+              2
+            ],
+            [
+              "sunk so far",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "Continue scanning rows 1 and 2. All cells in row 1 are now 0 (sunk or natural water), and row 2 is all 0 -> skipped quickly.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "scan",
+              "rows 1 & 2"
+            ],
+            [
+              "status",
+              "all 0 (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Scanning reached (3, 0) in row 3: land (1) found that is NOT sunk! This is a separate island #3. Increment count to 3.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "scan"
+            }
+          ],
+          "vars": [
+            [
+              "found land",
+              "(3, 0)"
+            ],
+            [
+              "count",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (3, 0): flip land to 0 and mark green. Look right to neighbour (3, 1).",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(3, 0)"
+            ],
+            [
+              "island #",
+              3
+            ],
+            [
+              "sunk so far",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "From (3, 0) look right -> (3, 1): land (1) found! DFS-recurse right to sink it.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "target"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "spread into",
+              "(3, 1)"
+            ],
+            [
+              "island #",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Sink (3, 1): flip land to 0 and mark green. Island #3 is completely sunk.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "sink",
+              "(3, 1)"
+            ],
+            [
+              "island #",
+              3
+            ],
+            [
+              "sunk so far",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 3,
+          "narration": "Scan remaining cells (3, 2), (3, 3), (3, 4) in row 3. All are 0 -> skip.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "scan",
+              "(3, 2) .. (3, 4)"
+            ],
+            [
+              "status",
+              "water (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 2,
+          "narration": "Linear scan finished visiting all 20 cells in the 4 × 5 map. Every land pixel was visited and sunk by its respective DFS cluster walk.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "scan",
+              "COMPLETE (20 cells)"
+            ],
+            [
+              "islands found",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 9,
+          "narration": "Return final count = 3. We successfully counted all 3 disjoint connected components without extra memory by sinking visited cells in-place.",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "best": {
+            "label": "Total Islands: 3"
+          },
+          "vars": [
+            [
+              "return",
+              3
+            ],
+            [
+              "time",
+              "O(R · C)"
+            ],
+            [
+              "space",
+              "O(R · C)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 9,
+          "narration": "Algorithm complete! Total 3 islands found. DFS sink pattern ensures each cell is examined at most a constant number of times (O(R · C) time).",
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 5 MAP · 1 = LAND, 0 = WATER",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 4,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "best": {
+            "label": "Total Islands: 3"
+          },
+          "vars": [
+            [
+              "status",
+              "COMPLETE"
+            ],
+            [
+              "islands",
+              3
+            ],
+            [
+              "time",
+              "O(R · C)"
+            ],
+            [
+              "space",
+              "O(R · C)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     "id": "surrounded-regions",
     "patternId": "dfs",
