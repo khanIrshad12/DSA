@@ -60,6 +60,10 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               const isTarget = gridH?.status === 'target';
               const hasDfsBadge = gridH?.badge === 'dfs' || (isActive && isStringVal);
 
+              let borderColor = 'rgba(255, 255, 255, 0.35)';
+              let bgColor = 'var(--bg-surface)';
+              let textColor = 'var(--text-ink)';
+
               if (isActive || isTarget) {
                 borderColor = 'var(--accent)';
                 bgColor = 'rgba(255, 120, 40, 0.15)';
@@ -72,10 +76,6 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                 borderColor = 'var(--border-ink-soft)';
                 bgColor = 'var(--bg-paper)';
                 textColor = 'var(--text-faint)';
-              } else {
-                borderColor = 'rgba(255, 255, 255, 0.35)';
-                bgColor = 'var(--bg-surface)';
-                textColor = 'var(--text-ink)';
               }
 
               return (
