@@ -1,0 +1,829 @@
+import { Problem } from '../../types';
+
+export const greedyProblems: Problem[] = [
+  {
+    id: 'intro',
+    patternId: 'greedy',
+    title: 'Overview',
+    subtitle: 'Take the best local choice, never look back',
+    kind: 'intro',
+    statement: 'A Greedy algorithm builds up a solution piece by piece, always choosing the next piece that offers the most immediate, local benefit. Once a choice is made, it is NEVER reconsidered (no backtracking). Greedy works when the problem exhibits the Greedy Choice Property and Optimal Substructure.',
+    visualType: 'array',
+    initialInput: [1, 2, 5, 10, 20, 50, 100],
+    approaches: [
+      {
+        id: 'greedy-concept',
+        label: 'Greedy Choice Property',
+        complexity: {
+          time: 'O(N)',
+          space: 'O(1)'
+        },
+        pseudocode: [
+          'for each decision step:',
+          '    pick the best local option immediately',
+          '    commit to this choice (no backtrack)',
+          '    reduce the remaining subproblem',
+          'return combined choices'
+        ],
+        starterCode: {
+          javascript: `function greedyOverview(choices) {\n  let result = [];\n  for (let c of choices) {\n    if (isBestLocalChoice(c)) result.push(c);\n  }\n  return result;\n}`,
+          python: `def greedyOverview(choices: list[int]) -> list[int]:\n    result = []\n    for c in choices:\n        if is_best_local_choice(c):\n            result.append(c)\n    return result`
+        },
+        solutionCode: {
+          javascript: `function greedyOverview(choices) {\n  let result = [];\n  for (let c of choices) {\n    if (isBestLocalChoice(c)) result.push(c);\n  }\n  return result;\n}`,
+          python: `def greedyOverview(choices: list[int]) -> list[int]:\n    result = []\n    for c in choices:\n        if is_best_local_choice(c):\n            result.append(c)\n    return result`
+        },
+        testCases: [
+          {
+            input: [[1, 2, 5, 10, 20, 50, 100]],
+            expected: [100],
+            description: "Standard denominations"
+          }
+        ],
+        steps: [
+          {
+            codeLine: 1,
+            narration: "Greedy Strategy: Make the locally optimal choice at each stage. Unlike Dynamic Programming which evaluates all subproblems, Greedy commits forward with zero regret.",
+            customVisual: { array: [1, 2, 5, 10, 20, 50, 100] },
+            highlights: [6],
+            pointers: [{ name: 'best', index: 6, color: 'accent' }],
+            vars: [
+              ['strategy', 'locally optimal choice'],
+              ['backtracking', 'none']
+            ]
+          },
+          {
+            codeLine: 2,
+            narration: "Example: Coin Change for canonical currency. To make 143, take the largest possible bill (100) first, reducing the remaining balance immediately to 43.",
+            customVisual: { array: [1, 2, 5, 10, 20, 50, 100] },
+            highlights: [6],
+            best: { label: 'Take $100 -> Remaining: $43' },
+            vars: [
+              ['chosen', 100],
+              ['remaining', 43]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Next step: From 43, pick 20, then 20, then 2, then 1 -> 5 coins total. Optimal in O(N) time without searching all combinations.",
+            customVisual: { array: [1, 2, 5, 10, 20, 50, 100] },
+            highlights: [4, 1, 0],
+            best: { label: 'Optimal: 100 + 20 + 20 + 2 + 1 = 143' },
+            vars: [
+              ['coins', '100, 20, 20, 2, 1'],
+              ['total count', 5],
+              ['time', 'O(N)']
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'best-time-to-buy-and-sell-stock',
+    patternId: 'greedy',
+    title: 'Best Time to Buy and Sell Stock',
+    subtitle: 'Track the cheapest day seen so far',
+    difficulty: 'Easy',
+    leetcodeId: 121,
+    askedAt: ['Amazon', 'Microsoft', 'Google', 'Apple', 'Meta'],
+    kind: 'problem',
+    statement: 'You are given an array prices where prices[i] is the price of a given stock on the ith day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.',
+    visualType: 'array',
+    initialInput: [7, 1, 5, 3, 6, 4],
+    approaches: [
+      {
+        id: 'one-pass-greedy',
+        label: 'One-Pass Greedy Minimum',
+        complexity: {
+          time: 'O(N)',
+          space: 'O(1)'
+        },
+        pseudocode: [
+          'min_price = Infinity, max_profit = 0',
+          'for price in prices:',
+          '    if price < min_price:',
+          '        min_price = price',
+          '    else:',
+          '        max_profit = max(max_profit, price - min_price)',
+          'return max_profit'
+        ],
+        starterCode: {
+          javascript: `function maxProfit(prices) {\n  let minPrice = Infinity;\n  let maxProfit = 0;\n  for (let price of prices) {\n    if (price < minPrice) {\n      minPrice = price;\n    } else if (price - minPrice > maxProfit) {\n      maxProfit = price - minPrice;\n    }\n  }\n  return maxProfit;\n}`,
+          python: `def maxProfit(prices: list[int]) -> int:\n    min_price = float('inf')\n    max_profit = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n        elif p - min_price > max_profit:\n            max_profit = p - min_price\n    return max_profit`
+        },
+        solutionCode: {
+          javascript: `function maxProfit(prices) {\n  let minPrice = Infinity;\n  let maxProfit = 0;\n  for (let price of prices) {\n    if (price < minPrice) {\n      minPrice = price;\n    } else if (price - minPrice > maxProfit) {\n      maxProfit = price - minPrice;\n    }\n  }\n  return maxProfit;\n}`,
+          python: `def maxProfit(prices: list[int]) -> int:\n    min_price = float('inf')\n    max_profit = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n        elif p - min_price > max_profit:\n            max_profit = p - min_price\n    return max_profit`
+        },
+        testCases: [
+          {
+            input: [[7, 1, 5, 3, 6, 4]],
+            expected: 5,
+            description: "Buy day 2 ($1), sell day 5 ($6) = $5 profit"
+          },
+          {
+            input: [[7, 6, 4, 3, 1]],
+            expected: 0,
+            description: "Decreasing prices -> profit 0"
+          }
+        ],
+        steps: [
+          {
+            codeLine: 1,
+            narration: "Initialize min_price = Infinity, max_profit = 0. Greedily maintain the minimum purchase price as we sweep left-to-right.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            vars: [
+              ['min_price', 'Infinity'],
+              ['max_profit', 0]
+            ]
+          },
+          {
+            codeLine: 3,
+            narration: "Day 0 (price = 7): price < Infinity -> update min_price = 7.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [0],
+            pointers: [{ name: 'min_buy', index: 0, color: 'accent' }],
+            vars: [
+              ['price', 7],
+              ['min_price', 7],
+              ['max_profit', 0]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Day 1 (price = 1): price 1 < 7 -> new absolute lowest buy price! min_price = 1.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [1],
+            pointers: [{ name: 'min_buy', index: 1, color: 'accent' }],
+            vars: [
+              ['price', 1],
+              ['min_price', 1],
+              ['max_profit', 0]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Day 2 (price = 5): sell potential = 5 - 1 = 4. Update max_profit = 4.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [1, 2],
+            pointers: [
+              { name: 'min_buy', index: 1, color: 'accent' },
+              { name: 'sell', index: 2, color: 'green' }
+            ],
+            vars: [
+              ['price', 5],
+              ['min_price', 1],
+              ['current profit', 4],
+              ['max_profit', 4]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Day 3 (price = 3): profit = 3 - 1 = 2 < 4. max_profit stays 4.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [1, 3],
+            pointers: [
+              { name: 'min_buy', index: 1, color: 'accent' },
+              { name: 'day', index: 3, color: 'amber' }
+            ],
+            vars: [
+              ['price', 3],
+              ['min_price', 1],
+              ['max_profit', 4]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Day 4 (price = 6): sell potential = 6 - 1 = 5 > 4! New global max_profit = 5.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [1, 4],
+            pointers: [
+              { name: 'min_buy', index: 1, color: 'accent' },
+              { name: 'best_sell', index: 4, color: 'green' }
+            ],
+            best: { label: 'Max Profit = $5 (Buy at $1, Sell at $6)' },
+            vars: [
+              ['price', 6],
+              ['min_price', 1],
+              ['profit', 5],
+              ['max_profit', 5]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Day 5 (price = 4): profit = 4 - 1 = 3 < 5. Sweep complete.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [1, 4],
+            best: { label: 'Max Profit = $5' },
+            vars: [
+              ['status', 'COMPLETE'],
+              ['max_profit', 5]
+            ]
+          },
+          {
+            codeLine: 7,
+            narration: "Return max_profit = 5 in O(N) time and O(1) space.",
+            customVisual: { array: [7, 1, 5, 3, 6, 4] },
+            highlights: [1, 4],
+            best: { label: 'Max Profit = $5' },
+            vars: [
+              ['return', 5],
+              ['time', 'O(N)'],
+              ['space', 'O(1)']
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'gas-station',
+    patternId: 'greedy',
+    title: 'Gas Station',
+    subtitle: 'If total gas >= total cost, one start works, find it',
+    difficulty: 'Medium',
+    leetcodeId: 134,
+    askedAt: ['Amazon', 'Google', 'Microsoft', 'Bloomberg'],
+    kind: 'problem',
+    statement: 'There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i]. You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. Return the starting gas station index if you can travel around the circuit once in the clockwise direction, otherwise return -1.',
+    visualType: 'array',
+    initialInput: [1, 2, 3, 4, 5],
+    approaches: [
+      {
+        id: 'greedy-tank-reset',
+        label: 'Greedy Tank Reset',
+        complexity: {
+          time: 'O(N)',
+          space: 'O(1)'
+        },
+        pseudocode: [
+          'total_surplus = 0, current_tank = 0, start_idx = 0',
+          'for i from 0 to n-1:',
+          '    diff = gas[i] - cost[i]',
+          '    total_surplus += diff',
+          '    current_tank += diff',
+          '    if current_tank < 0:',
+          '        start_idx = i + 1',
+          '        current_tank = 0',
+          'return start_idx if total_surplus >= 0 else -1'
+        ],
+        starterCode: {
+          javascript: `function canCompleteCircuit(gas, cost) {\n  let total = 0, tank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    const diff = gas[i] - cost[i];\n    total += diff;\n    tank += diff;\n    if (tank < 0) {\n      start = i + 1;\n      tank = 0;\n    }\n  }\n  return total >= 0 ? start : -1;\n}`,
+          python: `def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    total = tank = start = 0\n    for i in range(len(gas)):\n        diff = gas[i] - cost[i]\n        total += diff\n        tank += diff\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1`
+        },
+        solutionCode: {
+          javascript: `function canCompleteCircuit(gas, cost) {\n  let total = 0, tank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    const diff = gas[i] - cost[i];\n    total += diff;\n    tank += diff;\n    if (tank < 0) {\n      start = i + 1;\n      tank = 0;\n    }\n  }\n  return total >= 0 ? start : -1;\n}`,
+          python: `def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    total = tank = start = 0\n    for i in range(len(gas)):\n        diff = gas[i] - cost[i]\n        total += diff\n        tank += diff\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1`
+        },
+        testCases: [
+          {
+            input: [[1, 2, 3, 4, 5], [3, 4, 5, 1, 2]],
+            expected: 3,
+            description: "Start at station 3 (gas=4, cost=1) completes full circle"
+          }
+        ],
+        steps: [
+          {
+            codeLine: 1,
+            narration: "Gas = [1, 2, 3, 4, 5], Cost = [3, 4, 5, 1, 2]. Compute net balance diff[i] = gas[i] - cost[i] = [-2, -2, -2, +3, +3].",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            vars: [
+              ['total_surplus', 0],
+              ['current_tank', 0],
+              ['start_idx', 0]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Station 0: diff = -2 -> current_tank = -2 < 0! Station 0 cannot reach station 1. Greedily reset start_idx = 1, current_tank = 0.",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            highlights: [0],
+            pointers: [{ name: 'fail', index: 0, color: 'red' }],
+            vars: [
+              ['station', 0],
+              ['diff', -2],
+              ['tank', -2],
+              ['new start', 1]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Station 1: diff = -2 -> current_tank = -2 < 0! Reset start_idx = 2, current_tank = 0.",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            highlights: [1],
+            pointers: [{ name: 'fail', index: 1, color: 'red' }],
+            vars: [
+              ['station', 1],
+              ['diff', -2],
+              ['new start', 2]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Station 2: diff = -2 -> current_tank = -2 < 0! Reset start_idx = 3, current_tank = 0.",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            highlights: [2],
+            pointers: [{ name: 'fail', index: 2, color: 'red' }],
+            vars: [
+              ['station', 2],
+              ['diff', -2],
+              ['new start', 3]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Station 3: diff = 4 - 1 = +3 -> current_tank = 3 >= 0! Station 3 survives.",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            highlights: [3],
+            pointers: [{ name: 'start', index: 3, color: 'green' }],
+            vars: [
+              ['station', 3],
+              ['diff', '+3'],
+              ['tank', 3],
+              ['start_idx', 3]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Station 4: diff = 5 - 2 = +3 -> current_tank = 3 + 3 = 6 >= 0! Total surplus across whole circuit = (-2 - 2 - 2 + 3 + 3) = 0 >= 0.",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            highlights: [3, 4],
+            pointers: [{ name: 'start', index: 3, color: 'green' }, { name: 'curr', index: 4, color: 'accent' }],
+            best: { label: 'Valid Starting Station = Index 3' },
+            vars: [
+              ['total_surplus', 0],
+              ['tank', 6],
+              ['start_idx', 3]
+            ]
+          },
+          {
+            codeLine: 9,
+            narration: "Because total gas >= total cost (surplus 0 >= 0), starting at index 3 is guaranteed to complete the entire circular route. Return 3.",
+            customVisual: { array: [-2, -2, -2, 3, 3] },
+            highlights: [3],
+            pointers: [{ name: 'start', index: 3, color: 'green' }],
+            best: { label: 'Start Station: Index 3' },
+            vars: [
+              ['return', 3],
+              ['time', 'O(N)'],
+              ['space', 'O(1)']
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'jump-game',
+    patternId: 'greedy',
+    title: 'Jump Game',
+    subtitle: 'Track the farthest index you can reach',
+    difficulty: 'Medium',
+    leetcodeId: 55,
+    askedAt: ['Amazon', 'Microsoft', 'Google', 'Meta', 'Apple'],
+    kind: 'problem',
+    statement: 'You are given an integer array nums. You are initially positioned at the array\'s first index, and each element in the array represents your maximum jump length at that position. Return true if you can reach the last index, or false otherwise.',
+    visualType: 'array',
+    initialInput: [2, 3, 1, 1, 4],
+    approaches: [
+      {
+        id: 'greedy-farthest-reach',
+        label: 'Greedy Farthest Reach',
+        complexity: {
+          time: 'O(N)',
+          space: 'O(1)'
+        },
+        pseudocode: [
+          'max_reach = 0',
+          'for i from 0 to n-1:',
+          '    if i > max_reach: return false',
+          '    max_reach = max(max_reach, i + nums[i])',
+          '    if max_reach >= n - 1: return true',
+          'return true'
+        ],
+        starterCode: {
+          javascript: `function canJump(nums) {\n  let maxReach = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > maxReach) return false;\n    maxReach = Math.max(maxReach, i + nums[i]);\n    if (maxReach >= nums.length - 1) return true;\n  }\n  return true;\n}`,
+          python: `def canJump(nums: list[int]) -> bool:\n    max_reach = 0\n    for i, jump in enumerate(nums):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + jump)\n        if max_reach >= len(nums) - 1:\n            return True\n    return True`
+        },
+        solutionCode: {
+          javascript: `function canJump(nums) {\n  let maxReach = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > maxReach) return false;\n    maxReach = Math.max(maxReach, i + nums[i]);\n    if (maxReach >= nums.length - 1) return true;\n  }\n  return true;\n}`,
+          python: `def canJump(nums: list[int]) -> bool:\n    max_reach = 0\n    for i, jump in enumerate(nums):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + jump)\n        if max_reach >= len(nums) - 1:\n            return True\n    return True`
+        },
+        testCases: [
+          {
+            input: [[2, 3, 1, 1, 4]],
+            expected: true,
+            description: "Jump 1 step from 0 to 1, then 3 steps to the last index"
+          },
+          {
+            input: [[3, 2, 1, 0, 4]],
+            expected: false,
+            description: "Stuck at 0 at index 3, cannot reach index 4"
+          }
+        ],
+        steps: [
+          {
+            codeLine: 1,
+            narration: "Start at index 0 with max_reach = 0. We expand the farthest reachable index frontier greedily.",
+            customVisual: { array: [2, 3, 1, 1, 4] },
+            pointers: [{ name: 'curr', index: 0, color: 'accent' }],
+            vars: [
+              ['i', 0],
+              ['max_reach', 0],
+              ['target', 4]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "At i = 0 (jump = 2): reach = 0 + 2 = 2. Update max_reach = 2.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 0, end: 2, color: 'blue', label: 'REACHABLE [0..2]' }]
+            },
+            highlights: [0, 1, 2],
+            pointers: [
+              { name: 'curr', index: 0, color: 'accent' },
+              { name: 'reach', index: 2, color: 'accent2' }
+            ],
+            vars: [
+              ['i', 0],
+              ['jump', 2],
+              ['max_reach', 2]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "At i = 1 (jump = 3): potential reach = 1 + 3 = 4 >= target (4)! Target index is reached.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 0, end: 4, color: 'green', label: 'TARGET REACHED [0..4]' }]
+            },
+            highlights: [1, 4],
+            pointers: [
+              { name: 'curr', index: 1, color: 'accent' },
+              { name: 'target', index: 4, color: 'green' }
+            ],
+            best: { label: 'Can Reach Last Index: True' },
+            vars: [
+              ['i', 1],
+              ['jump', 3],
+              ['max_reach', 4],
+              ['target', 4]
+            ]
+          },
+          {
+            codeLine: 5,
+            narration: "max_reach (4) >= last index (4). Return true immediately in O(N) time.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 0, end: 4, color: 'green', label: 'TARGET REACHED [0..4]' }]
+            },
+            highlights: [0, 1, 4],
+            best: { label: 'Can Reach Last Index: True' },
+            vars: [
+              ['return', true],
+              ['time', 'O(N)'],
+              ['space', 'O(1)']
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'jump-game-ii',
+    patternId: 'greedy',
+    title: 'Jump Game II',
+    subtitle: 'Minimum jumps, greedy BFS by levels',
+    difficulty: 'Medium',
+    leetcodeId: 45,
+    askedAt: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+    kind: 'problem',
+    statement: 'You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0]. Each element nums[i] represents the maximum length of a forward jump from index i. Return the minimum number of jumps to reach nums[n - 1].',
+    visualType: 'array',
+    initialInput: [2, 3, 1, 1, 4],
+    approaches: [
+      {
+        id: 'greedy-bfs-levels',
+        label: 'Greedy BFS Level Windows',
+        complexity: {
+          time: 'O(N)',
+          space: 'O(1)'
+        },
+        pseudocode: [
+          'jumps = 0, cur_end = 0, farthest = 0',
+          'for i from 0 to n-2:',
+          '    farthest = max(farthest, i + nums[i])',
+          '    if i == cur_end:',
+          '        jumps++',
+          '        cur_end = farthest',
+          '        if cur_end >= n-1: break',
+          'return jumps'
+        ],
+        starterCode: {
+          javascript: `function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, curEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === curEnd) {\n      jumps++;\n      curEnd = farthest;\n      if (curEnd >= nums.length - 1) break;\n    }\n  }\n  return jumps;\n}`,
+          python: `def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = cur_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = farthest\n            if cur_end >= len(nums) - 1:\n                break\n    return jumps`
+        },
+        solutionCode: {
+          javascript: `function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, curEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === curEnd) {\n      jumps++;\n      curEnd = farthest;\n      if (curEnd >= nums.length - 1) break;\n    }\n  }\n  return jumps;\n}`,
+          python: `def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = cur_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = farthest\n            if cur_end >= len(nums) - 1:\n                break\n    return jumps`
+        },
+        testCases: [
+          {
+            input: [[2, 3, 1, 1, 4]],
+            expected: 2,
+            description: "Jump 1 step from index 0 to 1, then 3 steps to the last index = 2 jumps"
+          },
+          {
+            input: [[2, 3, 0, 1, 4]],
+            expected: 2,
+            description: "2 jumps to end"
+          }
+        ],
+        steps: [
+          {
+            codeLine: 1,
+            narration: "Treat jumps as BFS distance levels: Level 0 = index 0. Level 1 = all indices reachable in 1 jump. Level 2 = all indices reachable in 2 jumps.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 0, end: 0, color: 'accent', label: 'LEVEL 0 (0 jumps)' }]
+            },
+            pointers: [{ name: 'start', index: 0, color: 'accent' }],
+            vars: [
+              ['jumps', 0],
+              ['cur_end', 0],
+              ['farthest', 0]
+            ]
+          },
+          {
+            codeLine: 3,
+            narration: "At i = 0 (jump = 2): farthest reachable = 0 + 2 = 2. Reached end of Level 0 (i == cur_end = 0).",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 0, end: 2, color: 'blue', label: 'JUMP 1 RANGE [1..2]' }]
+            },
+            highlights: [0],
+            pointers: [
+              { name: 'i', index: 0, color: 'accent' },
+              { name: 'farthest', index: 2, color: 'accent2' }
+            ],
+            vars: [
+              ['i', 0],
+              ['farthest', 2],
+              ['cur_end', 0]
+            ]
+          },
+          {
+            codeLine: 5,
+            narration: "Increment jumps = 1. Level 1 window is now [1..2]. cur_end becomes 2.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 1, end: 2, color: 'blue', label: 'LEVEL 1 WINDOW [1..2]' }]
+            },
+            highlights: [1, 2],
+            pointers: [{ name: 'cur_end', index: 2, color: 'accent2' }],
+            vars: [
+              ['jumps', 1],
+              ['cur_end', 2],
+              ['farthest', 2]
+            ]
+          },
+          {
+            codeLine: 3,
+            narration: "At i = 1 (jump = 3): farthest reachable = 1 + 3 = 4 >= target (4)! Farthest frontier expands to index 4.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 1, end: 4, color: 'green', label: 'JUMP 2 CAN REACH TARGET (4)' }]
+            },
+            highlights: [1, 4],
+            pointers: [
+              { name: 'i', index: 1, color: 'accent' },
+              { name: 'farthest', index: 4, color: 'green' }
+            ],
+            vars: [
+              ['i', 1],
+              ['farthest', 4],
+              ['cur_end', 2]
+            ]
+          },
+          {
+            codeLine: 5,
+            narration: "At i = 2 (end of Level 1 window): increment jumps = 2. cur_end expands to farthest = 4 >= last index. Target reached!",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 1, end: 4, color: 'green', label: 'TARGET REACHED IN 2 JUMPS' }]
+            },
+            highlights: [0, 1, 4],
+            best: { label: 'Min Jumps = 2 (0 -> 1 -> 4)' },
+            vars: [
+              ['jumps', 2],
+              ['cur_end', 4],
+              ['status', 'REACHED']
+            ]
+          },
+          {
+            codeLine: 8,
+            narration: "Return min jumps = 2 in O(N) time and O(1) space.",
+            customVisual: {
+              array: [2, 3, 1, 1, 4],
+              brackets: [{ start: 0, end: 4, color: 'green', label: 'MIN JUMPS = 2' }]
+            },
+            highlights: [0, 1, 4],
+            best: { label: 'Min Jumps = 2' },
+            vars: [
+              ['return', 2],
+              ['time', 'O(N)'],
+              ['space', 'O(1)']
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'partition-labels',
+    patternId: 'greedy',
+    title: 'Partition Labels',
+    subtitle: "Extend the part to each letter's last occurrence",
+    difficulty: 'Medium',
+    leetcodeId: 763,
+    askedAt: ['Amazon', 'Google', 'Facebook'],
+    kind: 'problem',
+    statement: 'You are given a string s. We want to partition the string into as many parts as possible so that each letter appears in at most one part. Return a list of integers representing the size of these parts.',
+    visualType: 'array',
+    initialInput: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+    approaches: [
+      {
+        id: 'greedy-last-occurrence',
+        label: 'Greedy Last Occurrence Window',
+        complexity: {
+          time: 'O(N)',
+          space: 'O(1) · at most 26 letters'
+        },
+        pseudocode: [
+          'last = map of each char to its last index in s',
+          'start = 0, end = 0, result = []',
+          'for i from 0 to n-1:',
+          '    end = max(end, last[s[i]])',
+          '    if i == end:',
+          '        result.append(end - start + 1)',
+          '        start = i + 1',
+          'return result'
+        ],
+        starterCode: {
+          javascript: `function partitionLabels(s) {\n  const last = {};\n  for (let i = 0; i < s.length; i++) last[s[i]] = i;\n  const res = [];\n  let start = 0, end = 0;\n  for (let i = 0; i < s.length; i++) {\n    end = Math.max(end, last[s[i]]);\n    if (i === end) {\n      res.push(end - start + 1);\n      start = i + 1;\n    }\n  }\n  return res;\n}`,
+          python: `def partitionLabels(s: str) -> list[int]:\n    last = {c: i for i, c in enumerate(s)}\n    res = []\n    start = end = 0\n    for i, c in enumerate(s):\n        end = max(end, last[c])\n        if i == end:\n            res.append(end - start + 1)\n            start = i + 1\n    return res`
+        },
+        solutionCode: {
+          javascript: `function partitionLabels(s) {\n  const last = {};\n  for (let i = 0; i < s.length; i++) last[s[i]] = i;\n  const res = [];\n  let start = 0, end = 0;\n  for (let i = 0; i < s.length; i++) {\n    end = Math.max(end, last[s[i]]);\n    if (i === end) {\n      res.push(end - start + 1);\n      start = i + 1;\n    }\n  }\n  return res;\n}`,
+          python: `def partitionLabels(s: str) -> list[int]:\n    last = {c: i for i, c in enumerate(s)}\n    res = []\n    start = end = 0\n    for i, c in enumerate(s):\n        end = max(end, last[c])\n        if i == end:\n            res.append(end - start + 1)\n            start = i + 1\n    return res`
+        },
+        testCases: [
+          {
+            input: ["ababcbacadefegdehijhklij"],
+            expected: [9, 7, 8],
+            description: "Partitions: 'ababcbaca' (9), 'defegde' (7), 'hijhklij' (8)"
+          }
+        ],
+        steps: [
+          {
+            codeLine: 1,
+            narration: "Precompute last occurrence of each char: last['a']=8, last['b']=5, last['c']=7, last['d']=14, last['e']=15, last['f']=11, last['g']=13, last['h']=19, last['i']=22, last['j']=23, last['k']=20, last['l']=21.",
+            customVisual: { array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'] },
+            vars: [
+              ['last a', 8],
+              ['last b', 5],
+              ['last c', 7]
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Scan from index 0 ('a'): last['a'] = 8 -> extend end boundary to 8. Every letter in this part must be contained within at least [0..8].",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [{ start: 0, end: 8, color: 'accent', label: 'PART 1 BOUNDARY [0..8]' }]
+            },
+            highlights: [0, 8],
+            pointers: [
+              { name: 'start', index: 0, color: 'accent' },
+              { name: 'end', index: 8, color: 'accent2' }
+            ],
+            vars: [
+              ['start', 0],
+              ['end', 8]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Sweep through indices 1..8: all chars ('b' last=5, 'c' last=7) have last index <= 8. At i = 8, i == end! Cut Partition 1: length = 8 - 0 + 1 = 9 ('ababcbaca').",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [{ start: 0, end: 8, color: 'green', label: 'PARTITION 1: LENGTH 9' }]
+            },
+            highlights: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            best: { label: 'Partition 1 = 9' },
+            vars: [
+              ['part 1 length', 9],
+              ['collected', '[9]']
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Start Partition 2 at index 9 ('d'): last['d'] = 14. At index 10 ('e'): last['e'] = 15 -> expand end boundary to 15.",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [
+                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
+                { start: 9, end: 15, color: 'accent', label: 'PART 2 BOUNDARY [9..15]' }
+              ]
+            },
+            highlights: [9, 15],
+            pointers: [
+              { name: 'start', index: 9, color: 'accent' },
+              { name: 'end', index: 15, color: 'accent2' }
+            ],
+            vars: [
+              ['start', 9],
+              ['end', 15]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "Sweep through indices 11..15 ('f' last=11, 'g' last=13): all fit in <= 15. At i = 15, i == end! Cut Partition 2: length = 15 - 9 + 1 = 7 ('defegde').",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [
+                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
+                { start: 9, end: 15, color: 'green', label: 'PARTITION 2: LENGTH 7' }
+              ]
+            },
+            highlights: [9, 10, 11, 12, 13, 14, 15],
+            best: { label: 'Partitions: [9, 7]' },
+            vars: [
+              ['part 2 length', 7],
+              ['collected', '[9, 7]']
+            ]
+          },
+          {
+            codeLine: 4,
+            narration: "Start Partition 3 at index 16 ('h'): last['h']=19, last['i']=22, last['j']=23 -> expand end boundary to 23 (end of string).",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [
+                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
+                { start: 9, end: 15, color: 'green', label: 'PART 2 (7)' },
+                { start: 16, end: 23, color: 'accent', label: 'PART 3 BOUNDARY [16..23]' }
+              ]
+            },
+            highlights: [16, 23],
+            pointers: [
+              { name: 'start', index: 16, color: 'accent' },
+              { name: 'end', index: 23, color: 'accent2' }
+            ],
+            vars: [
+              ['start', 16],
+              ['end', 23]
+            ]
+          },
+          {
+            codeLine: 6,
+            narration: "At i = 23 (end of string): i == end! Cut Partition 3: length = 23 - 16 + 1 = 8 ('hijhklij').",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [
+                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
+                { start: 9, end: 15, color: 'green', label: 'PART 2 (7)' },
+                { start: 16, end: 23, color: 'green', label: 'PART 3 (8)' }
+              ]
+            },
+            highlights: [16, 17, 18, 19, 20, 21, 22, 23],
+            best: { label: 'All Partitions: [9, 7, 8]' },
+            vars: [
+              ['part 3 length', 8],
+              ['result', '[9, 7, 8]']
+            ]
+          },
+          {
+            codeLine: 8,
+            narration: "Return result = [9, 7, 8]. Max partitions created such that no letter appears in more than one part. O(N) time and O(1) space.",
+            customVisual: {
+              array: ['a','b','a','b','c','b','a','c','a','d','e','f','e','g','d','e','h','i','j','h','k','l','i','j'],
+              brackets: [
+                { start: 0, end: 8, color: 'green', label: 'PART 1 (9)' },
+                { start: 9, end: 15, color: 'green', label: 'PART 2 (7)' },
+                { start: 16, end: 23, color: 'green', label: 'PART 3 (8)' }
+              ]
+            },
+            best: { label: 'Result: [9, 7, 8]' },
+            vars: [
+              ['return', '[9, 7, 8]'],
+              ['time', 'O(N)'],
+              ['space', 'O(1)']
+            ]
+          }
+        ]
+      }
+    ]
+  }
+];

@@ -9,7 +9,8 @@ import { dfsProblems } from './problems/dfsProblems';
 import { dpProblems } from './problems/dpProblems';
 import { graphProblems } from './problems/graphProblems';
 import { heapProblems } from './problems/heapProblems';
-import { greedyProblems, matrixProblems, intervalProblems, bitProblems } from './problems/otherPatterns';
+import { greedyProblems } from './problems/greedyProblems';
+import { matrixProblems, intervalProblems, bitProblems } from './problems/otherPatterns';
 
 export const allTopics: Topic[] = [
   {
