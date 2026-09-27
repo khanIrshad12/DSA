@@ -545,142 +545,778 @@ export const greedyProblems: Problem[] = [
     ]
   },
   {
-    id: 'gas-station',
-    patternId: 'greedy',
-    title: 'Gas Station',
-    subtitle: 'If total gas >= total cost, one start works, find it',
-    difficulty: 'Medium',
-    leetcodeId: 134,
-    askedAt: ['Amazon', 'Google', 'Microsoft', 'Bloomberg'],
-    kind: 'problem',
-    statement: 'There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i]. You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. Return the starting gas station index if you can travel around the circuit once in the clockwise direction, otherwise return -1.',
-    visualType: 'array',
-    initialInput: [1, 2, 3, 4, 5],
-    approaches: [
-      {
-        id: 'greedy-tank-reset',
-        label: 'Greedy Tank Reset',
-        complexity: {
-          time: 'O(N)',
-          space: 'O(1)'
+  "id": "gas-station",
+  "patternId": "greedy",
+  "title": "Gas Station",
+  "subtitle": "If total gas >= total cost, one start works, find it",
+  "difficulty": "Medium",
+  "leetcodeId": 134,
+  "askedAt": [
+    "Amazon",
+    "Google",
+    "Microsoft"
+  ],
+  "kind": "problem",
+  "statement": "Given gas available at each station along a circular route and the cost to travel from each station to the next, return the starting station index from which you can complete the full loop, or -1 if no such start exists. A unique answer is guaranteed when one exists.",
+  "visualType": "array",
+  "initialInput": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "approaches": [
+    {
+      "id": "greedy-one-pass-reset",
+      "label": "Greedy - one pass, reset start past each failure",
+      "complexity": {
+        "time": "O(n)",
+        "space": "O(1)"
+      },
+      "pseudocode": [
+        "given gas, cost",
+        "total = 0; tank = 0; start = 0",
+        "for i = 0 to n - 1:",
+        "    d = gas[i] - cost[i]",
+        "    total += d; tank += d",
+        "    if tank < 0:        // segment start..i unusable",
+        "        start = i + 1; tank = 0",
+        "return total >= 0 ? start : -1"
+      ],
+      "starterCode": {
+        "javascript": "function canCompleteCircuit(gas, cost) {\n  let total = 0, tank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    const d = gas[i] - cost[i];\n    total += d;\n    tank += d;\n    if (tank < 0) {\n      start = i + 1;\n      tank = 0;\n    }\n  }\n  return total >= 0 ? start : -1;\n}",
+        "python": "def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    total = tank = start = 0\n    for i in range(len(gas)):\n        d = gas[i] - cost[i]\n        total += d\n        tank += d\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1"
+      },
+      "solutionCode": {
+        "javascript": "function canCompleteCircuit(gas, cost) {\n  let total = 0, tank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    const d = gas[i] - cost[i];\n    total += d;\n    tank += d;\n    if (tank < 0) {\n      start = i + 1;\n      tank = 0;\n    }\n  }\n  return total >= 0 ? start : -1;\n}",
+        "python": "def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    total = tank = start = 0\n    for i in range(len(gas)):\n        d = gas[i] - cost[i]\n        total += d\n        tank += d\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            [
+              3,
+              4,
+              5,
+              1,
+              2
+            ]
+          ],
+          "expected": 3,
+          "description": "Start at station 3 (gas=4, cost=1) completes full loop"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Circular route of 5 stations. gas[i] = fuel you gain at station i, cost[i] = fuel to drive from i to i+1. Start with an empty tank at some station and find an index you can begin at to complete the full loop, or report -1.",
+          "customVisual": {
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": []
+            }
+          },
+          "vars": [
+            [
+              "gas",
+              "[1, 2, 3, 4, 5]"
+            ],
+            [
+              "cost",
+              "[3, 4, 5, 1, 2]"
+            ]
+          ]
         },
-        pseudocode: [
-          'total_surplus = 0, current_tank = 0, start_idx = 0',
-          'for i from 0 to n-1:',
-          '    diff = gas[i] - cost[i]',
-          '    total_surplus += diff',
-          '    current_tank += diff',
-          '    if current_tank < 0:',
-          '        start_idx = i + 1',
-          '        current_tank = 0',
-          'return start_idx if total_surplus >= 0 else -1'
-        ],
-        starterCode: {
-          javascript: `function canCompleteCircuit(gas, cost) {\n  let total = 0, tank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    const diff = gas[i] - cost[i];\n    total += diff;\n    tank += diff;\n    if (tank < 0) {\n      start = i + 1;\n      tank = 0;\n    }\n  }\n  return total >= 0 ? start : -1;\n}`,
-          python: `def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    total = tank = start = 0\n    for i in range(len(gas)):\n        diff = gas[i] - cost[i]\n        total += diff\n        tank += diff\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1`
+        {
+          "codeLine": 2,
+          "narration": "Initialise: total = 0 (running sum of every net, to test feasibility), tank = 0 (fuel since the CURRENT candidate start), start = 0 (the candidate we are testing).",
+          "customVisual": {
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": []
+            }
+          },
+          "pointers": [
+            {
+              "name": "start",
+              "index": 0,
+              "color": "accent"
+            }
+          ],
+          "vars": [
+            [
+              "total",
+              0
+            ],
+            [
+              "tank",
+              0
+            ],
+            [
+              "start",
+              0
+            ]
+          ]
         },
-        solutionCode: {
-          javascript: `function canCompleteCircuit(gas, cost) {\n  let total = 0, tank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    const diff = gas[i] - cost[i];\n    total += diff;\n    tank += diff;\n    if (tank < 0) {\n      start = i + 1;\n      tank = 0;\n    }\n  }\n  return total >= 0 ? start : -1;\n}`,
-          python: `def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    total = tank = start = 0\n    for i in range(len(gas)):\n        diff = gas[i] - cost[i]\n        total += diff\n        tank += diff\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1`
+        {
+          "codeLine": 3,
+          "narration": "i = 0. Testing station 0 as candidate start.",
+          "highlights": [
+            0
+          ],
+          "secondaryHighlights": [
+            0
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 0,
+              "color": "accent"
+            },
+            {
+              "name": "i",
+              "index": 0,
+              "color": "amber"
+            }
+          ],
+          "customVisual": {
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                0
+              ]
+            }
+          },
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "total",
+              0
+            ],
+            [
+              "tank",
+              0
+            ],
+            [
+              "start",
+              0
+            ]
+          ]
         },
-        testCases: [
-          {
-            input: [[1, 2, 3, 4, 5], [3, 4, 5, 1, 2]],
-            expected: 3,
-            description: "Start at station 3 (gas=4, cost=1) completes full circle"
-          }
-        ],
-        steps: [
-          {
-            codeLine: 1,
-            narration: "Gas = [1, 2, 3, 4, 5], Cost = [3, 4, 5, 1, 2]. Compute net balance diff[i] = gas[i] - cost[i] = [-2, -2, -2, +3, +3].",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            vars: [
-              ['total_surplus', 0],
-              ['current_tank', 0],
-              ['start_idx', 0]
-            ]
+        {
+          "codeLine": 4,
+          "narration": "Station 0: net = 1 - 3 = -2. Add to the tank (tank = -2) and to the overall total (total = -2).",
+          "highlights": [
+            0
+          ],
+          "secondaryHighlights": [
+            0
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 0,
+              "color": "accent"
+            },
+            {
+              "name": "i",
+              "index": 0,
+              "color": "amber"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "accent",
+                "label": "FROM START=0"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                0
+              ]
+            }
           },
-          {
-            codeLine: 6,
-            narration: "Station 0: diff = -2 -> current_tank = -2 < 0! Station 0 cannot reach station 1. Greedily reset start_idx = 1, current_tank = 0.",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            highlights: [0],
-            pointers: [{ name: 'fail', index: 0, color: 'red' }],
-            vars: [
-              ['station', 0],
-              ['diff', -2],
-              ['tank', -2],
-              ['new start', 1]
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "net",
+              -2
+            ],
+            [
+              "total",
+              -2
+            ],
+            [
+              "tank",
+              -2
+            ],
+            [
+              "start",
+              0
             ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "tank = negative dropped below 0 driving from start=0 through 0. KEY GREEDY INSIGHT: no station in [0..0] can be a valid start either, each prefix from 0 was >= 0, so removing any of those leading stations only LOWERS the tank at i. So skip the whole segment: reset start = 1, tank = 0.",
+          "highlights": [
+            0
+          ],
+          "pointers": [
+            {
+              "name": "i",
+              "index": 0,
+              "color": "red"
+            },
+            {
+              "name": "start",
+              "index": 1,
+              "color": "accent"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 0,
+                "end": 0,
+                "color": "red",
+                "label": "DEAD SEGMENT [0..0]"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                0
+              ]
+            }
           },
-          {
-            codeLine: 6,
-            narration: "Station 1: diff = -2 -> current_tank = -2 < 0! Reset start_idx = 2, current_tank = 0.",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            highlights: [1],
-            pointers: [{ name: 'fail', index: 1, color: 'red' }],
-            vars: [
-              ['station', 1],
-              ['diff', -2],
-              ['new start', 2]
+          "vars": [
+            [
+              "i",
+              0
+            ],
+            [
+              "total",
+              -2
+            ],
+            [
+              "tank",
+              0
+            ],
+            [
+              "start",
+              1
             ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Station 1: net = 2 - 4 = -2. Add to total (-4) and tank (-2).",
+          "highlights": [
+            1
+          ],
+          "secondaryHighlights": [
+            1
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 1,
+              "color": "accent"
+            },
+            {
+              "name": "i",
+              "index": 1,
+              "color": "amber"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 1,
+                "end": 1,
+                "color": "accent",
+                "label": "FROM START=1"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                1
+              ]
+            }
           },
-          {
-            codeLine: 6,
-            narration: "Station 2: diff = -2 -> current_tank = -2 < 0! Reset start_idx = 3, current_tank = 0.",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            highlights: [2],
-            pointers: [{ name: 'fail', index: 2, color: 'red' }],
-            vars: [
-              ['station', 2],
-              ['diff', -2],
-              ['new start', 3]
+          "vars": [
+            [
+              "i",
+              1
+            ],
+            [
+              "net",
+              -2
+            ],
+            [
+              "total",
+              -4
+            ],
+            [
+              "tank",
+              -2
+            ],
+            [
+              "start",
+              1
             ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "tank (-2) < 0. Station 1 also failed immediately. Dead segment is now [0..1]. Reset start = 2, tank = 0.",
+          "highlights": [
+            1
+          ],
+          "pointers": [
+            {
+              "name": "i",
+              "index": 1,
+              "color": "red"
+            },
+            {
+              "name": "start",
+              "index": 2,
+              "color": "accent"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 0,
+                "end": 1,
+                "color": "red",
+                "label": "DEAD SEGMENT [0..1]"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                1
+              ]
+            }
           },
-          {
-            codeLine: 4,
-            narration: "Station 3: diff = 4 - 1 = +3 -> current_tank = 3 >= 0! Station 3 survives.",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            highlights: [3],
-            pointers: [{ name: 'start', index: 3, color: 'green' }],
-            vars: [
-              ['station', 3],
-              ['diff', '+3'],
-              ['tank', 3],
-              ['start_idx', 3]
+          "vars": [
+            [
+              "i",
+              1
+            ],
+            [
+              "total",
+              -4
+            ],
+            [
+              "tank",
+              0
+            ],
+            [
+              "start",
+              2
             ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Station 2: net = 3 - 5 = -2. Add to total (-6) and tank (-2).",
+          "highlights": [
+            2
+          ],
+          "secondaryHighlights": [
+            2
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 2,
+              "color": "accent"
+            },
+            {
+              "name": "i",
+              "index": 2,
+              "color": "amber"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 2,
+                "end": 2,
+                "color": "accent",
+                "label": "FROM START=2"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                2
+              ]
+            }
           },
-          {
-            codeLine: 4,
-            narration: "Station 4: diff = 5 - 2 = +3 -> current_tank = 3 + 3 = 6 >= 0! Total surplus across whole circuit = (-2 - 2 - 2 + 3 + 3) = 0 >= 0.",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            highlights: [3, 4],
-            pointers: [{ name: 'start', index: 3, color: 'green' }, { name: 'curr', index: 4, color: 'accent' }],
-            best: { label: 'Valid Starting Station = Index 3' },
-            vars: [
-              ['total_surplus', 0],
-              ['tank', 6],
-              ['start_idx', 3]
+          "vars": [
+            [
+              "i",
+              2
+            ],
+            [
+              "net",
+              -2
+            ],
+            [
+              "total",
+              -6
+            ],
+            [
+              "tank",
+              -2
+            ],
+            [
+              "start",
+              2
             ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "tank (-2) < 0. Dead segment is now [0..2]. Reset start = 3, tank = 0.",
+          "highlights": [
+            2
+          ],
+          "pointers": [
+            {
+              "name": "i",
+              "index": 2,
+              "color": "red"
+            },
+            {
+              "name": "start",
+              "index": 3,
+              "color": "green"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 0,
+                "end": 2,
+                "color": "red",
+                "label": "DEAD SEGMENT [0..2]"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                2
+              ]
+            }
           },
-          {
-            codeLine: 9,
-            narration: "Because total gas >= total cost (surplus 0 >= 0), starting at index 3 is guaranteed to complete the entire circular route. Return 3.",
-            customVisual: { array: [-2, -2, -2, 3, 3] },
-            highlights: [3],
-            pointers: [{ name: 'start', index: 3, color: 'green' }],
-            best: { label: 'Start Station: Index 3' },
-            vars: [
-              ['return', 3],
-              ['time', 'O(N)'],
-              ['space', 'O(1)']
+          "vars": [
+            [
+              "i",
+              2
+            ],
+            [
+              "total",
+              -6
+            ],
+            [
+              "tank",
+              0
+            ],
+            [
+              "start",
+              3
             ]
-          }
-        ]
-      }
-    ]
-  },
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Station 3: net = 4 - 1 = +3. Add to total (total = -3) and tank (tank = 3 >= 0). Station 3 is positive!",
+          "highlights": [
+            3
+          ],
+          "secondaryHighlights": [
+            3
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 3,
+              "color": "green"
+            },
+            {
+              "name": "i",
+              "index": 3,
+              "color": "amber"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 3,
+                "end": 3,
+                "color": "green",
+                "label": "CANDIDATE START [3..3]"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                3
+              ]
+            }
+          },
+          "vars": [
+            [
+              "i",
+              3
+            ],
+            [
+              "net",
+              3
+            ],
+            [
+              "total",
+              -3
+            ],
+            [
+              "tank",
+              3
+            ],
+            [
+              "start",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Station 4: net = 5 - 2 = +3. Add to total (total = 0) and tank (tank = 6 >= 0). Tank never dropped below 0 from index 3 onwards!",
+          "highlights": [
+            3,
+            4
+          ],
+          "secondaryHighlights": [
+            3,
+            4
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 3,
+              "color": "green"
+            },
+            {
+              "name": "i",
+              "index": 4,
+              "color": "amber"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 3,
+                "end": 4,
+                "color": "green",
+                "label": "VALID ROUTE [3..4]"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                3,
+                4
+              ]
+            }
+          },
+          "best": {
+            "label": "Total Gas >= Total Cost (Surplus 0 >= 0)"
+          },
+          "vars": [
+            [
+              "i",
+              4
+            ],
+            [
+              "net",
+              3
+            ],
+            [
+              "total",
+              0
+            ],
+            [
+              "tank",
+              6
+            ],
+            [
+              "start",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Total net gas = 0 >= 0, so the loop is fully possible. The ONLY valid starting station is index 3. Return 3.",
+          "highlights": [
+            3
+          ],
+          "secondaryHighlights": [
+            3
+          ],
+          "pointers": [
+            {
+              "name": "start",
+              "index": 3,
+              "color": "green"
+            }
+          ],
+          "customVisual": {
+            "brackets": [
+              {
+                "start": 3,
+                "end": 4,
+                "color": "green",
+                "label": "VALID START = INDEX 3"
+              }
+            ],
+            "secondaryArray": {
+              "array": [
+                3,
+                4,
+                5,
+                1,
+                2
+              ],
+              "label": "COST",
+              "highlights": [
+                3
+              ]
+            }
+          },
+          "best": {
+            "label": "Start Station: Index 3"
+          },
+          "vars": [
+            [
+              "return",
+              3
+            ],
+            [
+              "time",
+              "O(N)"
+            ],
+            [
+              "space",
+              "O(1)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
   {
     id: 'jump-game',
     patternId: 'greedy',
