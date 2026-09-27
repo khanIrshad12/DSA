@@ -302,10 +302,9 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, step }) 
         })()}
 
         {(() => {
-          const narrationLower = (step.narration || '').toLowerCase();
-          const isSwapStep = narrationLower.includes('swap') || narrationLower.includes('trade') || narrationLower.includes('exchange') || narrationLower.includes('partition') || narrationLower.includes('reverse') || narrationLower.includes('invert');
-          const isPopStep = narrationLower.includes('remove') || narrationLower.includes('delete') || narrationLower.includes('pop') || narrationLower.includes('discard') || narrationLower.includes('duplicate');
-          const isPushStep = narrationLower.includes('insert') || narrationLower.includes('push') || narrationLower.includes('add') || narrationLower.includes('append');
+          const isSwapStep = narrationLower.includes('swap') || narrationLower.includes('trade') || narrationLower.includes('exchange');
+          const isPopStep = (step.customVisual?.remove !== undefined) || (step.highlights?.length === 1 && (narrationLower.startsWith('remove') || narrationLower.includes('pop ') || narrationLower.includes('delete ')));
+          const isPushStep = (step.customVisual?.insert !== undefined) || (step.highlights?.length === 1 && (narrationLower.startsWith('insert') || narrationLower.includes('push ') || narrationLower.includes('append ')));
 
           const swapPair = step.customVisual?.swap || (step.highlights && step.highlights.length === 2 && isSwapStep ? step.highlights : null);
 
