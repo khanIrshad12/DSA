@@ -128,10 +128,12 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                 badgeBg = 'rgba(239, 68, 68, 0.22)';
               }
 
+              const isFlipAnimation = isCaptured || badgeText === 'flip';
+
               return (
                 <div
                   key={c}
-                  className={`sketch-border visualizer-cell ${isActive ? 'animate-item-active' : ''}`}
+                  className={`sketch-border visualizer-cell ${isActive ? 'animate-item-active' : ''} ${isFlipAnimation ? 'animate-cell-flip' : ''}`}
                   style={{
                     width: '54px',
                     height: '54px',
@@ -147,7 +149,8 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     boxShadow: isSpecialFocus ? focusShadow : 'none',
                     transform: isSpecialFocus ? 'scale(1.06)' : 'scale(1)',
                     transition: 'all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    position: 'relative'
+                    position: 'relative',
+                    perspective: '400px'
                   }}
                 >
                   {hasBadge ? (
