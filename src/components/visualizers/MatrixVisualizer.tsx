@@ -58,7 +58,8 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               const isStringVal = typeof val === 'string';
               const showCoords = !step.customVisual?.hideCoords && !isStringVal;
               const isTarget = gridH?.status === 'target';
-              const hasDfsBadge = gridH?.badge === 'dfs' || (isActive && isStringVal);
+              const hasBadge = !!gridH?.badge || (isActive && isStringVal);
+              const badgeText = gridH?.badge || (isStringVal ? 'dfs' : '');
 
               let borderColor = 'rgba(255, 255, 255, 0.35)';
               let bgColor = 'var(--bg-surface)';
@@ -107,7 +108,7 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     position: 'relative'
                   }}
                 >
-                  {hasDfsBadge ? (
+                  {hasBadge ? (
                     <div
                       className="font-mono"
                       style={{
@@ -122,7 +123,7 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                         lineHeight: 1.2
                       }}
                     >
-                      dfs
+                      {badgeText}
                     </div>
                   ) : (
                     <span

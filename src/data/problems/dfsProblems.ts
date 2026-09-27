@@ -51557,6 +51557,2174 @@ export const dfsProblems: Problem[] = [
   ]
 },
   {
+  "id": "flood-fill",
+  "patternId": "dfs",
+  "title": "Flood Fill",
+  "subtitle": "Recolour a connected region",
+  "difficulty": "easy",
+  "leetcodeId": 733,
+  "askedAt": [
+    "Amazon",
+    "Google"
+  ],
+  "kind": "problem",
+  "statement": "Given an image grid, a starting pixel, and a new color, repaint that pixel and every pixel reachable from it through 4-directionally adjacent pixels of the same original color, then return the modified image.",
+  "visualType": "matrix",
+  "initialInput": [
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      1
+    ]
+  ],
+  "approaches": [
+    {
+      "id": "recursive-dfs-flood",
+      "label": "Recursive DFS flood",
+      "complexity": {
+        "time": "O(R · C)",
+        "space": "O(R · C)"
+      },
+      "pseudocode": [
+        "oldColor = image[sr][sc]",
+        "if oldColor == newColor: return image",
+        "dfs(r, c):",
+        "    image[r][c] = newColor",
+        "    if out of bounds: return",
+        "    if image[nr][nc] != oldColor: skip",
+        "    dfs(nr, nc)    // each of 4 neighbours",
+        "dfs(sr, sc); return image"
+      ],
+      "starterCode": {
+        "javascript": "function floodFill(image, sr, sc, newColor) {\n  const oldColor = image[sr][sc];\n  if (oldColor === newColor) return image;\n  const R = image.length, C = image[0].length;\n  function dfs(r, c) {\n    if (r < 0 || r >= R || c < 0 || c >= C || image[r][c] !== oldColor) return;\n    image[r][c] = newColor;\n    dfs(r - 1, c);\n    dfs(r + 1, c);\n    dfs(r, c - 1);\n    dfs(r, c + 1);\n  }\n  dfs(sr, sc);\n  return image;\n}",
+        "python": "def floodFill(image: list[list[int]], sr: int, sc: int, newColor: int) -> list[list[int]]:\n    old_color = image[sr][sc]\n    if old_color == newColor:\n        return image\n    R, C = len(image), len(image[0])\n    def dfs(r, c):\n        if 0 <= r < R and 0 <= c < C and image[r][c] == old_color:\n            image[r][c] = newColor\n            dfs(r - 1, c)\n            dfs(r + 1, c)\n            dfs(r, c - 1)\n            dfs(r, c + 1)\n    dfs(sr, sc)\n    return image"
+      },
+      "solutionCode": {
+        "javascript": "function floodFill(image, sr, sc, newColor) {\n  const oldColor = image[sr][sc];\n  if (oldColor === newColor) return image;\n  const R = image.length, C = image[0].length;\n  function dfs(r, c) {\n    if (r < 0 || r >= R || c < 0 || c >= C || image[r][c] !== oldColor) return;\n    image[r][c] = newColor;\n    dfs(r - 1, c);\n    dfs(r + 1, c);\n    dfs(r, c - 1);\n    dfs(r, c + 1);\n  }\n  dfs(sr, sc);\n  return image;\n}",
+        "python": "def floodFill(image: list[list[int]], sr: int, sc: int, newColor: int) -> list[list[int]]:\n    old_color = image[sr][sc]\n    if old_color == newColor:\n        return image\n    R, C = len(image), len(image[0])\n    def dfs(r, c):\n        if 0 <= r < R and 0 <= c < C and image[r][c] == old_color:\n            image[r][c] = newColor\n            dfs(r - 1, c)\n            dfs(r + 1, c)\n            dfs(r, c - 1)\n            dfs(r, c + 1)\n    dfs(sr, sc)\n    return image"
+      },
+      "testCases": [
+        {
+          "input": [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                1
+              ]
+            ],
+            1,
+            1,
+            2
+          ],
+          "expected": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "description": "Standard 3x3 flood fill from center (1, 1)"
+        },
+        {
+          "input": [
+            [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            0,
+            0,
+            0
+          ],
+          "expected": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "description": "Same color no-op"
+        }
+      ],
+      "steps": [
+        {
+          "codeLine": 1,
+          "narration": "Flood Fill is the \"paint bucket\" tool. We start at (1, 1), note its colour (1), and recolour every cell connected to it through up/down/left/right moves that ALSO has that original colour, repainting them to 2. Different colours and the grid edge are the walls that stop the spread.",
+          "matrix": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active"
+            }
+          ],
+          "vars": [
+            [
+              "start",
+              "(1, 1)"
+            ],
+            [
+              "oldColor",
+              1
+            ],
+            [
+              "newColor",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Paint (1, 1): repaint from 1 to 2. This pixel is now part of the flooded area. Now we spread to its 4 neighbours.",
+          "matrix": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(1, 1)"
+            ],
+            [
+              "colour",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look up -> (0, 1): in bounds and still colour 1. It belongs to the region: RECURSE and let the paint spread into it.",
+          "matrix": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "spread into",
+              "(0, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Paint (0, 1): repaint from 1 to 2. This pixel is now part of the flooded area. Now we spread to its 4 neighbours.",
+          "matrix": [
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(0, 1)"
+            ],
+            [
+              "colour",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 1) look up -> (-1, 1): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(-1, 1)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look down -> (1, 1): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited-target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(1, 1)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look left -> (0, 0): in bounds and still colour 1. It belongs to the region: RECURSE and let the paint spread into it.",
+          "matrix": [
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "target"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "spread into",
+              "(0, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Paint (0, 0): repaint from 1 to 2. This pixel is now part of the flooded area. Now we spread to its 4 neighbours.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(0, 0)"
+            ],
+            [
+              "colour",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 0) look up -> (-1, 0): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(-1, 0)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look down -> (1, 0): in bounds and still colour 1. It belongs to the region: RECURSE and let the paint spread into it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "spread into",
+              "(1, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Paint (1, 0): repaint from 1 to 2. This pixel is now part of the flooded area. Now we spread to its 4 neighbours.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(1, 0)"
+            ],
+            [
+              "colour",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look up -> (0, 0): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited-target"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(0, 0)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look down -> (2, 0): in bounds and still colour 1. It belongs to the region: RECURSE and let the paint spread into it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "spread into",
+              "(2, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Paint (2, 0): repaint from 1 to 2. This pixel is now part of the flooded area. Now we spread to its 4 neighbours.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(2, 0)"
+            ],
+            [
+              "colour",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look up -> (1, 0): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited-target"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(1, 0)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (2, 0) look down -> (3, 0): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(3, 0)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (2, 0) look left -> (2, -1): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(2, -1)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look right -> (2, 1): colour is 0 (not original colour 1). Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(2, 1)"
+            ],
+            [
+              "skip",
+              "different colour"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (1, 0) look left -> (1, -1): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(1, -1)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look right -> (1, 1): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited-target"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(1, 1)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 0) look left -> (0, -1): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(0, -1)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look right -> (0, 1): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited-target"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(0, 1)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look right -> (0, 2): in bounds and still colour 1. It belongs to the region: RECURSE and let the paint spread into it.",
+          "matrix": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "spread into",
+              "(0, 2)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Paint (0, 2): repaint from 1 to 2. This pixel is now part of the flooded area. Now we spread to its 4 neighbours.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(0, 2)"
+            ],
+            [
+              "colour",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 2) look up -> (-1, 2): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(-1, 2)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look down -> (1, 2): colour is 0 (not original colour 1). Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "target"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(1, 2)"
+            ],
+            [
+              "skip",
+              "different colour"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look left -> (0, 1): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited-target"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(0, 1)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 2) look right -> (0, 3): off the grid. The boundary is a wall, stop here.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(0, 3)"
+            ],
+            [
+              "stop",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look down -> (2, 1): colour is 0 (not original colour 1). Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(2, 1)"
+            ],
+            [
+              "skip",
+              "different colour"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look left -> (1, 0): already repainted to 2. Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited-target"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(1, 0)"
+            ],
+            [
+              "skip",
+              "already repainted"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "Look right -> (1, 2): colour is 0 (not original colour 1). Skip it.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "fill"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "target"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(1, 2)"
+            ],
+            [
+              "skip",
+              "different colour"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Flood Fill complete! All 4-directionally connected pixels of original colour 1 starting from (1, 1) have been repainted to 2. Total repainted: 7 pixels in O(R · C) time.",
+          "matrix": [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              1
+            ]
+          ],
+          "customVisual": {
+            "label": "3 × 3 IMAGE · NEW COLOUR 2",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            }
+          ],
+          "best": {
+            "label": "Flood Fill Complete"
+          },
+          "vars": [
+            [
+              "status",
+              "COMPLETE"
+            ],
+            [
+              "repainted",
+              7
+            ],
+            [
+              "time",
+              "O(R · C)"
+            ],
+            [
+              "space",
+              "O(R · C)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+},
+  {
     "id": "number-of-islands",
     "patternId": "dfs",
     "title": "Number of Islands",
