@@ -55,27 +55,28 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
               const isVisited = gridH?.status === 'visited';
               const isActive = gridH?.status === 'active' || isFlatActive;
 
-              let borderColor = 'var(--border-ink)';
-              let bgColor = 'var(--bg-surface)';
-              let textColor = 'var(--text-ink)';
+              const isStringVal = typeof val === 'string';
+              const showCoords = !step.customVisual?.hideCoords && !isStringVal;
+              const isTarget = gridH?.status === 'target';
+              const hasDfsBadge = gridH?.badge === 'dfs' || (isActive && isStringVal);
 
-              if (isActive) {
+              if (isActive || isTarget) {
                 borderColor = 'var(--accent)';
-                bgColor = 'rgba(255, 120, 40, 0.25)';
-                textColor = '#ffffff';
+                bgColor = 'rgba(255, 120, 40, 0.15)';
+                textColor = 'var(--accent)';
               } else if (isVisited) {
                 borderColor = 'var(--color-green)';
-                bgColor = 'var(--color-green-soft)';
+                bgColor = 'rgba(16, 185, 129, 0.12)';
                 textColor = 'var(--color-green)';
               } else if (isFlatDimmed) {
                 borderColor = 'var(--border-ink-soft)';
                 bgColor = 'var(--bg-paper)';
                 textColor = 'var(--text-faint)';
+              } else {
+                borderColor = 'rgba(255, 255, 255, 0.35)';
+                bgColor = 'var(--bg-surface)';
+                textColor = 'var(--text-ink)';
               }
-
-              const isStringVal = typeof val === 'string';
-              const showCoords = !step.customVisual?.hideCoords && !isStringVal;
-              const badge = gridH?.badge || (isActive && !isStringVal ? 'mid' : undefined);
 
               return (
                 <div
@@ -94,41 +95,39 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     color: textColor,
                     opacity: isFlatDimmed ? 0.35 : 1,
                     boxShadow: isActive ? '0 0 16px var(--accent-glow)' : 'none',
-                    transform: isActive ? 'scale(1.05)' : 'none',
+                    transform: isActive || isTarget ? 'scale(1.05)' : 'none',
                     transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     position: 'relative'
                   }}
                 >
-                  {badge && (
+                  {hasDfsBadge ? (
                     <div
                       className="font-mono"
                       style={{
-                        position: 'absolute',
-                        top: '3px',
-                        fontSize: '9px',
+                        fontSize: '13px',
                         fontWeight: 800,
                         color: 'var(--accent)',
-                        letterSpacing: '0.04em',
-                        border: '1px solid var(--accent-border)',
-                        padding: '0 4px',
-                        borderRadius: '3px',
-                        backgroundColor: 'var(--accent-soft)',
+                        letterSpacing: '0.02em',
+                        border: '1.5px solid var(--accent)',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        backgroundColor: 'rgba(255, 120, 40, 0.15)',
                         lineHeight: 1.2
                       }}
                     >
-                      {badge}
+                      dfs
                     </div>
+                  ) : (
+                    <span
+                      className={isStringVal ? "font-mono" : "font-hand"}
+                      style={{
+                        fontSize: isStringVal ? '19px' : '22px',
+                        fontWeight: 700
+                      }}
+                    >
+                      <DialValue value={val} />
+                    </span>
                   )}
-                  <span
-                    className={isStringVal ? "font-mono" : "font-hand"}
-                    style={{
-                      fontSize: isStringVal ? '18px' : '22px',
-                      fontWeight: 700,
-                      marginTop: badge ? '8px' : '0'
-                    }}
-                  >
-                    <DialValue value={val} />
-                  </span>
                   {showCoords && (
                     <span className="font-mono" style={{ fontSize: '8.5px', color: isActive ? 'var(--accent)' : 'var(--text-mute)', marginTop: '-2px' }}>
                       ({r},{c})

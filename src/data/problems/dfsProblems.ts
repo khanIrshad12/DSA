@@ -40861,12 +40861,12 @@ export const dfsProblems: Problem[] = [
         "dfs(startR, startC)"
       ],
       "starterCode": {
-        "javascript": "function floodDFS(grid) {\n  const R = grid.length, C = grid[0].length;\n  const visited = Array.from({ length: R }, () => Array(C).fill(false));\n  const dirs = [[-1,0], [1,0], [0,-1], [0,1]];\n  function dfs(r, c) {\n    visited[r][c] = true;\n    for (let [dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr < 0 || nr >= R || nc < 0 || nc >= C || visited[nr][nc]) continue;\n      dfs(nr, nc);\n    }\n  }\n  dfs(0, 0);\n  return visited;\n}",
-        "python": "def floodDFS(grid):\n    R, C = len(grid), len(grid[0])\n    visited = [[False]*C for _ in range(R)]\n    dirs = [(-1,0), (1,0), (0,-1), (0,1)]\n    def dfs(r, c):\n        visited[r][c] = True\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < R and 0 <= nc < C and not visited[nr][nc]:\n                dfs(nr, nc)\n    dfs(0, 0)\n    return visited"
+        "javascript": "function floodDFS(grid, startR = 1, startC = 1) {\n  const R = grid.length, C = grid[0].length;\n  const visited = Array.from({ length: R }, () => Array(C).fill(false));\n  const dirs = [[-1,0], [1,0], [0,-1], [0,1]];\n  function dfs(r, c) {\n    visited[r][c] = true;\n    for (let [dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr < 0 || nr >= R || nc < 0 || nc >= C || visited[nr][nc]) continue;\n      dfs(nr, nc);\n    }\n  }\n  dfs(startR, startC);\n  return visited;\n}",
+        "python": "def floodDFS(grid, startR=1, startC=1):\n    R, C = len(grid), len(grid[0])\n    visited = [[False]*C for _ in range(R)]\n    dirs = [(-1,0), (1,0), (0,-1), (0,1)]\n    def dfs(r, c):\n        visited[r][c] = True\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < R and 0 <= nc < C and not visited[nr][nc]:\n                dfs(nr, nc)\n    dfs(startR, startC)\n    return visited"
       },
       "solutionCode": {
-        "javascript": "function floodDFS(grid) {\n  const R = grid.length, C = grid[0].length;\n  const visited = Array.from({ length: R }, () => Array(C).fill(false));\n  const dirs = [[-1,0], [1,0], [0,-1], [0,1]];\n  function dfs(r, c) {\n    visited[r][c] = true;\n    for (let [dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr < 0 || nr >= R || nc < 0 || nc >= C || visited[nr][nc]) continue;\n      dfs(nr, nc);\n    }\n  }\n  dfs(0, 0);\n  return visited;\n}",
-        "python": "def floodDFS(grid):\n    R, C = len(grid), len(grid[0])\n    visited = [[False]*C for _ in range(R)]\n    dirs = [(-1,0), (1,0), (0,-1), (0,1)]\n    def dfs(r, c):\n        visited[r][c] = True\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < R and 0 <= nc < C and not visited[nr][nc]:\n                dfs(nr, nc)\n    dfs(0, 0)\n    return visited"
+        "javascript": "function floodDFS(grid, startR = 1, startC = 1) {\n  const R = grid.length, C = grid[0].length;\n  const visited = Array.from({ length: R }, () => Array(C).fill(false));\n  const dirs = [[-1,0], [1,0], [0,-1], [0,1]];\n  function dfs(r, c) {\n    visited[r][c] = true;\n    for (let [dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr < 0 || nr >= R || nc < 0 || nc >= C || visited[nr][nc]) continue;\n      dfs(nr, nc);\n    }\n  }\n  dfs(startR, startC);\n  return visited;\n}",
+        "python": "def floodDFS(grid, startR=1, startC=1):\n    R, C = len(grid), len(grid[0])\n    visited = [[False]*C for _ in range(R)]\n    dirs = [(-1,0), (1,0), (0,-1), (0,1)]\n    def dfs(r, c):\n        visited[r][c] = True\n        for dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < R and 0 <= nc < C and not visited[nr][nc]:\n                dfs(nr, nc)\n    dfs(startR, startC)\n    return visited"
       },
       "testCases": [
         {
@@ -40953,8 +40953,405 @@ export const dfsProblems: Problem[] = [
           ]
         },
         {
-          "codeLine": 9,
-          "narration": "Initiate flood DFS from top-left cell start = (0, 0) ('a').",
+          "codeLine": 2,
+          "narration": "The one danger a grid adds: cycles. Cell (1,1) is a neighbour of (1,2), and (1,2) is a neighbour of (1,1) right back. Without a VISITED marker we would bounce between them forever. So every cell we touch gets marked green = visited, and we never revisit a green cell.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active"
+            }
+          ],
+          "vars": [
+            [
+              "rule",
+              "mark visited, never revisit"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (1, 1) = 'f'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(1, 1)"
+            ],
+            [
+              "stack depth",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look up -> (0, 1). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "recurse into",
+              "(0, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (0, 1) = 'b'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "at",
+              "(0, 1)"
+            ],
+            [
+              "stack depth",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 1) look up -> (-1, 1). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(-1, 1)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (0, 1) look down -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(1, 1) = 'f'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look left -> (0, 0). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "target"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "recurse into",
+              "(0, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (0, 0) = 'a'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
           "matrix": [
             [
               "a",
@@ -40991,6 +41388,16 @@ export const dfsProblems: Problem[] = [
               "c": 0,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -41000,13 +41407,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              1
+              3
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[0][0] = true ('a'). We examine its 4 orthogonal neighbours in order: up, down, left, right.",
+          "codeLine": 5,
+          "narration": "From (0, 0) look up -> (-1, 0). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
           "matrix": [
             [
               "a",
@@ -41041,88 +41448,105 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "at",
-              "(0, 0)"
-            ],
-            [
-              "visited",
-              "['a']"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (1, 0) = 'e'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
+              "status": "active",
+              "badge": "dfs"
+            },
             {
               "r": 0,
-              "c": 0,
+              "c": 1,
               "status": "visited"
             },
             {
               "r": 1,
-              "c": 0,
-              "status": "active",
-              "badge": "dfs"
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "down"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(1, 0) = 'e'"
+              "(-1, 0)"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "out of bounds"
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(1, 0) ('e'). Push onto DFS call stack (depth 2).",
+          "narration": "Look down -> (1, 0). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "recurse into",
+              "(1, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (1, 0) = 'e'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
           "matrix": [
             [
               "a",
@@ -41160,10 +41584,20 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -41173,13 +41607,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              2
+              4
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[1][0] = true ('e'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (1, 0) look up -> (0, 0) = 'a'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -41217,147 +41651,40 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              2
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'e', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
               "r": 0,
-              "c": 0,
+              "c": 1,
               "status": "visited"
             },
             {
               "r": 1,
-              "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (2, 0) = 'i'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
               "c": 0,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "down"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(2, 0) = 'i'"
+              "(0, 0) = 'a'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(2, 0) ('i'). Push onto DFS call stack (depth 3).",
+          "narration": "Look down -> (2, 0). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -41395,8 +41722,90 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "recurse into",
+              "(2, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (2, 0) = 'i'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
               "status": "visited"
             },
             {
@@ -41413,13 +41822,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              3
+              5
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[2][0] = true ('i'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (2, 0) look up -> (1, 0) = 'e'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -41457,64 +41866,8 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              3
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'i', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
               "r": 0,
-              "c": 0,
+              "c": 1,
               "status": "visited"
             },
             {
@@ -41523,69 +41876,12 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (3, 0) = 'm'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
               "r": 1,
-              "c": 0,
+              "c": 1,
               "status": "visited"
             },
             {
               "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
               "c": 0,
               "status": "active",
               "badge": "dfs"
@@ -41593,26 +41889,22 @@ export const dfsProblems: Problem[] = [
           ],
           "vars": [
             [
-              "direction",
-              "down"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(3, 0) = 'm'"
+              "(1, 0) = 'e'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(3, 0) ('m'). Push onto DFS call stack (depth 4).",
+          "narration": "Look down -> (3, 0). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -41650,8 +41942,95 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "recurse into",
+              "(3, 0)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (3, 0) = 'm'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
               "status": "visited"
             },
             {
@@ -41673,13 +42052,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              4
+              6
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[3][0] = true ('m'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (3, 0) look up -> (2, 0) = 'i'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -41717,177 +42096,50 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              4
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'm', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
               "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look right to neighbour (3, 1) = 'n'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
               "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
               "status": "active",
               "badge": "dfs"
             }
           ],
           "vars": [
             [
-              "direction",
-              "right"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(3, 1) = 'n'"
+              "(2, 0) = 'i'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
-          "codeLine": 7,
-          "narration": "Recurse: dfs(3, 1) ('n'). Push onto DFS call stack (depth 5).",
+          "codeLine": 5,
+          "narration": "From (3, 0) look down -> (4, 0). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
           "matrix": [
             [
               "a",
@@ -41925,8 +42177,262 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(4, 0)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (3, 0) look left -> (3, -1). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(3, -1)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look right -> (3, 1). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "recurse into",
+              "(3, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (3, 1) = 'n'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
               "status": "visited"
             },
             {
@@ -41953,236 +42459,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              5
-            ]
-          ]
-        },
-        {
-          "codeLine": 2,
-          "narration": "Mark visited[3][1] = true ('n'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              5
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'n', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look up to neighbour (2, 1) = 'j'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "direction",
-              "up"
-            ],
-            [
-              "target",
-              "(2, 1) = 'j'"
-            ],
-            [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              7
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(2, 1) ('j'). Push onto DFS call stack (depth 6).",
+          "narration": "Look up -> (2, 1). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -42220,14 +42503,29 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
               "status": "visited"
             },
             {
               "r": 2,
               "c": 0,
               "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "target"
             },
             {
               "r": 3,
@@ -42237,6 +42535,78 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "recurse into",
+              "(2, 1)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (2, 1) = 'j'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -42244,6 +42614,16 @@ export const dfsProblems: Problem[] = [
               "c": 1,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -42253,13 +42633,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              6
+              8
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[2][1] = true ('j'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (2, 1) look up -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -42297,116 +42677,45 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              6
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look up to neighbour (1, 1) = 'f'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
               "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
               "c": 1,
               "status": "visited"
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
               "c": 1,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
+              "look",
               "up"
             ],
             [
@@ -42414,18 +42723,14 @@ export const dfsProblems: Problem[] = [
               "(1, 1) = 'f'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
-          "codeLine": 7,
-          "narration": "Recurse: dfs(1, 1) ('f'). Push onto DFS call stack (depth 7).",
+          "codeLine": 6,
+          "narration": "From (2, 1) look down -> (3, 1) = 'n'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -42463,96 +42768,30 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
+              "r": 0,
               "c": 1,
               "status": "visited"
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
               "c": 1,
               "status": "active",
               "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "at",
-              "(1, 1)"
-            ],
-            [
-              "stack depth",
-              7
-            ]
-          ]
-        },
-        {
-          "codeLine": 2,
-          "narration": "Mark visited[1][1] = true ('f'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
             },
             {
               "r": 3,
@@ -42561,402 +42800,28 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
               "c": 1,
               "status": "visited"
             }
           ],
           "vars": [
             [
-              "visited count",
-              7
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look right to neighbour (1, 2) = 'g'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "direction",
-              "right"
-            ],
-            [
-              "target",
-              "(1, 2) = 'g'"
-            ],
-            [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
-            ]
-          ]
-        },
-        {
-          "codeLine": 7,
-          "narration": "Recurse: dfs(1, 2) ('g'). Push onto DFS call stack (depth 8).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "at",
-              "(1, 2)"
-            ],
-            [
-              "stack depth",
-              8
-            ]
-          ]
-        },
-        {
-          "codeLine": 2,
-          "narration": "Mark visited[1][2] = true ('g'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              8
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (2, 2) = 'k'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "direction",
+              "look",
               "down"
             ],
             [
               "target",
-              "(2, 2) = 'k'"
+              "(3, 1) = 'n'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
-          "codeLine": 7,
-          "narration": "Recurse: dfs(2, 2) ('k'). Push onto DFS call stack (depth 9).",
+          "codeLine": 6,
+          "narration": "From (2, 1) look left -> (2, 0) = 'i'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -42994,14 +42859,30 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
               "status": "visited"
             },
             {
               "r": 2,
               "c": 0,
               "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
             },
             {
               "r": 3,
@@ -43012,20 +42893,177 @@ export const dfsProblems: Problem[] = [
               "r": 3,
               "c": 1,
               "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(2, 0) = 'i'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look right -> (2, 2). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
             },
             {
               "r": 2,
               "c": 1,
-              "status": "visited"
+              "status": "active",
+              "badge": "dfs"
             },
             {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
+              "r": 2,
               "c": 2,
+              "status": "target"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "recurse into",
+              "(2, 2)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (2, 2) = 'k'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
               "status": "visited"
             },
             {
@@ -43033,6 +43071,16 @@ export const dfsProblems: Problem[] = [
               "c": 2,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -43047,204 +43095,8 @@ export const dfsProblems: Problem[] = [
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[2][2] = true ('k'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              9
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (3, 2) = 'o'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "direction",
-              "down"
-            ],
-            [
-              "target",
-              "(3, 2) = 'o'"
-            ],
-            [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
-            ]
-          ]
-        },
-        {
           "codeLine": 7,
-          "narration": "Recurse: dfs(3, 2) ('o'). Push onto DFS call stack (depth 10).",
+          "narration": "Look up -> (1, 2). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -43282,28 +43134,13 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -43314,79 +43151,23 @@ export const dfsProblems: Problem[] = [
             {
               "r": 1,
               "c": 2,
+              "status": "target"
+            },
+            {
+              "r": 2,
+              "c": 0,
               "status": "visited"
             },
             {
               "r": 2,
-              "c": 2,
+              "c": 1,
               "status": "visited"
             },
             {
-              "r": 3,
+              "r": 2,
               "c": 2,
               "status": "active",
               "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "at",
-              "(3, 2)"
-            ],
-            [
-              "stack depth",
-              10
-            ]
-          ]
-        },
-        {
-          "codeLine": 2,
-          "narration": "Mark visited[3][2] = true ('o'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
             },
             {
               "r": 3,
@@ -43396,550 +43177,23 @@ export const dfsProblems: Problem[] = [
             {
               "r": 3,
               "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
               "status": "visited"
             }
           ],
           "vars": [
             [
-              "visited count",
-              10
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'o', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look up to neighbour (0, 1) = 'b'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "direction",
+              "look",
               "up"
             ],
             [
-              "target",
-              "(0, 1) = 'b'"
-            ],
-            [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
-            ]
-          ]
-        },
-        {
-          "codeLine": 7,
-          "narration": "Recurse: dfs(0, 1) ('b'). Push onto DFS call stack (depth 11).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "active",
-              "badge": "dfs"
-            }
-          ],
-          "vars": [
-            [
-              "at",
-              "(0, 1)"
-            ],
-            [
-              "stack depth",
-              11
-            ]
-          ]
-        },
-        {
-          "codeLine": 2,
-          "narration": "Mark visited[0][1] = true ('b'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              11
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'b', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
+              "recurse into",
+              "(1, 2)"
             ]
           ]
         },
         {
           "codeLine": 4,
-          "narration": "Look right to neighbour (0, 2) = 'c'. Check boundary and visited state.",
+          "narration": "Visit (1, 2) = 'g'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
           "matrix": [
             [
               "a",
@@ -43977,84 +43231,66 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
             },
             {
-              "r": 0,
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 2,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "right"
+              "at",
+              "(1, 2)"
             ],
             [
-              "target",
-              "(0, 2) = 'c'"
-            ],
-            [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "stack depth",
+              10
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(0, 2) ('c'). Push onto DFS call stack (depth 12).",
+          "narration": "Look up -> (0, 2). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -44092,13 +43328,44 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "target"
+            },
+            {
               "r": 1,
               "c": 0,
               "status": "visited"
             },
             {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
               "r": 2,
               "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
               "status": "visited"
             },
             {
@@ -44110,30 +43377,56 @@ export const dfsProblems: Problem[] = [
               "r": 3,
               "c": 1,
               "status": "visited"
-            },
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "recurse into",
+              "(0, 2)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (0, 2) = 'c'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
             {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
+              "r": 0,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -44146,6 +43439,46 @@ export const dfsProblems: Problem[] = [
               "c": 2,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -44155,119 +43488,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              12
-            ]
-          ]
-        },
-        {
-          "codeLine": 2,
-          "narration": "Mark visited[0][2] = true ('c'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              12
-            ],
-            [
-              "total cells",
-              16
+              11
             ]
           ]
         },
         {
           "codeLine": 5,
-          "narration": "At cell 'c', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
+          "narration": "From (0, 2) look up -> (-1, 2). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
           "matrix": [
             [
               "a",
@@ -44305,51 +43532,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -44357,19 +43539,68 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
               "status": "visited"
             }
           ],
           "vars": [
             [
-              "boundary check",
-              "SAFE (SKIP)"
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(-1, 2)"
+            ],
+            [
+              "result",
+              "out of bounds"
             ]
           ]
         },
         {
-          "codeLine": 4,
-          "narration": "Look right to neighbour (0, 3) = 'd'. Check boundary and visited state.",
+          "codeLine": 6,
+          "narration": "From (0, 2) look down -> (1, 2) = 'g'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -44407,51 +43638,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -44459,31 +43645,275 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "right"
+              "look",
+              "down"
             ],
             [
               "target",
-              "(0, 3) = 'd'"
+              "(1, 2) = 'g'"
             ],
             [
-              "in-bounds",
-              true
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (0, 2) look left -> (0, 1) = 'b'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
             ],
             [
-              "unvisited",
-              true
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(0, 1) = 'b'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 7,
+          "narration": "Look right -> (0, 3). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "target"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "recurse into",
+              "(0, 3)"
             ]
           ]
         },
@@ -44527,51 +43957,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -44586,6 +43971,46 @@ export const dfsProblems: Problem[] = [
               "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -44600,119 +44025,8 @@ export const dfsProblems: Problem[] = [
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[0][3] = true ('d'). Now exploring 4 orthogonal branches.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              13
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
           "codeLine": 5,
-          "narration": "At cell 'd', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
+          "narration": "From (0, 3) look up -> (-1, 3). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
           "matrix": [
             [
               "a",
@@ -44750,51 +44064,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -44806,145 +44075,69 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 0,
-              "c": 3,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (1, 3) = 'h'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 1,
               "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "down"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(1, 3) = 'h'"
+              "(-1, 3)"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "out of bounds"
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(1, 3) ('h'). Push onto DFS call stack (depth 14).",
+          "narration": "Look down -> (1, 3). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -44982,28 +44175,24 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
               "r": 1,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -45017,13 +44206,84 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 1,
+              "c": 3,
+              "status": "target"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 2,
               "c": 2,
               "status": "visited"
             },
             {
               "r": 3,
-              "c": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "recurse into",
+              "(1, 3)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (1, 3) = 'h'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -45039,6 +44299,21 @@ export const dfsProblems: Problem[] = [
             {
               "r": 0,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
               "status": "visited"
             },
             {
@@ -45046,6 +44321,31 @@ export const dfsProblems: Problem[] = [
               "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -45055,13 +44355,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              14
+              13
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[1][3] = true ('h'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (1, 3) look up -> (0, 3) = 'd'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -45099,51 +44399,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -45160,83 +44415,7 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
-              "c": 3,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              14
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'h', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -45250,176 +44429,55 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
-              "status": "visited"
-            },
-            {
               "r": 1,
-              "c": 3,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (2, 3) = 'l'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 2,
               "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "down"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(2, 3) = 'l'"
+              "(0, 3) = 'd'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(2, 3) ('l'). Push onto DFS call stack (depth 15).",
+          "narration": "Look down -> (2, 3). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -45457,28 +44515,23 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -45492,13 +44545,90 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 2,
               "c": 2,
               "status": "visited"
             },
             {
+              "r": 2,
+              "c": 3,
+              "status": "target"
+            },
+            {
               "r": 3,
-              "c": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "recurse into",
+              "(2, 3)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (2, 3) = 'l'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -45518,7 +44648,37 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
               "status": "visited"
             },
             {
@@ -45526,6 +44686,16 @@ export const dfsProblems: Problem[] = [
               "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
@@ -45535,13 +44705,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              15
+              14
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[2][3] = true ('l'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (2, 3) look up -> (1, 3) = 'h'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -45579,51 +44749,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -45640,88 +44765,7 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
-              "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 3,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "visited count",
-              15
-            ],
-            [
-              "total cells",
-              16
-            ]
-          ]
-        },
-        {
-          "codeLine": 5,
-          "narration": "At cell 'l', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -45735,90 +44779,8 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
-              "status": "visited"
-            },
-            {
               "r": 1,
               "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 3,
-              "status": "visited"
-            }
-          ],
-          "vars": [
-            [
-              "boundary check",
-              "SAFE (SKIP)"
-            ]
-          ]
-        },
-        {
-          "codeLine": 4,
-          "narration": "Look down to neighbour (3, 3) = 'p'. Check boundary and visited state.",
-          "matrix": [
-            [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            [
-              "e",
-              "f",
-              "g",
-              "h"
-            ],
-            [
-              "i",
-              "j",
-              "k",
-              "l"
-            ],
-            [
-              "m",
-              "n",
-              "o",
-              "p"
-            ]
-          ],
-          "customVisual": {
-            "label": "4 × 4 GRID AS A GRAPH",
-            "hideCoords": true
-          },
-          "gridHighlights": [
-            {
-              "r": 0,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 0,
               "status": "visited"
             },
             {
@@ -45827,28 +44789,8 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
               "r": 2,
               "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
               "status": "visited"
             },
             {
@@ -45857,64 +44799,40 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 0,
-              "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 3,
-              "status": "visited"
-            },
-            {
               "r": 2,
-              "c": 3,
-              "status": "visited"
-            },
-            {
-              "r": 3,
               "c": 3,
               "status": "active",
               "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
             }
           ],
           "vars": [
             [
-              "direction",
-              "down"
+              "look",
+              "up"
             ],
             [
               "target",
-              "(3, 3) = 'p'"
+              "(1, 3) = 'h'"
             ],
             [
-              "in-bounds",
-              true
-            ],
-            [
-              "unvisited",
-              true
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
           "codeLine": 7,
-          "narration": "Recurse: dfs(3, 3) ('p'). Push onto DFS call stack (depth 16).",
+          "narration": "Look down -> (3, 3). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -45952,28 +44870,23 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -45987,13 +44900,95 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 2,
               "c": 2,
               "status": "visited"
             },
             {
+              "r": 2,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
               "r": 3,
-              "c": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "target"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "recurse into",
+              "(3, 3)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (3, 3) = 'p'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -46013,12 +45008,52 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 3,
               "status": "visited"
             },
             {
               "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
               "status": "visited"
             },
             {
@@ -46035,13 +45070,13 @@ export const dfsProblems: Problem[] = [
             ],
             [
               "stack depth",
-              16
+              15
             ]
           ]
         },
         {
-          "codeLine": 2,
-          "narration": "Mark visited[3][3] = true ('p'). Now exploring 4 orthogonal branches.",
+          "codeLine": 6,
+          "narration": "From (3, 3) look up -> (2, 3) = 'l'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -46079,51 +45114,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -46140,7 +45130,37 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
               "status": "visited"
             },
             {
@@ -46150,24 +45170,39 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 3,
-              "c": 3,
+              "c": 0,
               "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
             }
           ],
           "vars": [
             [
-              "visited count",
-              16
+              "look",
+              "up"
             ],
             [
-              "total cells",
-              16
+              "target",
+              "(2, 3) = 'l'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
             ]
           ]
         },
         {
           "codeLine": 5,
-          "narration": "At cell 'p', out-of-bounds neighbours are safely skipped by boundary checks (0 <= nr < 4 and 0 <= nc < 4).",
+          "narration": "From (3, 3) look down -> (4, 3). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
           "matrix": [
             [
               "a",
@@ -46205,51 +45240,6 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
-              "r": 1,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 1,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 2,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 2,
-              "status": "visited"
-            },
-            {
               "r": 0,
               "c": 1,
               "status": "visited"
@@ -46266,7 +45256,37 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
               "status": "visited"
             },
             {
@@ -46276,20 +45296,39 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 3,
-              "c": 3,
+              "c": 0,
               "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
             }
           ],
           "vars": [
             [
-              "boundary check",
-              "SAFE (SKIP)"
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(4, 3)"
+            ],
+            [
+              "result",
+              "out of bounds"
             ]
           ]
         },
         {
-          "codeLine": 8,
-          "narration": "Backtrack: All 16 cells visited! Each DFS call finishes its 4-direction loop and returns up the call stack.",
+          "codeLine": 7,
+          "narration": "Look left -> (3, 2). In bounds and unvisited, a valid edge! RECURSE into it. The current cell waits on the stack until the whole branch below finishes.",
           "matrix": [
             [
               "a",
@@ -46327,28 +45366,23 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -46362,13 +45396,100 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 2,
               "c": 2,
               "status": "visited"
             },
             {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 3,
               "c": 2,
+              "status": "target"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "recurse into",
+              "(3, 2)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 4,
+          "narration": "Visit (3, 2) = 'o'. Mark it green and push it onto the DFS stack. Now we look at its four neighbours, one direction at a time, and dive into the first valid unvisited one.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -46388,13 +45509,59 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
               "status": "visited"
             },
             {
               "r": 2,
               "c": 3,
               "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
             },
             {
               "r": 3,
@@ -46404,18 +45571,18 @@ export const dfsProblems: Problem[] = [
           ],
           "vars": [
             [
-              "action",
-              "backtracking"
+              "at",
+              "(3, 2)"
             ],
             [
-              "visited.size",
+              "stack depth",
               16
             ]
           ]
         },
         {
-          "codeLine": 8,
-          "narration": "Flood DFS complete! All 16 grid cells traversed in O(R · C) time and O(R · C) recursion stack memory. This 4-neighbour template powers Island counting, Flood Fill, Word Search, and Pacific Atlantic flow.",
+          "codeLine": 6,
+          "narration": "From (3, 2) look up -> (2, 2) = 'k'. Already marked green (visited). Skip it to prevent an infinite cycle.",
           "matrix": [
             [
               "a",
@@ -46453,28 +45620,23 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
               "r": 1,
               "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 0,
-              "status": "visited"
-            },
-            {
-              "r": 3,
-              "c": 1,
-              "status": "visited"
-            },
-            {
-              "r": 2,
-              "c": 1,
               "status": "visited"
             },
             {
@@ -46488,13 +45650,104 @@ export const dfsProblems: Problem[] = [
               "status": "visited"
             },
             {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 2,
               "c": 2,
               "status": "visited"
             },
             {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
               "r": 3,
               "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "up"
+            ],
+            [
+              "target",
+              "(2, 2) = 'k'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (3, 2) look down -> (4, 2). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
               "status": "visited"
             },
             {
@@ -46514,12 +45767,5761 @@ export const dfsProblems: Problem[] = [
             },
             {
               "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
               "c": 3,
               "status": "visited"
             },
             {
               "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
               "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(4, 2)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (3, 2) look left -> (3, 1) = 'n'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(3, 1) = 'n'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (3, 2) look right -> (3, 3) = 'p'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(3, 3) = 'p'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (3, 2) = 'o'. Backtrack up to caller (3, 3) = 'p'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(3, 3)"
+            ],
+            [
+              "stack depth",
+              15
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (3, 3) look right -> (3, 4). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(3, 4)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (3, 3) = 'p'. Backtrack up to caller (2, 3) = 'l'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(2, 3)"
+            ],
+            [
+              "stack depth",
+              14
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (2, 3) look left -> (2, 2) = 'k'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(2, 2) = 'k'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (2, 3) look right -> (2, 4). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(2, 4)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (2, 3) = 'l'. Backtrack up to caller (1, 3) = 'h'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(1, 3)"
+            ],
+            [
+              "stack depth",
+              13
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 3) look left -> (1, 2) = 'g'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(1, 2) = 'g'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (1, 3) look right -> (1, 4). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(1, 4)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (1, 3) = 'h'. Backtrack up to caller (0, 3) = 'd'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(0, 3)"
+            ],
+            [
+              "stack depth",
+              12
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (0, 3) look left -> (0, 2) = 'c'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(0, 2) = 'c'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 3) look right -> (0, 4). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(0, 4)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (0, 3) = 'd'. Backtrack up to caller (0, 2) = 'c'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(0, 2)"
+            ],
+            [
+              "stack depth",
+              11
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (0, 2) = 'c'. Backtrack up to caller (1, 2) = 'g'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(1, 2)"
+            ],
+            [
+              "stack depth",
+              10
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 2) look down -> (2, 2) = 'k'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(2, 2) = 'k'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 2) look left -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(1, 1) = 'f'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 2) look right -> (1, 3) = 'h'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(1, 3) = 'h'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (1, 2) = 'g'. Backtrack up to caller (2, 2) = 'k'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(2, 2)"
+            ],
+            [
+              "stack depth",
+              9
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (2, 2) look down -> (3, 2) = 'o'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(3, 2) = 'o'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (2, 2) look left -> (2, 1) = 'j'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(2, 1) = 'j'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (2, 2) look right -> (2, 3) = 'l'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(2, 3) = 'l'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (2, 2) = 'k'. Backtrack up to caller (2, 1) = 'j'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(2, 1)"
+            ],
+            [
+              "stack depth",
+              8
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (2, 1) = 'j'. Backtrack up to caller (3, 1) = 'n'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(3, 1)"
+            ],
+            [
+              "stack depth",
+              7
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (3, 1) look down -> (4, 1). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(4, 1)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (3, 1) look left -> (3, 0) = 'm'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(3, 0) = 'm'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (3, 1) look right -> (3, 2) = 'o'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(3, 2) = 'o'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (3, 1) = 'n'. Backtrack up to caller (3, 0) = 'm'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(3, 0)"
+            ],
+            [
+              "stack depth",
+              6
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (3, 0) = 'm'. Backtrack up to caller (2, 0) = 'i'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(2, 0)"
+            ],
+            [
+              "stack depth",
+              5
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (2, 0) look left -> (2, -1). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(2, -1)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (2, 0) look right -> (2, 1) = 'j'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(2, 1) = 'j'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (2, 0) = 'i'. Backtrack up to caller (1, 0) = 'e'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(1, 0)"
+            ],
+            [
+              "stack depth",
+              4
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (1, 0) look left -> (1, -1). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(1, -1)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 0) look right -> (1, 1) = 'f'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(1, 1) = 'f'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (1, 0) = 'e'. Backtrack up to caller (0, 0) = 'a'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(0, 0)"
+            ],
+            [
+              "stack depth",
+              3
+            ]
+          ]
+        },
+        {
+          "codeLine": 5,
+          "narration": "From (0, 0) look left -> (0, -1). That is OFF the grid (a boundary check failed). Skip it, there is no edge to a cell that does not exist.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(0, -1)"
+            ],
+            [
+              "result",
+              "out of bounds"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (0, 0) look right -> (0, 1) = 'b'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(0, 1) = 'b'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (0, 0) = 'a'. Backtrack up to caller (0, 1) = 'b'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(0, 1)"
+            ],
+            [
+              "stack depth",
+              2
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (0, 1) look right -> (0, 2) = 'c'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(0, 2) = 'c'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Finished all 4 directions for (0, 1) = 'b'. Backtrack up to caller (1, 1) = 'f'.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "backtrack to",
+              "(1, 1)"
+            ],
+            [
+              "stack depth",
+              1
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 1) look down -> (2, 1) = 'j'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "down"
+            ],
+            [
+              "target",
+              "(2, 1) = 'j'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 1) look left -> (1, 0) = 'e'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "left"
+            ],
+            [
+              "target",
+              "(1, 0) = 'e'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 6,
+          "narration": "From (1, 1) look right -> (1, 2) = 'g'. Already marked green (visited). Skip it to prevent an infinite cycle.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "active",
+              "badge": "dfs"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "status": "visited"
+            }
+          ],
+          "vars": [
+            [
+              "look",
+              "right"
+            ],
+            [
+              "target",
+              "(1, 2) = 'g'"
+            ],
+            [
+              "result",
+              "already visited (skip)"
+            ]
+          ]
+        },
+        {
+          "codeLine": 8,
+          "narration": "Flood DFS complete! Explored the connected component across the grid using 4-directional orthogonal neighbours. All visited cells are marked green in O(R · C) time and O(R · C) stack space.",
+          "matrix": [
+            [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            [
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            [
+              "i",
+              "j",
+              "k",
+              "l"
+            ],
+            [
+              "m",
+              "n",
+              "o",
+              "p"
+            ]
+          ],
+          "customVisual": {
+            "label": "4 × 4 GRID AS A GRAPH",
+            "hideCoords": true
+          },
+          "gridHighlights": [
+            {
+              "r": 0,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 0,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 1,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "status": "visited"
+            },
+            {
+              "r": 2,
+              "c": 3,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 0,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 1,
+              "status": "visited"
+            },
+            {
+              "r": 3,
+              "c": 2,
               "status": "visited"
             },
             {
@@ -46535,6 +51537,10 @@ export const dfsProblems: Problem[] = [
             [
               "status",
               "COMPLETE"
+            ],
+            [
+              "visited cells",
+              16
             ],
             [
               "time",
