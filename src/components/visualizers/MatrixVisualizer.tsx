@@ -73,6 +73,10 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                 textColor = 'var(--text-faint)';
               }
 
+              const isStringVal = typeof val === 'string';
+              const showCoords = !step.customVisual?.hideCoords && !isStringVal;
+              const badge = gridH?.badge || (isActive && !isStringVal ? 'mid' : undefined);
+
               return (
                 <div
                   key={c}
@@ -84,24 +88,24 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: '12px',
-                    borderColor,
+                    borderRadius: '10px',
+                    border: `2px solid ${borderColor}`,
                     backgroundColor: bgColor,
                     color: textColor,
                     opacity: isFlatDimmed ? 0.35 : 1,
                     boxShadow: isActive ? '0 0 16px var(--accent-glow)' : 'none',
-                    transform: isActive ? 'scale(1.08)' : 'none',
-                    transition: 'all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    transform: isActive ? 'scale(1.05)' : 'none',
+                    transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     position: 'relative'
                   }}
                 >
-                  {isActive && (
+                  {badge && (
                     <div
                       className="font-mono"
                       style={{
                         position: 'absolute',
-                        top: '4px',
-                        fontSize: '9.5px',
+                        top: '3px',
+                        fontSize: '9px',
                         fontWeight: 800,
                         color: 'var(--accent)',
                         letterSpacing: '0.04em',
@@ -112,15 +116,24 @@ export const MatrixVisualizer: React.FC<MatrixVisualizerProps> = ({ data, step }
                         lineHeight: 1.2
                       }}
                     >
-                      mid
+                      {badge}
                     </div>
                   )}
-                  <span className="font-hand" style={{ fontSize: '22px', fontWeight: 800, marginTop: isActive ? '10px' : '0' }}>
+                  <span
+                    className={isStringVal ? "font-mono" : "font-hand"}
+                    style={{
+                      fontSize: isStringVal ? '18px' : '22px',
+                      fontWeight: 700,
+                      marginTop: badge ? '8px' : '0'
+                    }}
+                  >
                     <DialValue value={val} />
                   </span>
-                  <span className="font-mono" style={{ fontSize: '8.5px', color: isActive ? 'var(--accent)' : 'var(--text-mute)', marginTop: '-2px' }}>
-                    ({r},{c})
-                  </span>
+                  {showCoords && (
+                    <span className="font-mono" style={{ fontSize: '8.5px', color: isActive ? 'var(--accent)' : 'var(--text-mute)', marginTop: '-2px' }}>
+                      ({r},{c})
+                    </span>
+                  )}
                 </div>
               );
             })}
