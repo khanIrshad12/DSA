@@ -7,6 +7,7 @@ import {
   BookOpen,
   Split,
   Hash,
+  Sigma,
   Maximize2,
   Layers,
   GitCommit,
@@ -17,45 +18,54 @@ import {
   Share2,
   LayoutGrid,
   Sliders,
-  Binary
+  Binary,
+  RotateCcw,
+  Radio,
+  X
 } from 'lucide-react';
 
 interface SidebarProps {
   activeTopicId: string;
   activeProblemId: string;
   onSelectProblem: (topicId: string, problemId: string) => void;
-  isOpenMobile: boolean;
-  onCloseMobile: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const topicIcons: Record<string, React.ReactNode> = {
   'two-pointers': <Split size={16} />,
   'arrays-hashing': <Hash size={16} />,
+  'prefix-sum': <Sigma size={16} />,
   'sliding-window': <Maximize2 size={16} />,
   'stack': <Layers size={16} />,
   'linked-list': <GitCommit size={16} />,
   'heap': <TrendingUp size={16} />,
   'binary-search': <Search size={16} />,
   'dfs': <GitBranch size={16} />,
+  'bfs': <Radio size={16} />,
+  'backtracking': <RotateCcw size={16} />,
   'greedy': <Zap size={16} />,
   'dynamic-programming': <Grid size={16} />,
   'graphs': <Share2 size={16} />,
   'matrices': <LayoutGrid size={16} />,
   'intervals': <Sliders size={16} />,
-  'bit-manipulation': <Binary size={16} />
+  'bit-manipulation': <Binary size={16} />,
+  'trie': <GitBranch size={16} />
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTopicId,
   activeProblemId,
   onSelectProblem,
-  isOpenMobile,
-  onCloseMobile
+  isOpen,
+  onClose
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedTopics, setExpandedTopics] = useState<Record<string, boolean>>({
     [activeTopicId]: true
   });
+
+  if (!isOpen) return null;
 
   const toggleTopic = (topicId: string) => {
     setExpandedTopics(prev => ({ ...prev, [topicId]: !prev[topicId] }));
@@ -76,18 +86,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Mobile Backdrop */}
-      {isOpenMobile && (
-        <div
-          onClick={onCloseMobile}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            zIndex: 40
-          }}
-        />
-      )}
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        className="sidebar-backdrop"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0,0,0,0.6)',
+          zIndex: 45
+        }}
+      />
 
       <aside
         style={{
@@ -98,39 +107,62 @@ export const Sidebar: React.FC<SidebarProps> = ({
           display: 'flex',
           flexDirection: 'column',
           flexShrink: 0,
-          position: isOpenMobile ? 'fixed' : 'relative',
+          position: 'fixed',
           zIndex: 50,
           left: 0,
           top: 0,
-          transition: 'transform 0.2s ease'
+          boxShadow: '4px 0 24px rgba(0,0,0,0.5)',
+          animation: 'sidebarSlide 0.22s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
         {/* Logo / Header */}
-        <div style={{ padding: '20px 20px 14px 20px', borderBottom: '1px solid var(--border-ink-soft)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div
+        <div style={{ padding: '16px 16px 12px 16px', borderBottom: '1px solid var(--border-ink-soft)', position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--accent-soft)',
+                  border: '1.5px solid var(--accent-border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--accent)'
+                }}
+              >
+                <BookOpen size={18} />
+              </div>
+              <div>
+                <div className="font-hand" style={{ fontSize: '24px', lineHeight: 1, color: 'var(--text-ink)', fontWeight: 700 }}>
+                  DSA <span style={{ color: 'var(--accent)' }}>Visual</span>
+                </div>
+                <div style={{ fontSize: '10px', color: 'var(--text-mute)', marginTop: '2px' }}>
+                  step-by-step interactive animations
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="sketch-border-soft"
               style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '8px',
-                backgroundColor: 'var(--accent-soft)',
-                border: '1.5px solid var(--accent-border)',
+                width: '28px',
+                height: '28px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--accent)'
+                backgroundColor: 'var(--bg-paper)',
+                color: 'var(--text-mute)',
+                cursor: 'pointer',
+                borderRadius: '6px'
               }}
+              title="Close sidebar"
             >
-              <BookOpen size={20} />
-            </div>
-            <div>
-              <div className="font-hand" style={{ fontSize: '26px', lineHeight: 1, color: 'var(--text-ink)', fontWeight: 700 }}>
-                DSA <span style={{ color: 'var(--accent)' }}>Visual</span>
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-mute)', marginTop: '2px' }}>
-                step-by-step interactive animations
-              </div>
-            </div>
+              <X size={16} />
+            </button>
           </div>
 
           {/* Search Box */}
@@ -222,7 +254,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           type="button"
                           onClick={() => {
                             onSelectProblem(topic.id, problem.id);
-                            onCloseMobile();
+                            onClose();
                           }}
                           style={{
                             width: '100%',

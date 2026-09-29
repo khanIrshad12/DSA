@@ -201,12 +201,13 @@ export const CodePanel: React.FC<CodePanelProps> = ({
                   key={idx}
                   style={{
                     display: 'flex',
-                    alignItems: 'flex-start',
-                    backgroundColor: isActive ? 'var(--accent-soft)' : 'transparent',
-                    borderLeft: isActive ? '3px solid var(--accent)' : '3px solid transparent',
-                    paddingLeft: '4px',
-                    borderRadius: '2px',
+                    alignItems: 'center',
+                    backgroundColor: isActive ? 'rgba(255, 139, 61, 0.18)' : 'transparent',
+                    border: isActive ? '1px solid rgba(255, 139, 61, 0.45)' : '1px solid transparent',
+                    padding: '2px 6px',
+                    borderRadius: '6px',
                     position: 'relative',
+                    boxShadow: isActive ? '0 0 12px rgba(255, 139, 61, 0.15)' : 'none',
                     transition: 'all 0.15s ease'
                   }}
                 >
@@ -214,7 +215,7 @@ export const CodePanel: React.FC<CodePanelProps> = ({
                   <span
                     style={{
                       position: 'absolute',
-                      left: '-1px',
+                      left: '-14px',
                       color: 'var(--accent)',
                       fontSize: '11px',
                       fontWeight: 800,
@@ -227,7 +228,7 @@ export const CodePanel: React.FC<CodePanelProps> = ({
                   {/* Line Number */}
                   <span
                     style={{
-                      width: '26px',
+                      width: '24px',
                       textAlign: 'right',
                       paddingRight: '10px',
                       color: isActive ? 'var(--accent)' : 'var(--text-faint)',
@@ -244,7 +245,7 @@ export const CodePanel: React.FC<CodePanelProps> = ({
                   <span
                     style={{
                       fontWeight: isActive ? 600 : 400,
-                      color: isActive ? 'var(--text-ink)' : 'var(--text-ink)',
+                      color: isActive ? '#ffffff' : 'var(--text-ink)',
                       whiteSpace: 'pre',
                       wordBreak: 'normal'
                     }}

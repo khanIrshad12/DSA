@@ -15,13 +15,13 @@ export const StatePanel: React.FC<StatePanelProps> = ({ vars }) => {
         width: '100%'
       }}
     >
-      <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-mute)', fontWeight: 700, marginBottom: '10px' }}>
-        Live State & Variables
+      <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-mute)', fontWeight: 800, marginBottom: '10px' }}>
+        STATE
       </div>
 
       {vars.length === 0 ? (
-        <div style={{ fontSize: '12px', color: 'var(--text-faint)', padding: '6px 0' }}>
-          No local variables in current scope.
+        <div style={{ fontSize: '11.5px', color: 'var(--text-faint)', padding: '4px 0' }}>
+          No local variables
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -36,24 +36,15 @@ export const StatePanel: React.FC<StatePanelProps> = ({ vars }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  fontSize: '12.5px',
-                  padding: '4px 6px',
-                  borderRadius: '4px',
-                  backgroundColor: 'var(--bg-paper)'
+                  fontSize: '12px',
+                  padding: '3px 0'
                 }}
               >
-                <span style={{ color: 'var(--text-mute)' }}>{key}</span>
+                <span style={{ color: 'var(--text-mute)', fontWeight: 500 }}>{key}</span>
                 <span
                   style={{
-                    fontWeight: 600,
-                    color: 'var(--accent)',
-                    backgroundColor: 'var(--accent-soft)',
-                    padding: '1px 6px',
-                    borderRadius: '4px',
-                    overflow: 'hidden',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    minHeight: '20px'
+                    fontWeight: 700,
+                    color: 'var(--text-ink)'
                   }}
                 >
                   <DialValue value={formattedVal} />

@@ -19,6 +19,9 @@ import { DPGridVisualizer } from './components/visualizers/DPGridVisualizer';
 import { HeapVisualizer } from './components/visualizers/HeapVisualizer';
 import { IntervalVisualizer } from './components/visualizers/IntervalVisualizer';
 import { BarVisualizer } from './components/visualizers/BarVisualizer';
+import { BacktrackingVisualizer } from './components/visualizers/BacktrackingVisualizer';
+import { TrieVisualizer } from './components/visualizers/TrieVisualizer';
+import { BitVisualizer } from './components/visualizers/BitVisualizer';
 
 export function App() {
   const [activeTopicId, setActiveTopicId] = useState('two-pointers');
@@ -30,7 +33,7 @@ export function App() {
   const [hideSolutions, setHideSolutions] = useState(false);
   const [isPracticeMode, setIsPracticeMode] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Sync theme attribute on document root
   useEffect(() => {
@@ -166,7 +169,7 @@ export function App() {
       case 'tree':
         return <TreeVisualizer step={currentStep} />;
       case 'graph':
-        return <GraphVisualizer step={currentStep} />;
+        return <GraphVisualizer data={problem.initialInput} step={currentStep} />;
       case 'matrix':
         return <MatrixVisualizer data={problem.initialInput} step={currentStep} />;
       case 'dp-grid':
@@ -177,6 +180,13 @@ export function App() {
         return <IntervalVisualizer data={problem.initialInput} step={currentStep} />;
       case 'bars':
         return <BarVisualizer data={problem.initialInput || [1, 8, 6, 2, 5, 4, 8, 3, 7]} step={currentStep} />;
+      case 'backtracking':
+        return <BacktrackingVisualizer data={problem.initialInput} step={currentStep} />;
+      case 'trie':
+        return <TrieVisualizer step={currentStep} />;
+      case 'bits':
+      case 'bit-manipulation':
+        return <BitVisualizer data={problem.initialInput} step={currentStep} />;
       case 'array':
       default:
         return <ArrayVisualizer data={problem.initialInput || [1, 2, 3, 4, 5]} step={currentStep} />;
@@ -190,8 +200,8 @@ export function App() {
         activeTopicId={activeTopicId}
         activeProblemId={activeProblemId}
         onSelectProblem={handleSelectProblem}
-        isOpenMobile={isMobileSidebarOpen}
-        onCloseMobile={() => setIsMobileSidebarOpen(false)}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
       {/* Main Studio Area */}
@@ -210,7 +220,8 @@ export function App() {
           onToggleHideSolutions={() => setHideSolutions(!hideSolutions)}
           theme={theme}
           onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
-          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
+          isSidebarOpen={isSidebarOpen}
+          onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
         />
 
         {/* Center Workspace (Visualizer Canvas vs Practice Editor) */}

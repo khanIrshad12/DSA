@@ -1,16 +1,22 @@
 import { Topic } from '../types';
 import { twoPointersProblems } from './problems/twoPointers';
 import { arraysHashingProblems } from './problems/arraysHashing';
+import { prefixSumProblems } from './problems/prefixSumProblems';
 import { slidingWindowProblems } from './problems/slidingWindow';
 import { stackProblems } from './problems/stackProblems';
 import { linkedListProblems } from './problems/linkedListProblems';
 import { binarySearchProblems } from './problems/binarySearch';
 import { dfsProblems } from './problems/dfsProblems';
+import { backtrackingProblems } from './problems/backtrackingProblems';
+import { trieProblems } from './problems/trieProblems';
 import { dpProblems } from './problems/dpProblems';
 import { graphProblems } from './problems/graphProblems';
 import { heapProblems } from './problems/heapProblems';
 import { greedyProblems } from './problems/greedyProblems';
-import { matrixProblems, intervalProblems, bitProblems } from './problems/otherPatterns';
+import { matrixProblems } from './problems/matrixProblems';
+import { intervalProblems } from './problems/intervalProblems';
+import { bitProblems } from './problems/bitProblems';
+import { bfsProblems } from './problems/bfsProblems';
 
 export const allTopics: Topic[] = [
   {
@@ -26,6 +32,13 @@ export const allTopics: Topic[] = [
     description: 'Trade space for O(1) lookups — sets & maps',
     icon: 'Hash',
     problems: arraysHashingProblems
+  },
+  {
+    id: 'prefix-sum',
+    title: 'Prefix Sum',
+    description: 'Precompute running totals · range sum in O(1)',
+    icon: 'Sigma',
+    problems: prefixSumProblems
   },
   {
     id: 'sliding-window',
@@ -68,6 +81,27 @@ export const allTopics: Topic[] = [
     description: 'Go deep, then backtrack · pre/in/post order & graph DFS',
     icon: 'GitBranch',
     problems: dfsProblems
+  },
+  {
+    id: 'bfs',
+    title: 'Breadth-First Search',
+    description: 'Level by level with a FIFO queue · shortest path & multi-source BFS',
+    icon: 'Radio',
+    problems: bfsProblems
+  },
+  {
+    id: 'backtracking',
+    title: 'Backtracking',
+    description: 'Choose, explore, un-choose · state-space tree search & pruning',
+    icon: 'RotateCcw',
+    problems: backtrackingProblems
+  },
+  {
+    id: 'trie',
+    title: 'Trie',
+    description: 'Prefix tree · shared prefixes stored once & fast lookups',
+    icon: 'GitBranch',
+    problems: trieProblems
   },
   {
     id: 'greedy',

@@ -15,7 +15,8 @@ interface HeaderProps {
   onToggleHideSolutions: () => void;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
-  onOpenMobileSidebar: () => void;
+  isSidebarOpen: boolean;
+  onToggleSidebar: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,7 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleHideSolutions,
   theme,
   onToggleTheme,
-  onOpenMobileSidebar
+  isSidebarOpen,
+  onToggleSidebar
 }) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
 
@@ -49,22 +51,27 @@ export const Header: React.FC<HeaderProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
-            onClick={onOpenMobileSidebar}
+            onClick={onToggleSidebar}
             className="sketch-border-soft"
             style={{
-              padding: '6px 8px',
-              backgroundColor: 'var(--bg-surface)',
-              color: 'var(--text-ink)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 10px',
+              backgroundColor: isSidebarOpen ? 'var(--accent-soft)' : 'var(--bg-surface)',
+              color: isSidebarOpen ? 'var(--accent)' : 'var(--text-ink)',
+              fontSize: '11px',
+              fontWeight: 700,
               cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center'
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              transition: 'all 0.15s ease'
             }}
+            title={isSidebarOpen ? "Close Problems Sidebar" : "Open Problems Sidebar"}
           >
-            <Menu size={16} />
+            <Menu size={14} />
+            <span>Problem</span>
           </button>
-          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-mute)', fontWeight: 700 }}>
-            {problem.kind === 'intro' ? 'Concept' : 'Problem'}
-          </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -126,106 +133,145 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Main title & Meta */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            <h1 className="font-hand" style={{ fontSize: '32px', lineHeight: 1.1, fontWeight: 700, color: 'var(--text-ink)' }}>
-              {problem.title}
-            </h1>
+      {/* Main title & Complexity Row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          <h1 className="font-hand" style={{ fontSize: '32px', lineHeight: 1.1, fontWeight: 700, color: 'var(--text-ink)' }}>
+            {problem.title}
+          </h1>
 
-            {problem.leetcode && (
-              <a
-                href={`https://leetcode.com/problems/${problem.leetcode.slug}/`}
-                target="_blank"
-                rel="noreferrer"
-                className="ui-chip font-mono"
-              >
-                <span>LeetCode #{problem.leetcode.id}</span>
-                <ExternalLink size={10} />
-              </a>
-            )}
-
-            {problem.leetcode?.difficulty && (
-              <span className={`ui-chip ${getDifficultyClass(problem.leetcode.difficulty)}`}>
-                {problem.leetcode.difficulty}
-              </span>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-              className="ui-chip"
-              style={{ cursor: 'pointer' }}
+          {problem.leetcode && (
+            <a
+              href={`https://leetcode.com/problems/${problem.leetcode.slug}/`}
+              target="_blank"
+              rel="noreferrer"
+              className="ui-chip font-mono"
             >
-              <span>{isDetailsOpen ? 'hide details' : 'details'}</span>
-              {isDetailsOpen ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
-            </button>
-          </div>
-
-          {/* Expandable Problem Details Card */}
-          {isDetailsOpen && (
-            <div
-              className="sketch-border-soft"
-              style={{
-                marginTop: '12px',
-                padding: '12px 16px',
-                backgroundColor: 'var(--bg-surface)',
-                maxWidth: '780px',
-                position: 'relative'
-              }}
-            >
-              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-ink)' }}>
-                {problem.subtitle}
-              </div>
-              <p style={{ fontSize: '13px', color: 'var(--text-mute)', marginTop: '4px', lineHeight: 1.5 }}>
-                {problem.statement}
-              </p>
-
-              {problem.companies && problem.companies.length > 0 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-faint)' }}>
-                    Asked at:
-                  </span>
-                  {problem.companies.map(comp => (
-                    <span key={comp} className="ui-chip" style={{ fontSize: '10.5px', cursor: 'default' }}>
-                      {comp}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
+              <span>LeetCode #{problem.leetcode.id}</span>
+              <ExternalLink size={10} />
+            </a>
           )}
+
+          {problem.leetcode?.difficulty && (
+            <span className={`ui-chip ${getDifficultyClass(problem.leetcode.difficulty)}`}>
+              {problem.leetcode.difficulty}
+            </span>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+            className="ui-chip"
+            style={{
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              backgroundColor: isDetailsOpen ? 'var(--accent-soft)' : 'var(--bg-surface)',
+              color: isDetailsOpen ? 'var(--accent)' : 'var(--text-ink)',
+              borderColor: isDetailsOpen ? 'var(--accent)' : 'var(--border-ink-soft)',
+              fontWeight: 600,
+              transition: 'all 0.2s ease'
+            }}
+            title={isDetailsOpen ? "Collapse problem description" : "Expand problem description"}
+          >
+            <span>{isDetailsOpen ? 'Hide Description' : 'Problem Description'}</span>
+            {isDetailsOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          </button>
         </div>
 
         {/* Complexity info */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
-          <div
-            className="sketch-border-soft"
-            style={{
-              padding: '6px 12px',
-              backgroundColor: 'var(--bg-surface)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              fontSize: '12px'
-            }}
-          >
-            <span style={{ fontWeight: 600, color: 'var(--accent)' }}>{activeApproach.label}</span>
-            <span className="font-mono">
-              <span style={{ color: 'var(--text-mute)' }}>time </span>
-              <strong>{activeApproach.complexity.time}</strong>
-            </span>
-            <span className="font-mono">
-              <span style={{ color: 'var(--text-mute)' }}>space </span>
-              <strong>{activeApproach.complexity.space}</strong>
-            </span>
-            <span className="font-mono" style={{ color: 'var(--accent)', fontWeight: 600, borderLeft: '1px solid var(--border-ink-soft)', paddingLeft: '10px' }}>
-              step {stepIndex + 1} / {activeApproach.steps.length}
-            </span>
-          </div>
+        <div
+          className="sketch-border-soft"
+          style={{
+            padding: '6px 12px',
+            backgroundColor: 'var(--bg-surface)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            fontSize: '12px',
+            flexWrap: 'wrap'
+          }}
+        >
+          <span style={{ fontWeight: 600, color: 'var(--accent)' }}>{activeApproach.label}</span>
+          <span className="font-mono">
+            <span style={{ color: 'var(--text-mute)' }}>time </span>
+            <strong>{activeApproach.complexity.time}</strong>
+          </span>
+          <span className="font-mono">
+            <span style={{ color: 'var(--text-mute)' }}>space </span>
+            <strong>{activeApproach.complexity.space}</strong>
+          </span>
+          <span className="font-mono" style={{ color: 'var(--accent)', fontWeight: 600, borderLeft: '1px solid var(--border-ink-soft)', paddingLeft: '10px' }}>
+            step {stepIndex + 1} / {activeApproach.steps.length}
+          </span>
         </div>
       </div>
+
+      {/* Expandable / Collapsible Problem Details Card (Full Width) */}
+      {isDetailsOpen && (
+        <div
+          className="sketch-border-soft"
+          style={{
+            marginTop: '12px',
+            padding: '14px 18px',
+            backgroundColor: 'var(--bg-surface)',
+            width: '100%',
+            position: 'relative',
+            animation: 'fadeIn 0.2s ease'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            {problem.subtitle ? (
+              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-ink)' }}>
+                {problem.subtitle}
+              </div>
+            ) : <div />}
+            <button
+              type="button"
+              onClick={() => setIsDetailsOpen(false)}
+              className="ui-chip font-mono"
+              style={{
+                cursor: 'pointer',
+                fontSize: '11px',
+                padding: '3px 8px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                color: 'var(--text-mute)'
+              }}
+              title="Collapse description"
+            >
+              <span>Collapse</span>
+              <ChevronUp size={11} />
+            </button>
+          </div>
+
+          <div
+            style={{
+              fontSize: '13.5px',
+              color: 'var(--text-mute)',
+              lineHeight: 1.6,
+              whiteSpace: 'pre-line'
+            }}
+          >
+            {problem.statement}
+          </div>
+
+          {problem.companies && problem.companies.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-faint)' }}>
+                Asked at:
+              </span>
+              {problem.companies.map(comp => (
+                <span key={comp} className="ui-chip" style={{ fontSize: '10.5px', cursor: 'default' }}>
+                  {comp}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Approaches Bar with Interactive Step Dots */}
       <div
