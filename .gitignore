@@ -36,3 +36,6 @@ image/
 img/
 media/
 screenshots/
+
+# Un-ignore public assets
+!public/**

@@ -189,6 +189,12 @@ export interface Approach {
   steps: Step[];
 }
 
+export interface VideoSolution {
+  channel: string;
+  url: string;
+  title?: string;
+}
+
 export interface Problem {
   id: string;
   patternId?: string;
@@ -205,6 +211,10 @@ export interface Problem {
   statement?: string;
   visualType?: 'array' | 'bars' | 'linked-list' | 'stack' | 'tree' | 'graph' | 'matrix' | 'heap' | 'intervals' | 'dp-grid' | 'backtracking' | 'trie' | 'bits' | 'bit-manipulation';
   initialInput?: any;
+  videoSolutions?: {
+    english?: VideoSolution;
+    hindi?: VideoSolution;
+  };
   approaches: Approach[];
   [key: string]: any;
 }

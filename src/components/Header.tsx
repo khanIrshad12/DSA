@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Problem, Approach } from '../types';
-import { ExternalLink, ChevronDown, ChevronUp, Sun, Moon, Code2, Eye, EyeOff, Menu } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, Sun, Moon, Code2, Eye, EyeOff, Menu, Youtube } from 'lucide-react';
 
 interface HeaderProps {
   problem: Problem;
@@ -36,6 +36,15 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSidebar
 }) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
+
+  // Priority Video Solutions (Code Story With MIK 1st priority for Hindi, NeetCode for English)
+  const hindiChannel = problem.videoSolutions?.hindi?.channel || 'Code Story With MIK';
+  const hindiVideoUrl = problem.videoSolutions?.hindi?.url ||
+    `https://www.youtube.com/results?search_query=${encodeURIComponent(problem.title + ' code story with mik')}`;
+
+  const englishChannel = problem.videoSolutions?.english?.channel || 'NeetCode';
+  const englishVideoUrl = problem.videoSolutions?.english?.url ||
+    `https://www.youtube.com/results?search_query=${encodeURIComponent(problem.title + ' leetcode neetcode')}`;
 
   const getDifficultyClass = (diff?: string) => {
     if (diff === 'Easy') return 'ui-chip-easy';
@@ -270,6 +279,57 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </div>
           )}
+
+          {/* Video Solution Channels */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', flexWrap: 'wrap', borderTop: '1px dashed var(--border-ink-soft)', paddingTop: '10px' }}>
+            <span style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-faint)', fontWeight: 600 }}>
+              Video Solutions:
+            </span>
+            <a
+              href={hindiVideoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="ui-chip font-mono"
+              style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                borderColor: 'rgba(239, 68, 68, 0.4)',
+                color: '#f87171',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontSize: '11px',
+                padding: '3px 8px',
+                textDecoration: 'none'
+              }}
+              title={`Watch Hindi video solution on ${hindiChannel}`}
+            >
+              <Youtube size={13} color="#ef4444" />
+              <span>HI: {hindiChannel}</span>
+              <ExternalLink size={10} />
+            </a>
+            <a
+              href={englishVideoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="ui-chip font-mono"
+              style={{
+                backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                borderColor: 'rgba(56, 189, 248, 0.4)',
+                color: '#38bdf8',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontSize: '11px',
+                padding: '3px 8px',
+                textDecoration: 'none'
+              }}
+              title={`Watch English video solution on ${englishChannel}`}
+            >
+              <Youtube size={13} color="#38bdf8" />
+              <span>EN: {englishChannel}</span>
+              <ExternalLink size={10} />
+            </a>
+          </div>
         </div>
       )}
 
